@@ -10,21 +10,6 @@ body {
     padding: 0;
 	background:none;
 }
-div, h2, ul, li, img, p, dl, dt, dd, h3, h4, h5 {
-    border: 0 none;
-    list-style: none outside none;
-    margin: 0;
-    padding: 0;
-}
-img {
-    border: 0 none;
-    vertical-align: middle;
-}
-h2, h3, h4, h5 {
-    font-family: "微软雅黑",Arial;
-	font-weight:bold;
-	font-size:16px;
-}
 a,label{outline:none;white-space:nowrap;}
 a:link, a:visited {
     color: #666666;
