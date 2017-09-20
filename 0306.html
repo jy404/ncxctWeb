@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 	<head>
 		<meta charset="UTF-8">
-		<title>房建项目</title>
+		<title>市政项目管理</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-		<script type="text/javascript" src="js/js.js"></script>
-		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
 		<script type="text/javascript" src="js/json2.js"></script>
@@ -16,12 +13,11 @@
 		<script type="text/javascript" src="js/paging.js"></script>
 		<script type="text/javascript" src="js/PluginFun.js"></script>
 		<script type="text/javascript" src="js/jquery.toast.js"></script>
-		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
-		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
+
 		<script type="text/javascript">
 			var currentpage = 1;
 			var pagesize = 2;
-			var projecttype = "HOUSE";
+			var projecttype = "CITY";
 			var data = {
 				"projectType": projecttype
 			};
@@ -31,52 +27,52 @@
 			})
 		</script>
 	</head>
-
 	<body>
+	
 		<div class="title">
 			<div class="page">
 				<b>当前位置：</b>
 				<span>> 首页</span>
 				<span>> 项目综合管理</span>
-				<span>> 房建项目</span>
+				<span>> 市政项目管理</span>
 			</div>
 		</div>
-		<div class="fjxm">
-			<h2 class="fjxmTitle">房建项目</h2>
-			<a href="200房建项目添加.html" target="bodyRight" class="addBb">添加新项目</a>
-			<div class="fjxmSerach">
-				<div class="fjxmSerachList">
-					<div class="fjxmSerachTitle">
+		<div class="szxm">
+			<h2 class="szxmTitle">市政项目</h2>
+			<a href="030601.html" target="bodyRight" class="addBb">添加新项目</a>
+			<div class="szxmSerach">			
+				<div class="szxmSerachList">
+					<div class="szxmSerachTitle">
 						<span>项目名称</span>
-						<input type="text" id="txtProjectName" class="fjxmSerachTypeSelect" />
+						<input type="text" id="txtProjectName" class="szxmSerachTypeSelect"  />
 					</div>
-					<div class="fjxmSerachTitle">
+					<div class="szxmSerachTitle">
 						<span>时间</span>
-						<input type="text" id="txtStartTime" class="fjxmSerachTypeSelect" />
+						<input type="text" id="txtStartTime" class="szxmSerachTypeSelect"  />
 					</div>
-					<div class="fjxmSerachTitle">
+					<div class="szxmSerachTitle">
 						<span>项目进度</span>
-						<input type="text" id="txtStatus" class="fjxmSerachTypeSelect" />
+						<input type="text" id="txtStatus" class="szxmSerachTypeSelect"  />
 					</div>
-					<div class="fjxmSerachTitle">
+					<div class="szxmSerachTitle">
 						<span>责任部门</span>
-						<input type="text" id="txtOrgName" class="fjxmSerachTypeSelect" />
+						<input type="text" id="txtOrgName" class="szxmSerachTypeSelect"  />
 					</div>
-					<div class="fjxmSerachTitle">
+					<div class="szxmSerachTitle">
 						<span>责任人</span>
-						<input type="text" id="txtOrgName" class="fjxmSerachTypeSelect" />
+						<input type="text" id="txtOrgName" class="szxmSerachTypeSelect"  />
 					</div>
-					<!--<div class="fjxmSerachTitle">
+					<div class="szxmSerachTitle">
 						<span>完成百分比</span>
-						<input type="text" class="fjxmSerachTypeSelect" />
-					</div>-->
-				</div>
-				<div class="fjxmSerachBtn">
-					<a href="#" class="fjxmSerachBtn1">搜索</a>
-					<a href="#" class="fjxmSerachreset">清空</a>
+						<input type="text" class="szxmSerachTypeSelect"  />
+					</div>	
+				</div>											
+				<div class="szxmSerachBtn">
+					<a href="#" class="szxmSerachBtn1">搜索</a>
+					<a href="#" class="szxmSerachreset">清空</a>
 				</div>
 			</div>
-			<div class="fjxmTable">
+			<div class="szxmTable">
 				<table cellpadding="0" cellspacing="0" id="projectList">
 					<tr>
 						<td width="5%">序号</td>
@@ -90,12 +86,12 @@
 						<td width="5%">项目状态</td>
 						<td width="12%">操作</td>
 					</tr>
-				</table>
+					
+				</table>				
 			</div>
 			<div class="page_div fy" id="fj_page">
 
 			</div>
-		</div>
+		</div>			
 	</body>
-
 </html>

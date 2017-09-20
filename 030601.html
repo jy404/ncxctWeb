@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>房建项目添加</title>
+		<title>市政项目报建</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
@@ -86,8 +86,8 @@
 			function SubmitData() {
 				var data = {
 					"name": $("#projectName").val(),
-					"projectType": "HOUSE",
-					"projectTypeName": "房建项目",
+					"projectType": "CITY",
+					"projectTypeName": "市政项目",
 					"userId": "1",
 					"projectNo": $("#projectNo").val(),
 					"orgId": $("#projectOrg").val(),
@@ -109,7 +109,7 @@
 				}
 				if(action == "edit")
 					data["id"] = id;
-				meetAdd('/api/project/save', JSON.stringify(data), "房建项目.html");
+				meetAdd('/api/project/save', JSON.stringify(data), "0306.html");
 			}
 		</script>
 	</head>
