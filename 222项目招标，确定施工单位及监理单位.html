@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>项目招标，确定施工单位及监理单位</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link href="css/hsCheckData.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id;
+			$(function() {
+				//$.ajaxSettings.async = false;
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = $.getUrlParam("projectName");
+				SelectUnitList("sgdw", "A0004", projectType);
+				SelectUnitList("jldw", "A0005", projectType);
+				if (action != "" && action != undefined) {
+					SetData(projectId)
+					if (action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/prophase/invitetender/orders/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							$('#docNo').val(res["result"]["docNo"]);
+							$('#dispatchTime').val(res["result"]["dispatchTime"]);
+							id = res["result"]["id"];
+							//单位集合赋值
+							var constructionUnit = res["result"]["constructionUnitList"];
+							var supervisionUnit = res["result"]["supervisionUnitList"];
+							SetUnitList(constructionUnit, "sgdw");
+							SetUnitList(supervisionUnit, "jldw");
+							//附件加上
+							upload.show(res["result"]["fileUrl"], "files_uploader")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var docNo = $("#docNo").val();
+				var dispatchTime = $("#dispatchTime").val();
+				if ($("#sgdw").attr("data-id") != "" || $("#sgdw").attr("data-id") != undefined) {
+					var constructionUnitArr = [];
+					var constructionUnitList = $("#sgdw").attr("data-id").split("-");
+					constructionUnitArr = constructionUnitList.map(function(data) {
+						return +data;
+					});
+				} else {
+					Toast.Err("错误", "请选择施工单位~", 'top-center', 'left')
+				}
+				if ($("#jldw").attr("data-id") != "" || $("#jldw").attr("data-id") != undefined) {
+					var supervisionUnitArr = [];
+					var supervisionUnitList = $("#jldw").attr("data-id").split("-");
+					supervisionUnitArr = supervisionUnitList.map(function(data) {
+						return +data;
+					});
+				} else {
+					Toast.Err("错误", "请选择监理单位~", 'top-center', 'left')
+				}
+				var fileUrl = $("#fileurl_uploader").val();
+				var data = {
+					"constructionUnitList": constructionUnitArr,
+					"dispatchTime": dispatchTime,
+					"docNo": docNo,
+					"fileUrl": fileUrl,
+					"projectId": projectId,
+					"projectName": projectName,
+					"projectType": projectType,
+					"supervisionUnitList": supervisionUnitArr
+				};
+				if (action == "edit") {
+					data["id"] = id
+				}
+				meetAdd('/api/prophase/invitetender/order', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+
+		<h2 class="szTitle">项目招标，确定施工单位及监理单位</h2>
+
+		<h3 class="ydsxHead">施工单位、监理单位</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="dispatchTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>施工单位：</span>
+			<div id="sgdw"></div>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>监理单位：</span>
+			<div id="jldw"></div>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<div id="uploader" style="margin-left: 10px;"></div>
+		</div>
+
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

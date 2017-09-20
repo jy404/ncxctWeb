@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>组织架构</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
+		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
+		<script type="text/javascript">
+			var currentpage = 1;
+			var pagesize = 2;
+			var data = {};
+
+			$(function() {
+				GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/system/org/list");
+			})
+		</script>
+	</head>
+
+	<body>
+		<div class="title">
+			<div class="page">
+				<b>当前位置：</b>
+				<span>> 首页</span>
+				<span>> 系统管理</span>
+				<span>> 组织架构</span>
+			</div>
+		</div>
+		<div class="lzzjgBigBox">
+			<h2 class="lzzjgTitle">组织架构</h2>
+			<a href="新增部门.html" class="lzzjgAdd">新增部门</a>
+			<div class="fjxmSerach">
+				<div class="fjxmSerachList">
+					<div class="fjxmSerachTitle">
+						<span>状态</span>
+						<input type="text" class="fjxmSerachTypeSelect" />
+					</div>
+					<div class="fjxmSerachTitle">
+						<span>部门名称</span>
+						<input type="text" class="fjxmSerachTypeSelect" />
+					</div>
+				</div>
+				<div class="fjxmSerachBtn">
+					<a href="#" class="fjxmSerachBtn1">搜索</a>
+					<a href="#" class="fjxmSerachreset">清空</a>
+				</div>
+			</div>
+			<div class="lzzjgMinBox">
+				<table cellpadding="0" cellspacing="0" id="projectList">
+					<tr>
+						<td width="10%">序号</td>
+						<td width="25%">部门编号</td>
+						<td width="25%">部门名称</td>
+						<td width="20%">使用状态 </td>
+						<td width="20%">操作</td>
+					</tr>
+				</table>
+
+			</div>
+			<div class="page_div fy" id="fj_page">
+
+			</div>
+		</div>
+	</body>
+
+</html>

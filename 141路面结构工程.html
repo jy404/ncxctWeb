@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>路面结构工程</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, id;
+			var id1, id2, id3, id4, id5, id6;
+			$(function() {
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				upload.init("uploader3", "添加附件...");
+				UploadProcess("uploader3");
+				upload.init("uploader4", "添加附件...");
+				UploadProcess("uploader4");
+				upload.init("uploader5", "添加附件...");
+				UploadProcess("uploader5");
+				upload.init("uploader6", "添加附件...");
+				UploadProcess("uploader6");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/construction/schedule/outdoormunicipal/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							if(res["result"]["details"].length > 0) {
+								//=============================级配碎石==========================
+								id1 = res["result"]["details"][0]["id"];
+								$('#txtstartTime1').val(res["result"]["details"][0]["startTime"]);
+								$('#txtcompletedTime1').val(res["result"]["details"][0]["completedTime"]);
+								$('#txtcompletePercentage1').val(res["result"]["details"][0]["completePercentage"]);
+								$('#txtamount1').val(res["result"]["details"][0]["amount"]);
+								$('#txtworkPlan1').val(res["result"]["details"][0]["workPlan"]);
+								$('#txtcompletion1').val(res["result"]["details"][0]["completion"]);
+								$('#txtrectification1').val(res["result"]["details"][0]["rectification"]);
+								$('#txtexsitProblem1').val(res["result"]["details"][0]["exsitProblem"]);
+								upload.show(res["result"]["details"][0]["fileUrl"], "files_uploader1")
+								//=============================下层水稳==========================
+								id2 = res["result"]["details"][1]["id"];
+								$('#txtstartTime2').val(res["result"]["details"][1]["startTime"]);
+								$('#txtcompletedTime2').val(res["result"]["details"][1]["completedTime"]);
+								$('#txtcompletePercentage2').val(res["result"]["details"][1]["completePercentage"]);
+								$('#txtamount2').val(res["result"]["details"][1]["amount"]);
+								$('#txtworkPlan2').val(res["result"]["details"][1]["workPlan"]);
+								$('#txtcompletion2').val(res["result"]["details"][1]["completion"]);
+								$('#txtrectification2').val(res["result"]["details"][1]["rectification"]);
+								$('#txtexsitProblem2').val(res["result"]["details"][1]["exsitProblem"]);
+								upload.show(res["result"]["details"][1]["fileUrl"], "files_uploader2")
+								//=============================上层水稳==========================
+								id3 = res["result"]["details"][2]["id"];
+								$('#txtstartTime3').val(res["result"]["details"][2]["startTime"]);
+								$('#txtcompletedTime3').val(res["result"]["details"][2]["completedTime"]);
+								$('#txtcompletePercentage3').val(res["result"]["details"][2]["completePercentage"]);
+								$('#txtamount3').val(res["result"]["details"][2]["amount"]);
+								$('#txtworkPlan3').val(res["result"]["details"][2]["workPlan"]);
+								$('#txtcompletion3').val(res["result"]["details"][2]["completion"]);
+								$('#txtrectification3').val(res["result"]["details"][2]["rectification"]);
+								$('#txtexsitProblem3').val(res["result"]["details"][2]["exsitProblem"]);
+								upload.show(res["result"]["details"][2]["fileUrl"], "files_uploader3")
+								//=============================底层沥青==========================
+								id4 = res["result"]["details"][3]["id"];
+								$('#txtstartTime4').val(res["result"]["details"][3]["startTime"]);
+								$('#txtcompletedTime4').val(res["result"]["details"][3]["completedTime"]);
+								$('#txtcompletePercentage4').val(res["result"]["details"][3]["completePercentage"]);
+								$('#txtamount4').val(res["result"]["details"][3]["amount"]);
+								$('#txtworkPlan4').val(res["result"]["details"][3]["workPlan"]);
+								$('#txtcompletion4').val(res["result"]["details"][3]["completion"]);
+								$('#txtrectification4').val(res["result"]["details"][3]["rectification"]);
+								$('#txtexsitProblem4').val(res["result"]["details"][3]["exsitProblem"]);
+								upload.show(res["result"]["details"][3]["fileUrl"], "files_uploader4")
+								//=============================中层沥青==========================
+								id5 = res["result"]["details"][4]["id"];
+								$('#txtstartTime5').val(res["result"]["details"][4]["startTime"]);
+								$('#txtcompletedTime5').val(res["result"]["details"][4]["completedTime"]);
+								$('#txtcompletePercentage5').val(res["result"]["details"][4]["completePercentage"]);
+								$('#txtamount5').val(res["result"]["details"][4]["amount"]);
+								$('#txtworkPlan5').val(res["result"]["details"][4]["workPlan"]);
+								$('#txtcompletion5').val(res["result"]["details"][4]["completion"]);
+								$('#txtrectification5').val(res["result"]["details"][4]["rectification"]);
+								$('#txtexsitProblem5').val(res["result"]["details"][4]["exsitProblem"]);
+								upload.show(res["result"]["details"][4]["fileUrl"], "files_uploader5")
+								//=============================上层沥青==========================
+								id6 = res["result"]["details"][5]["id"];
+								$('#txtstartTime6').val(res["result"]["details"][5]["startTime"]);
+								$('#txtcompletedTime6').val(res["result"]["details"][5]["completedTime"]);
+								$('#txtcompletePercentage6').val(res["result"]["details"][5]["completePercentage"]);
+								$('#txtamount6').val(res["result"]["details"][5]["amount"]);
+								$('#txtworkPlan6').val(res["result"]["details"][5]["workPlan"]);
+								$('#txtcompletion6').val(res["result"]["details"][5]["completion"]);
+								$('#txtrectification6').val(res["result"]["details"][5]["rectification"]);
+								$('#txtexsitProblem6').val(res["result"]["details"][5]["exsitProblem"]);
+								upload.show(res["result"]["details"][5]["fileUrl"], "files_uploader6")
+							}
+							id = res["result"]["id"];
+							//附件加上
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				//scheduleStageCategory:WATER_ELECTRICITY（水电气），ELEVATOR（电梯）
+				var data = {
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectType": projectType,
+
+					"details": [{
+							"scheduleStageCategory": "WATER_SUPPLY",
+							"startTime": $('#txtstartTime1').val(),
+							"completedTime": $('#txtcompletedTime1').val(),
+							"completePercentage": $('#txtcompletePercentage1').val(),
+							"amount": $('#txtamount1').val(),
+							"workPlan": $('#txtworkPlan1').val(),
+							"completion": $('#txtcompletion1').val(),
+							"rectification": $('#txtrectification1').val(),
+							"exsitProblem": $('#txtexsitProblem1').val(),
+							"fileUrl": $('#fileurl_uploader1').val()
+						},
+						{
+							"scheduleStageCategory": "FIRE",
+							"startTime": $('#txtstartTime2').val(),
+							"completedTime": $('#txtcompletedTime2').val(),
+							"completePercentage": $('#txtcompletePercentage2').val(),
+							"amount": $('#txtamount2').val(),
+							"workPlan": $('#txtworkPlan2').val(),
+							"completion": $('#txtcompletion2').val(),
+							"rectification": $('#txtrectification2').val(),
+							"exsitProblem": $('#txtexsitProblem2').val(),
+							"fileUrl": $('#fileurl_uploader2').val()
+						},
+						{
+							"scheduleStageCategory": "DRAINAGE",
+							"startTime": $('#txtstartTime3').val(),
+							"completedTime": $('#txtcompletedTime3').val(),
+							"completePercentage": $('#txtcompletePercentage3').val(),
+							"amount": $('#txtamount3').val(),
+							"workPlan": $('#txtworkPlan3').val(),
+							"completion": $('#txtcompletion3').val(),
+							"rectification": $('#txtrectification3').val(),
+							"exsitProblem": $('#txtexsitProblem3').val(),
+							"fileUrl": $('#fileurl_uploader3').val()
+						},
+						{
+							"scheduleStageCategory": "POWER_SUPPLY",
+							"startTime": $('#txtstartTime4').val(),
+							"completedTime": $('#txtcompletedTime4').val(),
+							"completePercentage": $('#txtcompletePercentage4').val(),
+							"amount": $('#txtamount4').val(),
+							"workPlan": $('#txtworkPlan4').val(),
+							"completion": $('#txtcompletion4').val(),
+							"rectification": $('#txtrectification4').val(),
+							"exsitProblem": $('#txtexsitProblem4').val(),
+							"fileUrl": $('#fileurl_uploader4').val()
+						},
+						{
+							"scheduleStageCategory": "WEAK_CURRENT",
+							"startTime": $('#txtstartTime5').val(),
+							"completedTime": $('#txtcompletedTime5').val(),
+							"completePercentage": $('#txtcompletePercentage5').val(),
+							"amount": $('#txtamount5').val(),
+							"workPlan": $('#txtworkPlan5').val(),
+							"completion": $('#txtcompletion5').val(),
+							"rectification": $('#txtrectification5').val(),
+							"exsitProblem": $('#txtexsitProblem5').val(),
+							"fileUrl": $('#fileurl_uploader5').val()
+						},
+						{
+							"scheduleStageCategory": "GAS",
+							"startTime": $('#txtstartTime6').val(),
+							"completedTime": $('#txtcompletedTime6').val(),
+							"completePercentage": $('#txtcompletePercentage6').val(),
+							"amount": $('#txtamount6').val(),
+							"workPlan": $('#txtworkPlan6').val(),
+							"completion": $('#txtcompletion6').val(),
+							"rectification": $('#txtrectification6').val(),
+							"exsitProblem": $('#txtexsitProblem6').val(),
+							"fileUrl": $('#fileurl_uploader6').val()
+						}
+					],
+
+					"status": status
+				}
+				if(action == "edit") {
+					data["id"] = id;
+					data["details"][0]["id"] = id1;
+					data["details"][1]["id"] = id2;
+					data["details"][2]["id"] = id3;
+					data["details"][3]["id"] = id4;
+					data["details"][4]["id"] = id5;
+					data["details"][5]["id"] = id6;
+				}
+				meetAdd('/api/construction/schedule/outdoormunicipal/save', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">路面结构工程</h2>
+		<h3 class="ydsxHead">级配碎石</h3>
+		<div class="szxmTjPageRightForm">
+			<span>开始时间：</span>
+			<input type="text" id="txtstartTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtcompletedTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成百分比：</span>
+			<input type="text" id="txtcompletePercentage1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader1" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工作计划：</span>
+			<textarea id="txtworkPlan1"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成情况：</span>
+			<textarea id="txtcompletion1"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification1"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtexsitProblem1"></textarea>
+		</div>
+		<h3 class="ydsxHead">下层水稳</h3>
+		<div class="szxmTjPageRightForm">
+			<span>开始时间：</span>
+			<input type="text" id="txtstartTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtcompletedTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成百分比：</span>
+			<input type="text" id="txtcompletePercentage2" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount2" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader2" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工作计划：</span>
+			<textarea id="txtworkPlan2"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成情况：</span>
+			<textarea id="txtcompletion2"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification2"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtexsitProblem2"></textarea>
+		</div>
+		<h3 class="ydsxHead">上层水稳</h3>
+		<div class="szxmTjPageRightForm">
+			<span>开始时间：</span>
+			<input type="text" id="txtstartTime3" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtcompletedTime3" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成百分比：</span>
+			<input type="text" id="txtcompletePercentage3" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount3" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader3" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工作计划：</span>
+			<textarea id="txtworkPlan3"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成情况：</span>
+			<textarea id="txtcompletion3"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification3"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtexsitProblem3"></textarea>
+		</div>
+		<h3 class="ydsxHead">底层沥青</h3>
+		<div class="szxmTjPageRightForm">
+			<span>开始时间：</span>
+			<input type="text" id="txtstartTime4" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtcompletedTime4" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成百分比：</span>
+			<input type="text" id="txtcompletePercentage4" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount4" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader4" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工作计划：</span>
+			<textarea id="txtworkPlan4"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成情况：</span>
+			<textarea id="txtcompletion4"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification4"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtexsitProblem4"></textarea>
+		</div>
+		<h3 class="ydsxHead">中层沥青</h3>
+		<div class="szxmTjPageRightForm">
+			<span>开始时间：</span>
+			<input type="text" id="txtstartTime5" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtcompletedTime5" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成百分比：</span>
+			<input type="text" id="txtcompletePercentage5" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount5" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader5" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工作计划：</span>
+			<textarea id="txtworkPlan5"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成情况：</span>
+			<textarea id="txtcompletion5"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification5"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtexsitProblem5"></textarea>
+		</div>
+		<h3 class="ydsxHead">上层沥青</h3>
+		<div class="szxmTjPageRightForm">
+			<span>开始时间：</span>
+			<input type="text" id="txtstartTime6" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtcompletedTime6" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成百分比：</span>
+			<input type="text" id="txtcompletePercentage6" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount6" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader6" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工作计划：</span>
+			<textarea id="txtworkPlan6"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成情况：</span>
+			<textarea id="txtcompletion6"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification6"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtexsitProblem6"></textarea>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

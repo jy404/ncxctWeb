@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>工程结算</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id;
+			var id1, id2, id3, id4, id5, id6;
+			$(function() {
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				upload.init("uploader3", "添加附件...");
+				UploadProcess("uploader3");
+				upload.init("uploader4", "添加附件...");
+				UploadProcess("uploader4");
+				upload.init("uploader5", "添加附件...");
+				UploadProcess("uploader5");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = $.getUrlParam("projectName");
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/projectSettlement/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							$('#txtdocNo').val(res["result"]["docNo"]);
+							$('#txtresponsibleDeptId').val(res["result"]["responsibleDeptId"]);
+							$('#txtresponsiblePerson').val(res["result"]["responsiblePerson"]);
+							$('#txtfinishTime').val(res["result"]["finishTime"]);
+							$('#txtamount').val(res["result"]["amount"]);
+							$('#txtproblem').val(res["result"]["problem"]);
+							$('#txtrectification').val(res["result"]["rectification"]);
+							upload.show(res["result"]["fileUrl"], "files_uploader1");
+							//========================施工单位====================
+							$('#txtunitName1').val(res["result"]["settlementExtensionList"][0]["unitName"]);
+							$('#txtlinkman1').val(res["result"]["settlementExtensionList"][0]["linkman"]);
+							$('#txtlinkPhone1').val(res["result"]["settlementExtensionList"][0]["linkPhone"]);
+							$('#txtsettlementAmount1').val(res["result"]["settlementExtensionList"][0]["settlementAmount"]);
+							$('#txtsettlementTime1').val(res["result"]["settlementExtensionList"][0]["settlementTime"]);
+							upload.show(res["result"]["settlementExtensionList"][0]["fileUrl"], "files_uploader2");
+							id1 = res["result"]["settlementExtensionList"][0]["id"];
+							//========================监理单位====================
+							$('#txtunitName2').val(res["result"]["settlementExtensionList"][1]["unitName"]);
+							$('#txtlinkman2').val(res["result"]["settlementExtensionList"][1]["linkman"]);
+							$('#txtlinkPhone2').val(res["result"]["settlementExtensionList"][1]["linkPhone"]);
+							$('#txtsettlementAmount2').val(res["result"]["settlementExtensionList"][1]["settlementAmount"]);
+							$('#txtsettlementTime2').val(res["result"]["settlementExtensionList"][1]["settlementTime"]);
+							upload.show(res["result"]["settlementExtensionList"][1]["fileUrl"], "files_uploader3");
+							id2 = res["result"]["settlementExtensionList"][1]["id"];
+							//========================业主单位====================
+							$('#txtunitName3').val(res["result"]["settlementExtensionList"][2]["unitName"]);
+							$('#txtlinkman3').val(res["result"]["settlementExtensionList"][2]["linkman"]);
+							$('#txtlinkPhone3').val(res["result"]["settlementExtensionList"][2]["linkPhone"]);
+							$('#txtsettlementAmount3').val(res["result"]["settlementExtensionList"][2]["settlementAmount"]);
+							$('#txtsettlementTime3').val(res["result"]["settlementExtensionList"][2]["settlementTime"]);
+							upload.show(res["result"]["settlementExtensionList"][2]["fileUrl"], "files_uploader4");
+							id3 = res["result"]["settlementExtensionList"][2]["id"];
+							//========================县财政局====================
+							$('#txtunitName4').val(res["result"]["settlementExtensionList"][3]["unitName"]);
+							$('#txtlinkman4').val(res["result"]["settlementExtensionList"][3]["linkman"]);
+							$('#txtlinkPhone4').val(res["result"]["settlementExtensionList"][3]["linkPhone"]);
+							$('#txtsettlementAmount4').val(res["result"]["settlementExtensionList"][3]["settlementAmount"]);
+							$('#txtsettlementTime4').val(res["result"]["settlementExtensionList"][3]["settlementTime"]);
+							upload.show(res["result"]["settlementExtensionList"][3]["fileUrl"], "files_uploader5");
+							id4 = res["result"]["settlementExtensionList"][3]["id"];
+							//========================县审计局====================
+							$('#txtunitName5').val(res["result"]["settlementExtensionList"][4]["unitName"]);
+							$('#txtlinkman5').val(res["result"]["settlementExtensionList"][4]["linkman"]);
+							$('#txtlinkPhone5').val(res["result"]["settlementExtensionList"][4]["linkPhone"]);
+							$('#txtsettlementAmount5').val(res["result"]["settlementExtensionList"][4]["settlementAmount"]);
+							$('#txtsettlementTime5').val(res["result"]["settlementExtensionList"][4]["settlementTime"]);
+							upload.show(res["result"]["settlementExtensionList"][4]["fileUrl"], "files_uploader6");
+							id5 = res["result"]["settlementExtensionList"][4]["id"];
+
+							id = res["result"]["id"];
+							//附件加上
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var docNo = $('#txtdocNo').val();
+				var responsibleDeptId = $('#txtresponsibleDeptId').val();
+				var responsiblePerson = $('#txtresponsiblePerson').val();
+				var finishTime = $('#txtfinishTime').val();
+				var amount = $('#txtamount').val();
+				var problem = $('#txtproblem').val();
+				var rectification = $('#txtrectification').val();
+				var artfu = $('#fileurl_uploader1').val() == "" ? "ss" : $('#fileurl_uploader1').val();
+
+				var data = {
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectName": projectName,
+					"projectType": projectType,
+
+					"settlementExtensionList": [{
+						"unitType": "CONSTRUCTION",
+						"unitName": $('#txtunitName1').val(),
+						"linkman": $('#txtlinkman1').val(),
+						"linkPhone": $('#txtlinkPhone1').val(),
+						"settlementAmount": $('#txtsettlementAmount1').val(),
+						"settlementTime": $('#txtsettlementTime1').val(),
+						"fileUrl": $('#fileurl_uploader2').val() == "" ? "ss" : $('#fileurl_uploader2').val()
+					}, {
+						"unitType": "SUPERVISION",
+						"unitName": $('#txtunitName2').val(),
+						"linkman": $('#txtlinkman2').val(),
+						"linkPhone": $('#txtlinkPhone2').val(),
+						"settlementAmount": $('#txtsettlementAmount2').val(),
+						"settlementTime": $('#txtsettlementTime2').val(),
+						"fileUrl": $('#fileurl_uploader3').val() == "" ? "ss" : $('#fileurl_uploader3').val()
+					}, {
+						"unitType": "OWNER",
+						"unitName": $('#txtunitName3').val(),
+						"linkman": $('#txtlinkman3').val(),
+						"linkPhone": $('#txtlinkPhone3').val(),
+						"settlementAmount": $('#txtsettlementAmount3').val(),
+						"settlementTime": $('#txtsettlementTime3').val(),
+						"fileUrl": $('#fileurl_uploader4').val() == "" ? "ss" : $('#fileurl_uploader4').val()
+					}, {
+						"unitType": "COUNTY_BUREAU_OF_FINANCE",
+						"unitName": $('#txtunitName4').val(),
+						"linkman": $('#txtlinkman4').val(),
+						"linkPhone": $('#txtlinkPhone4').val(),
+						"settlementAmount": $('#txtsettlementAmount4').val(),
+						"settlementTime": $('#txtsettlementTime4').val(),
+						"fileUrl": $('#fileurl_uploader5').val() == "" ? "ss" : $('#fileurl_uploader5').val()
+					}, {
+						"unitType": "COUNTY_AUDIT_OFFICE",
+						"unitName": $('#txtunitName5').val(),
+						"linkman": $('#txtlinkman5').val(),
+						"linkPhone": $('#txtlinkPhone5').val(),
+						"settlementAmount": $('#txtsettlementAmount5').val(),
+						"settlementTime": $('#txtsettlementTime5').val(),
+						"fileUrl": $('#fileurl_uploader6').val() == "" ? "ss" : $('#fileurl_uploader6').val()
+					}],
+
+					"status": status
+				}
+				if(action == "edit") {
+					data["id"] = id;
+					data["settlementExtensionList"][0]["id"] = id1;
+					data["settlementExtensionList"][1]["id"] = id2;
+					data["settlementExtensionList"][2]["id"] = id3;
+					data["settlementExtensionList"][3]["id"] = id4;
+					data["settlementExtensionList"][4]["id"] = id5;
+				}
+				meetAdd('/api/projectSettlement', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">工程结算</h2>
+		<h3 class="ydsxHead">施工单位</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="txtdocNo1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>结束时间：</span>
+			<input type="text" id="txtendTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader1" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtproblem1"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification1"></textarea>
+		</div>
+		<h3 class="ydsxHead">监理单位 </h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="txtdocNo2" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>结束时间：</span>
+			<input type="text" id="txtendTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount2" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader2" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtproblem2"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification2"></textarea>
+		</div>
+		<h3 class="ydsxHead">业主单位 </h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="txtdocNo3" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>结束时间：</span>
+			<input type="text" id="txtendTime3" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount3" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader3" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtproblem3"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification3"></textarea>
+		</div>
+		<h3 class="ydsxHead">县财政局 </h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="txtdocNo4" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>结束时间：</span>
+			<input type="text" id="txtendTime4" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount4" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader4" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtproblem4"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification4"></textarea>
+		</div>
+		<h3 class="ydsxHead">县局审计 </h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="txtdocNo5" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>结束时间：</span>
+			<input type="text" id="txtendTime5" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount5" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader5" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtproblem5"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification5"></textarea>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

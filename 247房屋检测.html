@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>房屋检测</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, id;
+			var id1, id2, id3, id4, id5, id6, id7;
+			$(function() {
+				$.ajaxSettings.async = false;
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				upload.init("uploader3", "添加附件...");
+				UploadProcess("uploader3");
+				upload.init("uploader4", "添加附件...");
+				UploadProcess("uploader4");
+				upload.init("uploader5", "添加附件...");
+				UploadProcess("uploader5");
+				upload.init("uploader6", "添加附件...");
+				UploadProcess("uploader6");
+				upload.init("uploader7", "添加附件...");
+				UploadProcess("uploader7");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				SelectUnit("unitId1", "A0004", projectType);
+				SelectUnit("unitId2", "A0004", projectType);
+				SelectUnit("unitId3", "A0004", projectType);
+				SelectUnit("unitId4", "A0004", projectType);
+				SelectUnit("unitId5", "A0004", projectType);
+				SelectUnit("unitId6", "A0004", projectType);
+				SelectUnit("unitId7", "A0004", projectType);
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/buildingDetection/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							//===============================================
+							$('#docNo1').val(res["result"][0]["docNo"]);
+							$("#unitId1").val(res["result"][0]["unitIds"])
+							$("#amount1").val(res["result"][0]["amount"])
+							$("#preAcceptanceTime1").val(res["result"][0]["preAcceptanceTime"])
+							$("#finishTime1").val(res["result"][0]["finishTime"])
+							$("#problem1").val(res["result"][0]["problem"])
+							$("#rectification1").val(res["result"][0]["rectification"])
+							upload.show(res["result"][0]["fileUrl"], "files_uploader1")
+							id1 = res["result"][0]["id"];
+
+							//===============================================
+							$('#docNo2').val(res["result"][1]["docNo"]);
+							$("#unitId2").val(res["result"][1]["unitIds"])
+							$("#amount2").val(res["result"][1]["amount"])
+							$("#preAcceptanceTime2").val(res["result"][1]["preAcceptanceTime"])
+							$("#finishTime2").val(res["result"][1]["finishTime"])
+							$("#problem2").val(res["result"][1]["problem"])
+							$("#rectification2").val(res["result"][1]["rectification"])
+							upload.show(res["result"][1]["fileUrl"], "files_uploader2")
+							id2 = res["result"][1]["id"];
+
+							//===============================================
+							$('#docNo3').val(res["result"][2]["docNo"]);
+							$("#unitId3").val(res["result"][2]["unitIds"])
+							$("#amount3").val(res["result"][2]["amount"])
+							$("#preAcceptanceTime3").val(res["result"][2]["preAcceptanceTime"])
+							$("#finishTime3").val(res["result"][2]["finishTime"])
+							$("#problem3").val(res["result"][2]["problem"])
+							$("#rectification3").val(res["result"][2]["rectification"])
+							upload.show(res["result"][2]["fileUrl"], "files_uploader3")
+							id3 = res["result"][2]["id"];
+
+							//===============================================
+							$('#docNo4').val(res["result"][3]["docNo"]);
+							$("#unitId4").val(res["result"][3]["unitIds"])
+							$("#amount4").val(res["result"][3]["amount"])
+							$("#preAcceptanceTime4").val(res["result"][3]["preAcceptanceTime"])
+							$("#finishTime4").val(res["result"][3]["finishTime"])
+							$("#problem4").val(res["result"][3]["problem"])
+							$("#rectification4").val(res["result"][3]["rectification"])
+							upload.show(res["result"][3]["fileUrl"], "files_uploader4")
+							id4 = res["result"][3]["id"];
+
+							//===============================================
+							$('#docNo5').val(res["result"][4]["docNo"]);
+							$("#unitId5").val(res["result"][4]["unitIds"])
+							$("#amount5").val(res["result"][4]["amount"])
+							$("#preAcceptanceTime5").val(res["result"][4]["preAcceptanceTime"])
+							$("#finishTime5").val(res["result"][4]["finishTime"])
+							$("#problem5").val(res["result"][4]["problem"])
+							$("#rectification5").val(res["result"][4]["rectification"])
+							upload.show(res["result"][4]["fileUrl"], "files_uploader5")
+							id5 = res["result"][4]["id"];
+
+							//===============================================
+							$('#docNo6').val(res["result"][5]["docNo"]);
+							$("#unitId6").val(res["result"][5]["unitIds"])
+							$("#amount6").val(res["result"][5]["amount"])
+							$("#preAcceptanceTime6").val(res["result"][5]["preAcceptanceTime"])
+							$("#finishTime6").val(res["result"][5]["finishTime"])
+							$("#problem6").val(res["result"][5]["problem"])
+							$("#rectification6").val(res["result"][5]["rectification"])
+							upload.show(res["result"][5]["fileUrl"], "files_uploader6")
+							id6 = res["result"][5]["id"];
+
+							//===============================================
+							$('#docNo7').val(res["result"][6]["docNo"]);
+							$("#unitId7").val(res["result"][6]["unitIds"])
+							$("#amount7").val(res["result"][6]["amount"])
+							$("#preAcceptanceTime7").val(res["result"][6]["preAcceptanceTime"])
+							$("#finishTime7").val(res["result"][6]["finishTime"])
+							$("#problem7").val(res["result"][6]["problem"])
+							$("#rectification7").val(res["result"][6]["rectification"])
+							upload.show(res["result"][6]["fileUrl"], "files_uploader7")
+							id7 = res["result"][6]["id"];
+
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var docNo = $('#txtdocNo').val();
+				var responsibilityUnitId = $("#txtresponsibilityUnit option:selected").val();
+				var responsibilityUnitName = $("#txtresponsibilityUnit option:selected").text();
+				var amount = $('#txtamount').val();
+				var retestTime = $('#txtretestTime').val();
+				var artfu = $('#fileurl_uploader').val();
+				var comment = $('#txtcomment').val();
+				var data = {
+					"buildingDetectionList": [{
+						"docNo": $("#docNo1").val(),
+						"unitId": $("#unitId1").val(),
+						"amount": $("#amount1").val(),
+						"preAcceptanceTime": $("#preAcceptanceTime1").val(),
+						"finishTime": $("#finishTime1").val(),
+						"problem": $("#problem1").val(),
+						"rectification": $("#rectification1").val(),
+						"fileUrl": $('#fileurl_uploader1').val()
+					}, {
+						"docNo": $("#docNo2").val(),
+						"unitId": $("#unitId2").val(),
+						"amount": $("#amount2").val(),
+						"preAcceptanceTime": $("#preAcceptanceTime2").val(),
+						"finishTime": $("#finishTime2").val(),
+						"problem": $("#problem2").val(),
+						"rectification": $("#rectification2").val(),
+						"fileUrl": $('#fileurl_uploader2').val()
+					}, {
+						"docNo": $("#docNo3").val(),
+						"unitId": $("#unitId3").val(),
+						"amount": $("#amount3").val(),
+						"preAcceptanceTime": $("#preAcceptanceTime3").val(),
+						"finishTime": $("#finishTime3").val(),
+						"problem": $("#problem3").val(),
+						"rectification": $("#rectification3").val(),
+						"fileUrl": $('#fileurl_uploader3').val()
+					}, {
+						"docNo": $("#docNo4").val(),
+						"unitId": $("#unitId4").val(),
+						"amount": $("#amount4").val(),
+						"preAcceptanceTime": $("#preAcceptanceTime4").val(),
+						"finishTime": $("#finishTime4").val(),
+						"problem": $("#problem4").val(),
+						"rectification": $("#rectification4").val(),
+						"fileUrl": $('#fileurl_uploader4').val()
+					}, {
+						"docNo": $("#docNo5").val(),
+						"unitId": $("#unitId5").val(),
+						"amount": $("#amount5").val(),
+						"preAcceptanceTime": $("#preAcceptanceTime5").val(),
+						"finishTime": $("#finishTime5").val(),
+						"problem": $("#problem5").val(),
+						"rectification": $("#rectification5").val(),
+						"fileUrl": $('#fileurl_uploader5').val()
+					}, {
+						"docNo": $("#docNo6").val(),
+						"unitId": $("#unitId6").val(),
+						"amount": $("#amount6").val(),
+						"preAcceptanceTime": $("#preAcceptanceTime6").val(),
+						"finishTime": $("#finishTime6").val(),
+						"problem": $("#problem6").val(),
+						"rectification": $("#rectification6").val(),
+						"fileUrl": $('#fileurl_uploader6').val()
+					}, {
+						"docNo": $("#docNo7").val(),
+						"unitId": $("#unitId7").val(),
+						"amount": $("#amount7").val(),
+						"preAcceptanceTime": $("#preAcceptanceTime7").val(),
+						"finishTime": $("#finishTime7").val(),
+						"problem": $("#problem7").val(),
+						"rectification": $("#rectification7").val(),
+						"fileUrl": $('#fileurl_uploader7').val()
+					}],
+					"projectId": projectId,
+					"projectType": projectType,
+					"status": status
+				}
+				if(action == "edit") {
+					data["buildingDetectionList"][0]["id"] = id1;
+					data["buildingDetectionList"][1]["id"] = id2;
+					data["buildingDetectionList"][2]["id"] = id3;
+					data["buildingDetectionList"][3]["id"] = id4;
+					data["buildingDetectionList"][4]["id"] = id5;
+					data["buildingDetectionList"][5]["id"] = id6;
+					data["buildingDetectionList"][6]["id"] = id7;
+				}
+				meetAdd('/api/buildingDetection', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">房屋检测</h2>
+		<h3 class="ydsxHead">房屋面积测绘</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<select id="unitId1">
+				<option value="0">---请选择---</option>
+			</select>
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与专家：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="amount1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预验收时间：</span>
+			<input type="text" id="preAcceptanceTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="finishTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader1" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="problem1"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="rectification1"></textarea>
+		</div>
+		<h3 class="ydsxHead">防雷检测</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo2" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<select id="unitId2">
+				<option value="0">---请选择---</option>
+			</select>
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与专家：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="amount2" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预验收时间：</span>
+			<input type="text" id="preAcceptanceTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="finishTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader2" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="problem2"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="rectification2"></textarea>
+		</div>
+		<h3 class="ydsxHead">节能检测</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo3" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<select id="unitId3">
+				<option value="0">---请选择---</option>
+			</select>
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与专家：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="amount3" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预验收时间：</span>
+			<input type="text" id="preAcceptanceTime3" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="finishTime3" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader3" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="problem3"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="rectification3"></textarea>
+		</div>
+		<h3 class="ydsxHead">室内环境检测</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo4" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<select id="unitId4">
+				<option value="0">---请选择---</option>
+			</select>
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与专家：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="amount4" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预验收时间：</span>
+			<input type="text" id="preAcceptanceTime4" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="finishTime4" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader4" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="problem4"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="rectification4"></textarea>
+		</div>
+		<h3 class="ydsxHead">沉降检测</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo5" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<select id="unitId5">
+				<option value="0">---请选择---</option>
+			</select>
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与专家：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="amount5" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预验收时间：</span>
+			<input type="text" id="preAcceptanceTime5" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="finishTime5" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader5" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="problem5"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="rectification5"></textarea>
+		</div>
+		<h3 class="ydsxHead">消防检测</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo6" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<select id="unitId6">
+				<option value="0">---请选择---</option>
+			</select>
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与专家：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="amount6" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预验收时间：</span>
+			<input type="text" id="preAcceptanceTime6" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="finishTime6" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader6" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="problem6"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="rectification6"></textarea>
+		</div>
+		<h3 class="ydsxHead">门窗及幕墙检测</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo7" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<select id="unitId7">
+				<option value="0">---请选择---</option>
+			</select>
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与专家：</span>
+			<table class="dczjTable" cellpadding="0" cellspacing="0">
+				<tr>
+					<td>姓名</td>
+					<td>电话</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+				<tr>
+					<td>江龙飞</td>
+					<td>13608653456</td>
+				</tr>
+			</table>
+		</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="amount7" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预验收时间：</span>
+			<input type="text" id="preAcceptanceTime7" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="finishTime7" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader7" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="problem7"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="rectification7"></textarea>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

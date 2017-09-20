@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>工程保修</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id;
+			$(function() {
+				$.ajaxSettings.async = false;
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = $.getUrlParam("projectName");
+				SelectUnit("txtresponsibleUnitId", "A0004", projectType);
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/projectWarranty/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							$('#txtresponsibleUnitId').val(res["result"]["responsibleUnitId"]);
+							$('#txtresponsibleDeptId').val(res["result"]["responsibleDeptId"]);
+							$('#txtresponsiblePerson').val(res["result"]["responsiblePerson"]);
+							$('#txtstartTime').val(res["result"]["startTime"]);
+							$('#txtwarrantyContent').val(res["result"]["warrantyContent"]);
+							$('#txtproblem').val(res["result"]["problem"]);
+							$('#txtrectification').val(res["result"]["rectification"]);
+
+							id = res["result"]["id"];
+							//附件加上
+							upload.show(res["result"]["fileUrl"], "files_uploader")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var responsibleUnitId = $("#txtresponsibleUnitId option:selected").val();;
+				var responsibleDeptId = $('#txtresponsibleDeptId').val();
+				var responsiblePerson = $('#txtresponsiblePerson').val();
+				var startTime = $('#txtstartTime').val();
+				var warrantyContent = $('#txtwarrantyContent').val();
+				var problem = $('#txtproblem').val();
+				var rectification = $('#txtrectification').val();
+				var artfu = $('#fileurl_uploader').val() == "" ? "ss" : $('#fileurl_uploader').val();
+
+				var data = {
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectName": projectName,
+					"projectType": projectType,
+
+					"docNo": 1,
+					"responsibleUnitId": responsibleUnitId,
+					"responsibleDeptId": responsibleDeptId,
+					"responsiblePerson": responsiblePerson,
+					"startTime": startTime,
+					"warrantyContent": warrantyContent,
+					"problem": problem,
+					"rectification": rectification,
+
+					"fileUrl": artfu,
+					"status": status
+				}
+				if(action == "edit")
+					data["id"] = id;
+				meetAdd('/api/projectWarranty', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+
+		<h2 class="szTitle">工程保修</h2>
+		<div class="szxmTjPageRightForm">
+			<span>责任单位：</span>
+			<select id="txtresponsibleUnitId">
+				<option value="0">---请选择---</option>
+			</select>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>责任部门：</span>
+			<input type="text" id="txtresponsibleDeptId" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>责任人：</span>
+			<input type="text" id="txtresponsiblePerson" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>起始时间：</span>
+			<input type="text" id="txtstartTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工程保修书附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>保修内容：</span>
+			<textarea id="txtwarrantyContent"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtproblem"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification"></textarea>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

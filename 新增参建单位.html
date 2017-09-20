@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>新增参建单位</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+		var action,orgCategory,orgType,id
+			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				orgCategory=$.getUrlParam("orgCategory");
+				orgType=$.getUrlParam("orgType");
+				id=$.getUrlParam("id");
+				if (action != "" && action != undefined) {
+					SetData(id)
+					if (action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".lfjqqzbbBottom").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.lfjqqzbbBottom').click(function() {
+					SubmitData()
+				});
+
+			});
+			
+			function SetData(id){
+				
+			}
+
+			function SubmitData() {
+
+				var data = {
+					"proOrgExtensions":[],
+					"projectOrg":{
+						"address":$("#address").val(),
+						"chargeProject":$("#chargeProject").val(),
+						"contact":$("#contact").val(),
+						"entity":$("#entity").val(),
+						"fileUrl":$("#fileurl_uploader").val(),
+						"foundTime":$("#foundTime").val(),
+						"name":$("#name").val(),
+						"orgCategory":$("#orgCategory").val(),
+						"orgType":orgType,
+						"projectEntity":$("#projectEntity").val(),
+						"projectType":$("input[name='projectType']:checked").val(),
+						"orgCategory":orgCategory
+						}
+				}
+				if (action == "edit")
+					data["id"] = id;
+				meetAdd('/api/proorg/save', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="title">
+			<div class="page">
+				<b>当前位置：</b>
+				<span>> 首页</span>
+				<span>> 项目综合管理</span>
+				<span>> 参建单位</span>
+				<span>> 新增参建单位</span>
+			</div>
+		</div>
+		<div class="lfjqqzbbBigBox">
+			<h2 class="lfjqqzbbTitle">新增参建单位</h2>
+			<div class="lfjqqzbbBox1">
+				<div class="lfjqqzbbBox1Left">
+					<span>单位名称：</span>
+					<input type="text" id="name" />
+				</div>
+				<div class="lfjqqzbbBox1Right">
+					<span>单位地址：</span>
+					<input type="text" id="address" />
+				</div>
+			</div>
+			<div class="lfjqqzbbBox1">
+				<div class="lfjqqzbbBox1Left">
+					<span>单位法人：</span>
+					<input type="text" id="entity" />
+				</div>
+				<div class="lfjqqzbbBox1Right">
+					<span>项目负责人：</span>
+					<input type="text" id="projectEntity" />
+				</div>
+			</div>
+			<div class="lfjqqzbbBox1">
+				<div class="lfjqqzbbBox1Left">
+					<span>联系方式：</span>
+					<input type="text" id="contact" />
+				</div>
+				
+			</div>
+			<div class="lfjqqzbbBox1">
+				<div class="lfjqqzbbBox1Left">
+					<span>项目类别：</span>
+					<input type="radio" name="projectType" value="CITY" />市政
+					<input type="radio" name="projectType" value="HOUSE" />房建
+				</div>
+			</div>
+			<div class="lfjqqzbbBox1">
+				<div class="lfjqqzbbBox1Left">
+					<span>成立时间：</span>
+					<input type="text" id="foundTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+				</div>
+				<div class="lfjqqzbbBox1Right">
+					<span>负责项目内容：</span>
+					<input type="text" id="chargeProject" />
+				</div>
+			</div>
+			<div class="lfjqqzbbBoxSame">
+				<div class="lfjqqzbbBoxSameLeft">
+					<span>附件：</span>
+					<div id="uploader" class="fjStyle">
+					</div>
+				</div>
+			</div>	
+			
+			<hr color="#CBCBCB" width="90%" size="2px" />
+			<div class="lfjqqzbbBox1">
+				<div class="lfjqqzbbBox1Left">
+					<span>项目总工：</span>
+					<input type="text" />
+				</div>
+				<div class="lfjqqzbbBox1Right">
+					<span>项目总工电话：</span>
+					<input type="text" />
+				</div>
+			</div>
+			<div class="lfjqqzbbBox1">
+				<div class="lfjqqzbbBox1Left">
+					<span>质检员：</span>
+					<input type="text" />
+				</div>
+				<div class="lfjqqzbbBox1Right">
+					<span>质检员证：</span>
+					<input type="text" />
+				</div>
+			</div>
+
+			<a href="#" class="lfjqqzbbBottom">保存</a>
+		</div>
+	</body>
+
+</html>

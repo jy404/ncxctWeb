@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>房建项目添加</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				var action = $.getUrlParam("action");
+				var id = $.getUrlParam("id");
+				var projectNo = $.getUrlParam("projectNo");
+				var projectType=$.getUrlParam("projectType");
+				var projectName=$.getUrlParam("projectName");
+				$.each($("a"), function() {
+					curUrl = $(this).attr("href");
+					$(this).attr("href", curUrl + "?action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType="+projectType+"&projectName="+escape(projectName)+"&rnd=" + Math.random());
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="title">
+			<div class="page">
+				<b>当前位置：</b>
+				<span>> 首页</span>
+				<span>> 项目综合管理</span>
+				<span>> 房建项目</span>
+				<span>> 新项目添加</span>
+			</div>
+		</div>
+		<div class="szxmTjPage">
+			<div class="leftNavSz">
+				<a href="200房建项目添加1.html" target="szRight"><h6>项目报建</h6></a>
+				<a href="201房建项目计划.html" target="szRight"><h6>项目计划</h6></a>
+				<div>
+					<h2><span>前期</span></h2>
+					<ul style="display: block;">
+						<a href="202会议纪要或抄报告.html" target="szRight">
+							<li class="leftNavSzSelect"> 1.会议纪要或抄告单</li>
+						</a>
+						<a href="203项目选址意见书、用地红线、国土测绘.html" target="szRight">
+							<li> 2.项目选址意见书、用地红线、国土测绘</li>
+						</a>
+						<a href="204规划方案设计评选.html" target="szRight">
+							<li> 3.规划方案设计评选</li>
+						</a>
+						<a href="205规划方案报批.html" target="szRight">
+							<li> 4.规划方案报批</li>
+						</a>
+						<a href="206交通影响评估1.html" target="szRight">
+							<li> 5.交通影响评估1</li>
+						</a>
+						<a href="206环境影响评估2.html" target="szRight">
+							<li> 6.环境影响评估2</li>
+						</a>
+						<a href="207项目建议书或可研批复、节能批复.html" target="szRight">
+							<li> 7.项目建议书或可研批复、节能批复</li>
+						</a>
+						<a href="208人防方案报批.html" target="szRight">
+							<li> 8.人防方案报批</li>
+						</a>
+						<a href="209地勘.html" target="szRight">
+							<li> 9.地勘</li>
+						</a>
+						<a href="210用地手续报批.html" target="szRight">
+							<li> 10.用地手续报批</li>
+						</a>
+						<a href="211用地规划许可证.html" target="szRight">
+							<li> 11.用地规划许可证</li>
+						</a>
+						<a href="212初步设计及概算批复.html" target="szRight">
+							<li> 12.初步设计及概算批复</li>
+						</a>
+						<a href="213施工图设计及设计审查.html" target="szRight">
+							<li> 13.施工图设计及设计审查</li>
+						</a>
+						<a href="214工程规划许可证.html" target="szRight">
+							<li> 14.工程规划许可证</li>
+						</a>
+						<a href="215八家联审.html" target="szRight">
+							<li> 15.八家联审</li>
+						</a>
+						<a href="216招标代理.html" target="szRight">
+							<li> 16.招标代理</li>
+						</a>
+						<a href="217预算控制价编制.html" target="szRight">
+							<li> 17.预算控制价编制</li>
+						</a>
+						<a href="218财政出具预算控制价审核报告、财政复函.html" target="szRight">
+							<li> 18.财政出具预算控制价审核报告、财政复函</li>
+						</a>
+						<a href="219招标核准、摸取下浮系数.html" target="szRight">
+							<li> 19.招标核准、摸取下浮系数</li>
+						</a>
+						<a href="220期望中标价.html" target="szRight">
+							<li> 20.期望中标价</li>
+						</a>
+						<a href="221招标邀请函、发布招标告知、招标文件.html" target="szRight">
+							<li> 21.招标邀请函、发布招标告知、招标文件</li>
+						</a>
+						<a href="222项目招标，确定施工单位及监理单位.html" target="szRight">
+							<li> 22.项目招标，确定施工单位及监理单位</li>
+						</a>
+						<a href="223中标通知书.html" target="szRight">
+							<li> 23.中标通知书</li>
+						</a>
+						<a href="224施工合同.html" target="szRight">
+							<li> 24.施工合同</li>
+						</a>
+						<a href="225监理合同.html" target="szRight">
+							<li> 25.监理合同</li>
+						</a>
+						<a href="226质、安监.html" target="szRight">
+							<li> 26.质、安监</li>
+						</a>
+						<a href="227施工许可证.html" target="szRight">
+							<li> 27.施工许可证</li>
+						</a>
+						<a href="228消防建审.html" target="szRight">
+							<li> 28.消防建审</li>
+						</a>
+					</ul>
+				</div>
+				<div>
+					<h2><span>征地拆迁</span></h2>
+					<ul>
+						<a href="229征地拆迁交底.html" target="szRight">
+							<li> 29.征地拆迁交底</li>
+						</a>
+						<a href="230征地.html" target="szRight">
+							<li> 30.征地</li>
+						</a>
+						<a href="231拆迁.html" target="szRight">
+							<li> 31.拆迁</li>
+						</a>
+						<a href="232强弱电改迁.html" target="szRight">
+							<li> 32.强弱电改迁</li>
+						</a>
+						<a href="233其他附着物清除.html" target="szRight">
+							<li> 33.其他附着物清除</li>
+						</a>
+					</ul>
+				</div>
+				<div>
+					<h2><span>施工</span></h2>
+					<ul>
+						<a href="234施工图会审.html" target="szRight">
+							<li> 34.施工图会审</li>
+						</a>
+						<a href="235施工单位交桩手续.html" target="szRight">
+							<li> 35.施工单位交桩手续</li>
+						</a>
+						<a href="236原地面复测.html" target="szRight">
+							<li> 36.原地面复测</li>
+						</a>
+						<a href="237工程清表推进.html" target="szRight">
+							<li> 37.工程清表推进</li>
+						</a>
+						<a href="238桩基工程.html" target="szRight">
+							<li> 38.桩基工程</li>
+						</a>
+						<a href="239地下室工程.html" target="szRight">
+							<li> 39.地下室工程</li>
+						</a>
+						<a href="240主体工程.html" target="szRight">
+							<li> 40.主体工程</li>
+						</a>
+						<a href="241装修工程.html" target="szRight">
+							<li> 41.装修工程</li>
+						</a>
+						<a href="242安装工程.html" target="szRight">
+							<li> 42.安装工程</li>
+						</a>
+						<a href="243室外市政工程.html" target="szRight">
+							<li> 43.室外市政工程</li>
+						</a>
+						<a href="244材料及设备询价.html" target="szRight">
+							<li> 44.材料及设备询价</li>
+						</a>
+						<a href="245基坑支付及降水工程.html" target="szRight">
+							<li> 45.基坑支付及降水工程</li>
+						</a>
+						<a href="246工程签证及变更.html" target="szRight">
+							<li> 46.工程签证及变更</li>
+						</a>
+					</ul>
+				</div>
+				<div>
+					<h2><span>竣工结算</span></h2>
+					<ul>
+						<a href="247房屋检测.html" target="szRight">
+							<li> 47.房屋检测</li>
+						</a>
+						<a href="248工程竣工图.html" target="szRight">
+							<li> 48.工程竣工图</li>
+						</a>
+						<a href="249配套专业验收.html" target="szRight">
+							<li> 49.配套专业验收</li>
+						</a>
+						<a href="250消防验收.html" target="szRight">
+							<li> 50.消防验收</li>
+						</a>
+						<a href="251人防验收.html" target="szRight">
+							<li> 51.人防验收</li>
+						</a>
+						<a href="252规划验收.html" target="szRight">
+							<li> 52.规划验收</li>
+						</a>
+						<a href="253城管验收.html" target="szRight">
+							<li> 53.城管验收</li>
+						</a>
+						<a href="254环保验收.html" target="szRight">
+							<li> 54.环保验收</li>
+						</a>
+						<a href="255国土验收.html" target="szRight">
+							<li> 55.国土验收</li>
+						</a>
+						<a href="256防震减灾局验收.html" target="szRight">
+							<li> 56.防震减灾局验收</li>
+						</a>
+						<a href="257交通验收.html" target="szRight">
+							<li> 57.交通验收</li>
+						</a>
+						<a href="258卫生验收.html" target="szRight">
+							<li> 58.卫生验收</li>
+						</a>
+						<a href="259园林验收.html" target="szRight">
+							<li> 59.园林验收</li>
+						</a>
+						<a href="260管线验收.html" target="szRight">
+							<li> 60.管线验收</li>
+						</a>
+						<a href="261质量终身责任牌（单体外墙）.html" target="szRight">
+							<li> 61.质量终身责任牌（单体外墙）</li>
+						</a>
+						<a href="262门牌楼牌号安装.html" target="szRight">
+							<li> 62.门牌楼牌号安装</li>
+						</a>
+						<a href="263工程预验收.html" target="szRight">
+							<li> 63.工程预验收</li>
+						</a>
+						<a href="264分户验收.html" target="szRight">
+							<li> 64.分户验收</li>
+						</a>
+						<a href="265工程竣工验收（五方责任主体验收）.html" target="szRight">
+							<li> 65.工程竣工验收（五方责任主体验收）</li>
+						</a>
+						<a href="266质安监验收.html" target="szRight">
+							<li> 66.质安监验收</li>
+						</a>
+						<a href="267安监站验收.html" target="szRight">
+							<li> 67.安监站验收</li>
+						</a>
+						<a href="268城建局抽取专家验收.html" target="szRight">
+							<li> 68.城建局抽取专家验收</li>
+						</a>
+						<a href="269城建档案馆资料移交.html" target="szRight">
+							<li> 69.城建档案馆资料移交</li>
+						</a>
+						<a href="270竣工验收备案表.html" target="szRight">
+							<li> 70.竣工验收备案表</li>
+						</a>
+						<a href="271工程移交（工程移交给试用单位）.html" target="szRight">
+							<li> 71.工程移交（工程移交给试用单位）</li>
+						</a>
+						<a href="272不动产证.html" target="szRight">
+							<li> 72.不动产证</li>
+						</a>
+						<a href="273工程结算.html" target="szRight">
+							<li> 73.工程结算</li>
+						</a>
+						<a href="274工程保修.html" target="szRight">
+							<li> 74.工程保修</li>
+						</a>
+					</ul>
+				</div>
+			</div>
+			<div class="szxmTjPageRight">
+				<iframe style="vertical-align:bottom" src="200房建项目添加1.html" name="szRight" width="100%" height="100%" frameborder="0"></iframe>
+			</div>
+		</div>
+	</body>
+
+</html>

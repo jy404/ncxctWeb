@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+<link href="css/hsCheckData.css" rel="stylesheet" />
+<style>
+	#demo{
+		margin:0 auto;
+		margin-top:100px;
+		width:700px;
+	}
+</style>
+</head>
+<body>
+    <div id="demo">
+        <span>单选</span>
+    	<div id="cityDanXuan" style="width:300px;">
+    	</div>
+        <br />
+        <br />
+        <br />
+        <span>多选</span>
+        <div id="cityDuoXuan" style="width:300px;">
+        </div>
+        <br />
+        <br />
+        <br />
+        <span>默认值1</span>
+        <div id="cityMR" style="width:300px;" >
+        </div>
+		<br />
+        <br />
+        <br />
+		<span>默认值2</span>
+		<div id="cityMR2" style="width:300px;" data-id="11-12-14" >
+        </div>
+    </div>
+</body>
+</html>
+<script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+<script src="js/cityData.js"></script>
+<script src="js/hsCheckData.js"></script>
+<script>
+    $('#cityDanXuan').hsCheckData({
+        isShowCheckBox: false, //默认为false
+        data: cityData
+    });
+    $('#cityDuoXuan').hsCheckData({
+        isShowCheckBox: true, //默认为false
+        minCheck: 3,//默认为0，不限最少选择个数
+        maxCheck: 6,//默认为0，不限最多选择个数
+        data: cityData
+    });
+    $('#cityMR').hsCheckData({
+        isShowCheckBox: true,
+        data: cityData,
+		defText:'北京-上海-汕头'
+    });
+	$('#cityMR2').hsCheckData({
+        isShowCheckBox: true,
+        data: cityData
+    });
+</script>
+

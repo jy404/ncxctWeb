@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>新增部门</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, id;
+			$(function() {
+				action = $.getUrlParam("action");
+				id = $.getUrlParam("id");
+				//判断编辑或者查看
+				if(action != "" && action != undefined) {
+					SetData()
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.lxzbmBtnLeft').click(function() {
+					SubmitData()
+				});
+			});
+
+			function SetData() {
+				$.getJSON(
+					domain + "api/system/org/view/" + id,
+					function(res) {
+						if(res["code"] == "0") {
+							//$('#txtSort').val(res["result"]["Sort"]);
+							$('#txtparentId').val(res["result"]["parentId"]);
+							$('#txtorgCode').val(res["result"]["orgCode"]);
+							$('#txtorgName').val(res["result"]["orgName"]);
+							$('#txtactivation').val(res["result"]["activation"]);
+							//$('#description').val(res["result"]["description"]);
+
+							id = res["result"]["id"];
+							//附件加上
+							//upload.show(res["result"]["files"], "files_uploader")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData() {
+				var parentId = $("#txtparentId").val();
+				var data = {
+					//"Sort": $("#txtSort").val(),
+					"parentId": parentId == "" ? parseInt(0) : parseInt(parentId),
+					"orgCode": $("#txtorgCode").val(),
+					"orgName": $("#txtorgName").val(),
+					"description": "详情",
+					"activation": $("#txtactivation").val() == "" ? true : false
+				}
+				if(action == "edit")
+					data["id"] = id;
+				meetAdd('/api/system/org/add', JSON.stringify(data), "组织架构.html");
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="title">
+			<div class="page">
+				<b>当前位置：</b>
+				<span>> 首页</span>
+				<span>> 系统管理</span>
+				<span>> 组织结构</span>
+				<span>> 新增部门</span>
+			</div>
+		</div>
+		<div class="lxzbmBigBox">
+			<h2 class="lxzbmTop">新增部门</h2>
+			<div class="lxzbmMinBox">
+				<span>序号：</span>
+				<input type="text" id="txtSort" />
+			</div>
+			<div class="lxzbmMinBox">
+				<span>所属部门：</span>
+				<input type="text" id="txtparentId" />
+			</div>
+			<div class="lxzbmMinBox">
+				<span>部门编号：</span>
+				<input type="text" id="txtorgCode" />
+			</div>
+			<div class="lxzbmMinBox">
+				<span>部门名称：</span>
+				<input type="text" id="txtorgName" />
+			</div>
+			<div class="lxzbmMinBox">
+				<span>使用状态：</span>
+				<input type="text" id="txtactivation" />
+			</div>
+			<div class="lxzbmMinBox">
+				<a href="#" class="lxzbmBtnLeft">提交</a>
+				<a href="岗位管理.html" class="lxzbmBtnRight">取消</a>
+			</div>
+		</div>
+	</body>
+
+</html>

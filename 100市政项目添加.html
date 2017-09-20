@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>市政项目添加</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				var action = $.getUrlParam("action");
+				var id = $.getUrlParam("id");
+				var projectNo = $.getUrlParam("projectNo");
+				var projectType = $.getUrlParam("projectType");
+				var projectName = $.getUrlParam("projectName");
+				$.each($("a"), function() {
+					curUrl = $(this).attr("href");
+					$(this).attr("href", curUrl + "?action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random());
+				});
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="title">
+			<div class="page">
+				<b>当前位置：</b>
+				<span>> 首页</span>
+				<span>> 项目综合管理</span>
+				<span>> 市政项目</span>
+				<span>> 新项目添加</span>
+			</div>
+		</div>
+		<div class="szxmTjPage">
+			<div class="leftNavSz">
+				<a href="100市政项目添加1.html" target="szRight"><h6>项目报建</h6></a>
+				<a href="1000市政项目计划.html" target="szRight"><h6>项目计划</h6></a>
+				<div>
+					<h2><span>前期</span></h2>
+					<ul style="display: block;">
+						<a href="101会议纪要或抄报告.html" target="szRight">
+							<li class="leftNavSzSelect"> 1.会议纪要或抄告单</li>
+						</a>
+						<a href="102项目选址意见书.html" target="szRight">
+							<li> 2.项目选址意见书</li>
+						</a>
+						<a href="103环境影响评估.html" target="szRight">
+							<li> 3.环境影响评估</li>
+						</a>
+						<a href="104交通影响评估.html" target="szRight">
+							<li> 4.交通影响评估</li>
+						</a>
+						<a href="105用地手续.html" target="szRight">
+							<li> 5.用地手续</li>
+						</a>
+						<a href="106用地规划许可证.html" target="szRight">
+							<li> 6.用地规划许可证</li>
+						</a>
+						<a href="107项目建议书请求.html" target="szRight">
+							<li> 7.项目建议书请求</li>
+						</a>
+						<a href="108项目建议书或科研批复.html" target="szRight">
+							<li> 8.项目建议书或可研批复</li>
+						</a>
+						<a href="109地勘、测绘.html" target="szRight">
+							<li> 9.地勘、测绘</li>
+						</a>
+						<a href="110水土保持评估.html" target="szRight">
+							<li> 10.水土保持评估</li>
+						</a>
+						<a href="111地质灾害、压覆矿评估.html" target="szRight">
+							<li> 11.地质灾害、压覆矿评估</li>
+						</a>
+						<a href="112防洪评估.html" target="szRight">
+							<li> 12.防洪评估</li>
+						</a>
+						<a href="113稳定评估.html" target="szRight">
+							<li> 13.稳定评估</li>
+						</a>
+						<a href="114施工图.html" target="szRight">
+							<li> 14.施工图图审报告</li>
+						</a>
+						<a href="115工程规划许可证.html" target="szRight">
+							<li> 15.工程规划许可证</li>
+						</a>
+						<a href="116初步设计及概算批复请求.html" target="szRight">
+							<li> 16.初步设计及概算批复请求</li>
+						</a>
+						<a href="117初步设计及概算批复.html" target="szRight">
+							<li> 17.初步设计及概算批复</li>
+						</a>
+						<a href="118招标代理.html" target="szRight">
+							<li> 18.确定招标代理</li>
+						</a>
+						<a href="119预算控制价编制.html" target="szRight">
+							<li> 19.预算控制价编制</li>
+						</a>
+						<a href="120财政复函、预算控制价审核报告.html" target="szRight">
+							<li> 20.财政复函、预算控制价审核报告</li>
+						</a>
+						<a href="121下浮系数.html" target="szRight">
+							<li> 21.下浮系数</li>
+						</a>
+						<a href="122期望中标价.html" target="szRight">
+							<li> 22.期望中标价</li>
+						</a>
+						<a href="123招标告知、招标核准.html" target="szRight">
+							<li> 23.招标告知、招标核准</li>
+						</a>
+						<a href="124项目招标，确定施工单位及监理单位.html" target="szRight">
+							<li> 24.项目招标，确定施工单位及监理单位</li>
+						</a>
+						<a href="125中标通知书.html" target="szRight">
+							<li> 25.中标通知书</li>
+						</a>
+						<a href="126施工合同.html" target="szRight">
+							<li> 26.施工合同</li>
+						</a>
+						<a href="127监理合同.html" target="szRight">
+							<li> 27.监理合同</li>
+						</a>
+						<a href="128质安监.html" target="szRight">
+							<li> 28.质、安监</li>
+						</a>
+						<a href="129施工许可证.html" target="szRight">
+							<li> 29.施工许可证</li>
+						</a>
+					</ul>
+				</div>
+				<div>
+					<h2><span>征地拆迁</span></h2>
+					<ul>
+						<a href="130征地拆迁交底.html" target="szRight">
+							<li> 30.征地拆迁交底</li>
+						</a>
+						<a href="131征地.html" target="szRight">
+							<li> 31.征地</li>
+						</a>
+						<a href="132拆迁.html" target="szRight">
+							<li> 32.拆迁</li>
+						</a>
+						<a href="133强弱电改签.html" target="szRight">
+							<li> 33.强弱电改签</li>
+						</a>
+						<a href="134其他附着物清楚.html" target="szRight">
+							<li> 34.其他附着物清除</li>
+						</a>
+					</ul>
+				</div>
+				<div>
+					<h2><span>施工</span></h2>
+					<ul>
+						<a href="135施工图会审.html" target="szRight">
+							<li> 35.施工图会审</li>
+						</a>
+						<a href="136施工图交桩手续.html" target="szRight">
+							<li> 36.施工图交桩手续</li>
+						</a>
+						<a href="137原地面复测.html" target="szRight">
+							<li> 37.原地面复测</li>
+						</a>
+						<a href="138工程清表推进.html" target="szRight">
+							<li> 38.工程清表推进</li>
+						</a>
+						<a href="139路基工程.html" target="szRight">
+							<li> 39.路基工程</li>
+						</a>
+						<a href="140排水工程.html" target="szRight">
+							<li> 40.排水工程</li>
+						</a>
+						<a href="141路面结构工程.html" target="szRight">
+							<li> 41.路面结构工程</li>
+						</a>
+						<a href="142非机动车道.html" target="szRight">
+							<li> 42.非机动车道</li>
+						</a>
+						<a href="143人行道及路沿石等附属工程.html" target="szRight">
+							<li> 43.人行道及路沿石等附属工程</li>
+						</a>
+						<a href="144交通工程.html" target="szRight">
+							<li> 44.交通工程</li>
+						</a>
+						<a href="145绿化工程.html" target="szRight">
+							<li> 45.绿化工程</li>
+						</a>
+						<a href="146亮化工程.html" target="szRight">
+							<li> 46.亮化工程</li>
+						</a>
+						<a href="147存在问题.html" target="szRight">
+							<li> 47.存在问题</li>
+						</a>
+						<a href="148整改情况.html" target="szRight">
+							<li> 48.整改情况</li>
+						</a>
+						<a href="149附件.html" target="szRight">
+							<li> 49.附件</li>
+						</a>
+						<a href="150工程签证及变更.html" target="szRight">
+							<li> 50.工程签证与变更</li>
+						</a>
+					</ul>
+				</div>
+				<div>
+					<h2><span>竣工结算</span></h2>
+					<ul>
+						<a href="151工程预验收.html" target="szRight">
+							<li> 51.工程预验收</li>
+						</a>
+						<a href="152工程竣工结算.html" target="szRight">
+							<li> 52.工程竣工验收</li>
+						</a>
+						<a href="153工程移交.html" target="szRight">
+							<li> 53.工程移交</li>
+						</a>
+						<a href="154工程结算.html" target="szRight">
+							<li> 54.工程结算</li>
+						</a>
+						<a href="155工程保修.html" target="szRight">
+							<li> 55.工程保修</li>
+						</a>
+					</ul>
+				</div>
+			</div>
+			<div class="szxmTjPageRight">
+				<iframe style="vertical-align:bottom" src="100市政项目添加1.html" name="szRight" width="100%" height="100%" frameborder="0"></iframe>
+			</div>
+		</div>
+	</body>
+
+</html>

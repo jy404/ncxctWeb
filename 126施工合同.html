@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>施工合同</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id;
+			$.ajaxSettings.async=false;
+			$(function() {
+				/*页面传参并判断类型 start*/
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = unescape($.getUrlParam("projectName"));
+				SelectUnit("swei", "A0004", projectType);
+				if (action != "" && action != undefined) {
+					SetData(projectId)
+					if (action == "view") {
+						$("body").find("input").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/prophase/contract/orders/A0004/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							$("#sNo").val(res["result"]["docNo"]);
+							$("#swei").val(res["result"]["wonBidUnitId"]);
+							$("#stime").val(res["result"]["dispatchTime"]);
+							$("#sprace").val(res["result"]["amount"]);
+							$("#fileurl_uploader").val(res["result"]["fileUrl"]);
+							upload.show(res["result"]["fileUrl"], "files_uploader")
+							upload.show(res["result"]["recordFileUrl"], "files_uploader1")
+							$("#beNo").val();
+							$("#betime").val(res["result"]["recordDispatchTime"]);
+							$("#beprace").val(res["result"]["recordAmount"]);
+
+							id = res["result"]["id"];
+							//附件加上
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var sNo = $("#sNo").val();
+				var swei = $("#swei").val();
+				var stime = $("#stime").val();
+				var sprace = $("#sprace").val();
+				var sfile = $("#fileurl_uploader").val();
+				var beNo = $("#beNo").val();
+				var unitId = $("#swei").val();
+				var unitName = $("#swei").find("option:selected").text();
+				var betime = $("#betime").val();
+				var beprace = $("#beprace").val();
+				var befile = $("#fileurl_uploader1").val();
+				var data = {
+					"amount": sprace,
+					"contractType": "A0004",
+					"dispatchTime": stime,
+					"docNo": sNo,
+					"fileUrl": sfile,
+					"projectId": projectId,
+					"projectName": projectName,
+					"projectType": projectType,
+					"recordAmount": beprace,
+					"recordDispatchTime": betime,
+					"recordFileUrl": befile,
+					"wonBidUnitId": unitId,
+					"wonBidUnitName": unitName
+				}
+				if (action == "edit") {
+					data["id"] = id
+				}
+				meetAdd('/api/prophase/contract/order', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">施工合同</h2>
+		<h3 class="ydsxHead">施工合同</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="sNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>中标单位：</span>
+			<select id="swei">
+				<option>---请选择---</option>
+			</select>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="stime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly"  />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="sprace" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+		<h3 class="ydsxHead">施工合同备案</h3>
+		<!--<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="beNo" />
+		</div>-->
+
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="betime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly"  />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="beprace" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader1" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>房建项目添加</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, id;
+			$(function() {
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBtn1').click(function() {
+					SubmitData()
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/project/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							$('#projectName').val(res["result"]["name"]);
+							$('#projectNo').val(res["result"]["projectNo"]);
+							$('#projectOrg').val(res["result"]["orgId"]);
+							$('#startTime').val(res["result"]["createTime"]);
+							$('#prophaseUserName').val(res["result"]["prophaseUserName"]);
+							$('#landUserName').val(res["result"]["landUserName"]);
+							$('#contUserName').val(res["result"]["contUserName"]);
+							$('#compUserName').val(res["result"]["compUserName"]);
+							$('#address').val(res["result"]["address"]);
+							$('#totalAmount').val(res["result"]["totalAmount"]);
+							$('#comment').val(res["result"]["comment"]);
+
+							id = res["result"]["id"];
+							//附件加上
+							//upload.show(res["result"]["files"], "files_uploader")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData() {
+				var data = {
+					"name": $("#projectName").val(),
+					"projectType": "HOUSE",
+					"projectTypeName": "房建项目",
+					"userId": "1",
+					"projectNo": $("#projectNo").val(),
+					"orgId": $("#projectOrg").val(),
+					"startTime": $("#startTime").val(),
+					"prophaseUserId": "1",
+					"prophaseUserName": $("#prophaseUserName").val(),
+					"landUserId": "1",
+					"landUserName": $("#landUserName").val(),
+					"contUserId": "1",
+					"contUserName": $("#contUserName").val(),
+					"compUserId": 1,
+					"compUserName": $("#compUserName").val(),
+					"address": $("#address").val(),
+					"totalAmount": $("#totalAmount").val(),
+					"comment": $("#comment").val(),
+					"latitude": "123",
+					"longitude": "234",
+					"status": "1"
+				}
+				if(action == "edit")
+					data["id"] = id;
+				meetAdd('/api/project/save', JSON.stringify(data), "房建项目.html");
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">项目报建</h2>
+		<div class="szxmTjPageRightForm">
+			<span>项目名称：</span>
+			<input type="text" id="projectName" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>项目编号：</span>
+			<input type="text" id="projectNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>负责部门：</span>
+			<input type="text" id="projectOrg" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预计开工时间：</span>
+			<input type="text" id="startTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+					<span>预计竣工时间：</span>
+					<input type="text" id="arttime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+				</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>项目前期负责人：</span>
+			<input type="text" id="prophaseUserName" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>征地拆迁工作负责人：</span>
+			<input type="text" id="landUserName" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>施工工作负责人：</span>
+			<input type="text" id="contUserName" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>竣工工作负责人：</span>
+			<input type="text" id="compUserName" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>项目地址：</span>
+			<input type="text" id="address" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>总金额：</span>
+			<input type="text" id="totalAmount" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>项目概况：</span>
+			<textarea id="comment"></textarea>
+		</div>
+		<a href="#" class="szxmTjPageRightFormBtn1">提交</a>
+
+		</div>
+	</body>
+
+</html>

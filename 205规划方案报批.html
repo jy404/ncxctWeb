@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>规划方案报批</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id, cid, zid, gid;
+			$(function() {
+				/*页面传参并判断类型 start*/
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = unescape($.getUrlParam("projectName"));
+				if (action != "" && action != undefined) {
+					SetData(projectId)
+					if (action == "view") {
+						$("body").find("input").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/programmeApproval/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							$("#cwei").val(res["result"][0]["unitName"]);
+							$("#cNo").val(res["result"][0]["docNo"]);
+							$("#ctime").val(res["result"][0]["createTime"]);
+							upload.show(res["result"][0]["fileUrl"], "files_uploader")
+								//城建局专家会
+							$("#zwei").val(res["result"][1]["unitName"]);
+							$("#zNo").val(res["result"][1]["docNo"]);
+							$("#ztime").val(res["result"][1]["createTime"]);
+							upload.show(res["result"][1]["fileUrl"], "files_uploader1")
+								//规委会办公会
+							$("#gwei").val(res["result"][2]["unitName"]);
+							$("#gNo").val(res["result"][2]["docNo"]);
+							$("#gtime").val(res["result"][2]["createTime"]);
+							upload.show(res["result"][2]["fileUrl"], "files_uploader2")
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				//城建局技术会
+				var cwei = $("#cwei").val();
+				var cNo = $("#cNo").val();
+				var ctime = $("#ctime").val();
+				var cfile = $("#fileurl_uploader").val();
+				//城建局专家会
+				var zwei = $("#zwei").val();
+				var zNo = $("#zNo").val();
+				var ztime = $("#ztime").val();
+				var zfile = $("#fileurl_uploader1").val();
+				//规委会办公会
+				var gwei = $("#gwei").val();
+				var gNo = $("#gNo").val();
+				var gtime = $("#gtime").val();
+				var gfile = $("#fileurl_uploader2").val();
+				var data = {
+					"programmeApprovalList": [{
+						"conferenceType": 'URBAN_CONSTRUCTION_BUREAU_TECHNICAL_MEETING',
+						"docNo": cNo,
+						"fileUrl": cfile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"unitId": 1,
+						"unitName": cwei
+					}, {
+						"conferenceType": 'URBAN_CONSTRUCTION_BUREAU_EXPERT_MEETING',
+						"docNo": zNo,
+						"fileUrl": zfile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"unitId": 1,
+						"unitName": zwei
+					}, {
+						"conferenceType": 'GENERAL_MEETING_OF_THE_COMMITTEE',
+						"docNo": gNo,
+						"fileUrl": gfile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"unitId": 1,
+						"unitName": gwei
+					}]
+				}
+				meetAdd('/api/programmeApproval', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">规划方案报批</h2>
+		<h3 class="ydsxHead">城建局技术会</h3>
+		<div class="szxmTjPageRightForm">
+			<span>单位名称：</span>
+			<input type="text" id="cwei" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id='cNo' />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ctime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<div id="uploader" class="fjStyle"></div>
+		</div>
+
+		<h3 class="ydsxHead">城建局专家会</h3>
+		<div class="szxmTjPageRightForm">
+			<span>单位名称：</span>
+			<input type="text" id="zwei" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="zNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id='ztime' onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<div id="uploader1" class="fjStyle"></div>
+		</div>
+
+		<h3 class="ydsxHead">规委会办公会</h3>
+		<div class="szxmTjPageRightForm">
+			<span>单位名称：</span>
+			<input type="text" id="gwei" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="gNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="gtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<div id="uploader2" class="fjStyle"></div>
+		</div>
+
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

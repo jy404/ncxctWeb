@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>排水工程</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, id;
+			var id1, id2;
+			$(function() {
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/construction/schedule/drainage/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							if(res["result"]["details"].length > 0) {
+								$('#txtstartTime1').val(res["result"]["details"][0]["startTime"]);
+								$('#txtcompletedTime1').val(res["result"]["details"][0]["completedTime"]);
+								$('#txtcompletePercentage1').val(res["result"]["details"][0]["completePercentage"]);
+								$('#txtamount1').val(res["result"]["details"][0]["amount"]);
+								$('#txtworkPlan1').val(res["result"]["details"][0]["workPlan"]);
+								$('#txtcompletion1').val(res["result"]["details"][0]["completion"]);
+								$('#txtrectification1').val(res["result"]["details"][0]["rectification"]);
+								$('#txtexsitProblem1').val(res["result"]["details"][0]["exsitProblem"]);
+								upload.show(res["result"]["details"][0]["fileUrl"], "files_uploader1");
+								id1 = res["result"]["details"][0]["id"];
+
+								$('#txtstartTime2').val(res["result"]["details"][1]["startTime"]);
+								$('#txtcompletedTime2').val(res["result"]["details"][1]["completedTime"]);
+								$('#txtcompletePercentage2').val(res["result"]["details"][1]["completePercentage"]);
+								$('#txtamount2').val(res["result"]["details"][1]["amount"]);
+								$('#txtworkPlan2').val(res["result"]["details"][1]["workPlan"]);
+								$('#txtcompletion2').val(res["result"]["details"][1]["completion"]);
+								$('#txtrectification2').val(res["result"]["details"][1]["rectification"]);
+								$('#txtexsitProblem2').val(res["result"]["details"][1]["exsitProblem"]);
+								upload.show(res["result"]["details"][1]["fileUrl"], "files_uploader2");
+								id2 = res["result"]["details"][1]["id"];
+							}
+							id = res["result"]["id"];
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				//scheduleStageCategory:REINFORCED_CONCRETE（钢筋混泥土工程），MASONRY_STRUCTURE（砌体结构工程）
+				var data = {
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectType": projectType,
+
+					"details": [{
+							"scheduleStageCategory": "RAIN",
+							"startTime": $('#txtstartTime1').val(),
+							"completedTime": $('#txtcompletedTime1').val(),
+							"completePercentage": $('#txtcompletePercentage1').val(),
+							"amount": $('#txtamount1').val(),
+							"workPlan": $('#txtworkPlan1').val(),
+							"completion": $('#txtcompletion1').val(),
+							"rectification": $('#txtrectification1').val(),
+							"exsitProblem": $('#txtexsitProblem1').val(),
+							"fileUrl": $('#fileurl_uploader1').val()
+						},
+						{
+							"scheduleStageCategory": "SEWAGE",
+							"startTime": $('#txtstartTime2').val(),
+							"completedTime": $('#txtcompletedTime2').val(),
+							"completePercentage": $('#txtcompletePercentage2').val(),
+							"amount": $('#txtamount2').val(),
+							"workPlan": $('#txtworkPlan2').val(),
+							"completion": $('#txtcompletion2').val(),
+							"rectification": $('#txtrectification2').val(),
+							"exsitProblem": $('#txtexsitProblem2').val(),
+							"fileUrl": $('#fileurl_uploader2').val()
+						}
+					],
+
+					"status": status
+				}
+				if(action == "edit") {
+					data["id"] = id;
+					data["details"][0]["id"]=id1;
+					data["details"][1]["id"]=id2;
+				}
+				meetAdd('/api/construction/schedule/drainage/save', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">排水工程</h2>
+		<h3 class="ydsxHead">雨水</h3>
+		<div class="szxmTjPageRightForm">
+			<span>开始时间：</span>
+			<input type="text" id="txtstartTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtcompletedTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成百分比：</span>
+			<input type="text" id="txtcompletePercentage1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader1" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工作计划：</span>
+			<textarea id="txtworkPlan1"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成情况：</span>
+			<textarea id="txtcompletion1"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification1"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtexsitProblem1"></textarea>
+		</div>
+		<h3 class="ydsxHead">污水</h3>
+		<div class="szxmTjPageRightForm">
+			<span>开始时间：</span>
+			<input type="text" id="txtstartTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtcompletedTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成百分比：</span>
+			<input type="text" id="txtcompletePercentage2" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="txtamount2" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader2" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>工作计划：</span>
+			<textarea id="txtworkPlan2"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成情况：</span>
+			<textarea id="txtcompletion2"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification2"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtexsitProblem2"></textarea>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

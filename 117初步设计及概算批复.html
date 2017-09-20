@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>初步设计及概算批复</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id;
+			$(function() {
+				/*页面传参并判断类型 start*/
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				if (action != "" && action != undefined) {
+					SetData(projectId)
+					if (action == "view") {
+						$("body").find("input").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.xmjyshkypfList li').click(function() {
+					$(this).addClass('xmjyshkypfListSelect').siblings('li').removeClass('xmjyshkypfListSelect');
+					$('.xmjyshkypfTab').eq($(this).index()).show().siblings('.xmjyshkypfTab').hide()
+				});
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/pdba/approval/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							$('#docNo').val(res["result"]["docNo"]);
+							$('#stime').val(res["result"]["dispatchTime"]);
+							$('#fileurl_uploader').val(res["result"]["fileUrl"]);
+							$('#price').val(res["result"]["price"]);
+							id = res["result"]["id"];
+							$('#remark').val(res["result"]["comment"]);
+							//附件加上
+							upload.show(res["result"]["fileUrl"], "files_uploader")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				//编制初步设计
+				var bNo = $("#bNo").val();
+				var btime = $("#btime").val();
+				var bprice = $("#bprice").val();
+				var bfile = $("#fileurl_uploader").val();
+				//专家评审
+				var zNo = $("#zNo").val();
+				var ztime = $("#ztime").val();
+				var zprice = $("#zprice").val();
+				var zfile = $("#fileurl_uploader1").val();
+				//概要批复
+				var gNo = $("#gNo").val();
+				var gtime = $("#gtime").val();
+				var gprice = $("#gprice").val();
+				var gfile = $("#fileurl_uploader2").val();
+				var gremark = $("#gremark").val();
+				//					var projectId="12";
+				//					var projectNo="1120";
+				//					var projectType="CITY";	
+				if (bprice > 5000000) {
+					data = {
+						"list": [{
+							"approvalType": ("PreliminaryDesign", "PreliminaryDesign"),
+							"dispatchTime": (btime, ztime),
+							"docNo": (bNo, zNo),
+							"fileUrl": (bfile, zfile),
+							"price": (bprice, zprice),
+							"projectId": (projectId, projectId),
+							"projectNo": (projectNo, projectNo),
+							"projectType": (projectType, projectType),
+							"status": (status, status)
+						}]
+					}
+				}
+				data = {
+					"list": [{
+						"approvalType": "BudgetApproval",
+						"dispatchTime": gtime,
+						"docNo": gNo,
+						"fileUrl": gfile,
+						"price": gprice,
+						"projectId": projectId,
+						"projectNo": projectNo,
+						"projectType": projectType,
+						"status": status
+					}]
+				}
+				meetAdd('/api/pdba/approval/save', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+
+		<h2 class="szTitle">初步设计及概算批复</h2>
+		<ul class="xmjyshkypfList">
+			<li class="xmjyshkypfListSelect">项目金额 > 500万</li>
+			<li>项目金额
+				< 500万</li>
+		</ul>
+		<div class="xmjyshkypfTab" style="display: block;">
+			<h3 class="ydsxHead ">编制初步设计</h3>
+			<div class="szxmTjPageRightForm">
+				<span>文号：</span>
+				<input type="text" id="bNo" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>时间：</span>
+				<input type="text" id="btime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>金额：</span>
+				<input type="text" id="bprice" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>附件：</span>
+
+			</div>
+			<div id="uploader" style="margin-left: 10px;"></div>
+			<h3 class="ydsxHead ">专家评审会</h3>
+			<div class="szxmTjPageRightForm">
+				<span>文号：</span>
+				<input type="text" id="zNo" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>时间：</span>
+				<input type="text" id="ztime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>金额：</span>
+				<input type="text" id="zprice" />
+			</div>
+
+			<div class="szxmTjPageRightForm">
+				<span>附件：</span>
+
+			</div>
+			<div id="uploader1" style="margin-left: 10px;"></div>
+		</div>
+		<div class="xmjyshkypfTab">
+			<h3 class="ydsxHead ">概算批复</h3>
+			<div class="szxmTjPageRightForm">
+				<span>文号：</span>
+				<input type="text" id="gNo" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>时间：</span>
+				<input type="text" id="gtime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>金额：</span>
+				<input type="text" id="gprice" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>附件：</span>
+
+			</div>
+			<div id="uploader2" style="margin-left: 10px;"></div>
+			<div class="szxmTjPageRightForm">
+				<span>备注：</span>
+				<textarea id="gremark"></textarea>
+			</div>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

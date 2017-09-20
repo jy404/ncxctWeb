@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>招标核准、摸取下浮系数</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+
+				function SubmitData(status) {
+					var zNo = $("#zNo").val();
+					var zprice = $("#zprice").val();
+					var z
+					var remark = "";
+					var id = "";
+					var price = $('#price').val();
+					var data = {
+							"comment": remark,
+							"dispatchTime": yitime,
+							"docNo": yiNo,
+							"fileUrl": yifile,
+							"projectId": "12",
+							"projectNo": "677sd67sf67",
+							"projectType": "CITY",
+							"sectionType": "FirstStage",
+							"status": status
+						}
+						//					if(action=="edit"){
+						//						data["id"]=id
+						//					}
+					meetAdd('/api/tender/agency/save', JSON.stringify(data));
+				}
+			});
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">招标核准、摸取下浮系数</h2>
+		<h3 class="ydsxHead">招标核准</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="zNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="zprice" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ztime" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<div id="upload1" class="fjStyle"></div>
+		</div>
+		<h3 class="ydsxHead">摸取下浮系数</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<div id="upload1" class="fjStyle"></div>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

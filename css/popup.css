@@ -1,0 +1,1141 @@
+/* CSS Document */
+
+/******* top small popup begin ********/
+.p_out{
+	width:1px;
+	height:1px;
+	overflow:visible;
+	line-height:0;
+	font-size:0;
+	position:relative;
+	z-index:2
+	}
+
+.p_out .inbox{
+	width:100px;
+	clear:both;
+	font-size:12px;
+	line-height:23px;
+	position:absolute;
+	z-index:999;
+	border:1px #d8d8d8 solid;
+	background:#f6f6f6;
+	font-weight:normal;
+	}
+
+.p_out .arr{
+	background: url("../images/btn.gif") no-repeat -265px 0;
+	width: 11px;
+    height: 11px;
+    left: 42px;
+    position: absolute;
+    top: -11px;
+	z-index:9999;    
+	}
+.p_out .pos20{
+	top:12px;
+	left:-20px;
+	*left:-80px;
+	text-align:left;
+	}
+.p_out .pos30{
+	top:12px;
+	left:-30px;
+	*left:-70px;
+	text-align:left;
+	}
+.p_out .pos70{
+	top:12px;
+	left:-35px;
+	}
+
+.p_out .pos32{
+	top:32px;
+	left:-85px;
+	}
+	
+.p_out .inbox .con li{
+	padding:0 10px;
+	}	
+	
+.p_out .inbox .con li:hover{background:#e2edf4; cursor:pointer;}	
+.top_user .after_login .p_out a:link,.top_user .after_login .p_out a:visited,.top_user .after_login .p_out a:hover{
+	text-decoration:none;
+	}
+
+	
+/******* top small popup end ********/	
+	
+/*************************************** Intelligent Input ***************************************/
+#box{width:600px;text-align:left;margin:0 auto;padding-top:80px;}
+#suggest,#suggest2{width:200px;}
+.gray{color:gray;}
+.ac_results {background:#fff;border:1px solid #7f9db9;position: absolute;z-index: 10000;display: none;}
+.ac_results ul{margin:0;padding:0;list-style:none;}
+.ac_results li a{white-space: nowrap;text-decoration:none;display:block;color:#05a;padding:1px 3px;}
+.ac_results li{border:1px solid #fff;}
+.ac_over,.ac_results li a:hover {background:#c8e3fc;}
+.ac_results li a span{float:right;}
+.ac_result_tip{border-bottom:1px dashed #666;padding:3px;}
+
+
+/*************************************** login ***************************************/
+.popupBox{
+	width:510px;
+	clear:both;
+	float:left;
+	background:#fff;
+	padding-bottom:20px;
+	overflow:hidden;
+	border:1px #666666 solid;
+	box-shadow:1px 1px 1px #ccc;	
+	}
+	
+
+.popupBox .mp{
+	clear:both;
+	position:relative;
+	}
+
+
+
+.popupBox .tip{
+	clear:both;
+	overflow:hidden;
+	text-align:center; 
+	height:50px; 
+	font:normal normal 18px/50px "微软雅黑"; 
+	color:#737373;
+	}
+
+.popupBox .icoli{
+	display:block; 
+	clear:both;
+	overflow:hidden;
+	text-align:center; 
+	height:50px; 
+	font:normal normal 18px/50px "微软雅黑"; 
+	color:#737373;
+	}
+.popclose{
+	width:12px;
+	height:12px;
+	background:#737373 url(../images/popclose.png) no-repeat 2px 2px;
+	border:none;
+	float:right;
+	cursor:pointer;
+	top:10px;
+	right:10px;
+	position:absolute;
+	z-index:99999;
+	margin:0;
+	border:0;
+	padding:0;
+	}
+.popclose:hover{
+	background:#528701 url(../images/popclose.png) no-repeat 2px 2px;
+	}
+.popupBox .con{
+	clear:both;
+	overflow:hidden;
+	padding:25px 25px 10px;
+	_zoom:1;
+	}
+
+
+.popupBox .mp .areaCon .bigCity div{padding-right:10px;}
+iframe{background:none;}
+.winning_tip {
+clear: both;
+overflow: hidden;
+height: 37px;
+line-height: 37px;
+background: #D1E5B2;
+font-size: 16px;
+text-align: center;
+color: #666;
+}
+div.w353 {
+width: 338px;
+*width: 354px;
+overflow:hidden;
+}
+div.popupBox .w351 {
+width: 336px;
+*width: 352px;
+}
+
+.my614{width:614px;}
+.myh255{height:235px;}
+.myh285{height:285px;}
+.myh345{height:345px;}
+/*************************************** tab begin ***************************************/
+
+.popupBox .con .item{padding:0; clear:both;overflow:hidden;}
+
+.popupBox .con .item .tab{
+	clear: both;
+	overflow:hidden;
+    height: 30px;
+	border-bottom:2px #7ab521 solid;
+	}
+.popupBox .con .item .tab ul li{
+    background:#eeeeee;
+    color:#666666;
+    float:left;
+    height: 30px;
+	line-height: 30px;
+    text-align: center;
+	padding:0 20px 0;
+	cursor: pointer;
+	margin-right:1px;
+	}
+.popupBox .con .item .tab ul li.current{
+    background:#7ab521;
+	color:#fff;
+	}
+.popupBox .con .item .items{
+	clear:both;
+	overflow:hidden;
+	}
+
+
+
+.popupBox .con .item .items .pLogin{
+	width:380px;
+	height:160px;
+	background:none;
+	padding:10px 15px 20px;
+	position:relative;
+	z-index:auto;
+	top:auto;
+	left:auto;
+	color:#666;
+	border:0;
+	}
+
+.popupBox .con .item .items .pLoginBtn{
+	width:66px;
+	height:29px;
+	padding:5px 0;
+	text-align:center;
+	background:url(../images/btn.png) no-repeat -270px -170px;
+	font:normal normal 12px/19px "宋体","arial","微软雅黑";
+	color:#666;
+	border:0;
+	cursor:pointer;
+	}
+
+.popupBox .con .item .items .pLogin .l{
+	width:105px;
+	padding-right:5px;
+	text-align:right;
+	float:left;
+	padding-top:6px;
+	line-height:27px;
+	}
+
+.popupBox .con .item .items .pLogin .r{
+	width:260px;
+	float:left;
+	padding-top:6px;
+	}
+
+.popupBox .con .item .items .pLogin li.pl145{
+	padding-left:110px;
+	height:auto;
+	line-height:normal;
+	padding-top:5px;
+	clear:both;
+	overflow:hidden;
+	}
+
+.popupBox .con .item .items .pLogin li.pl145 input{ margin-right:20px;}	
+.popupBox .con .item .items .pLogin_b{ clear:both; overflow:hidden; padding-top:10px; line-height:20px; padding-right:30px;}
+.popupBox .con .item .items .pLogin_b span.fr{_width:55px; _display:block;}
+
+.popupBox .con .item .items .pLogin .jizhu2{height:15px;line-height:19px\9; padding:7px 0;padding-left:107px; clear:both; overflow:hidden;}
+.popupBox .con .item .items .pLogin .jizhu2 .fr{display:block; width:85px;}
+.popupBox .con .item .items .pLogin .jizhu2 input.fl{margin-top:0;}
+
+
+.qqIco{
+	width:18px;
+	height:18px;
+	display:block;
+	float:left;
+	margin-right:5px;
+	background:url(../images/ico.gif) repeat-x -30px 0;
+	}
+
+.sinaIco{
+	width:18px;
+	height:18px;
+	display:block;
+	float:left;
+	margin-right:5px;
+	background:url(../images/ico.gif) repeat-x -60px 0;
+	}
+	
+.rrIco{
+	width:18px;
+	height:18px;
+	display:block;
+	float:left;
+	background:url(../images/ico.gif) repeat-x -90px 0;
+	}		
+	
+.mLogo{
+	width:302px;
+	height:59px;
+	border:0;
+	
+	clear:both;
+	padding:86px 0 38px 385px;
+	}	
+.mLogo a{
+	display:block;
+	width:302px;
+	height:59px;
+	border:0;
+	text-decoration:none;
+	background:url(../images/titBg.gif) no-repeat -260px 0;
+	}
+
+
+.nologin{ float:left;}
+.re_apply,.re_apply li{ clear:both; overflow:hidden; margin:0; padding:0;}
+.re_apply li{ padding:10px;}
+.re_apply input,.re_apply img{ float:left;}
+.re_apply img{margin:0 0px;}
+.re_apply span{ float:left; padding:5px; display:block;}
+.Lcheckbox{ float:left; display:block; padding:5px;}
+.re_apply .Lcheckbox{ float:left; display:block; padding:5px 0;}
+
+.re_apply li.bot{ border-top:1px #b2b2b2 solid; text-align:center; width:100%;}
+.re_apply li.bot input{ float:none;}
+
+
+.Att_apply{clear:both; overflow:hidden; margin:0; padding:25px 20px;}
+.Att_apply li{clear:both; overflow:hidden; padding:5px; line-height:30px;}
+.liulan{
+	width:63px;
+	height:32px;
+	background:url(../images/liulan.png) no-repeat;
+	border:0;
+	color:#666;
+	cursor:pointer;
+	}
+.Att_apply div.l{ width:50px; text-align:right; float:left;}
+.Att_apply div.l2{ width:45px; padding-right:5px; text-align:right; float:left;}
+.Att_apply span{ display:block; float:left; padding:0 2px;}
+.Att_apply li.pl50{ padding-left:53px;}
+
+.apply_suc{ clear:both; overflow:hidden;}
+.apply_suc li{ padding:7px 25px; line-height:22px;}
+.apply_suc li.bot{ border-top:1px #b2b2b2 solid;}
+.ml5{ margin-left:5px; margin-top:3px;}
+.pLogin li.h20{ height:14px; line-height:16px; padding-top:1px;}
+.pLogin li.h10{ height:10px; line-height:16px; padding-top:1px;}
+.apply_suc  li.pl10{ padding-left:0px; padding-bottom:15px;clear:both; float:left; width:291px;}
+.apply_suc  li.pl10_b{ padding-left:0px; padding-bottom:5px;clear:both; float:left;}
+.apply_suc li.tdinput2 {
+	clear: both;
+	overflow: hidden;
+	padding: 5px 5px 2px 0px;
+	}
+.txt_c{text-align:center;}
+/*************************************** send Shortcut ***************************************/
+
+.w353{ width:353px; height:241px;*overflow:hidden;}
+.popupBox .w351{ width:351px;*overflow:hidden;}
+
+.w310{width:310px; *width:313px; height:180px; *overflow:hidden;}
+.popupBox .w308{width:308px;*overflow:hidden;}
+
+.apply_suc li.tdinput{ clear:both; overflow:hidden; padding:2px 5px 2px 50px;}
+.tdinput input{ float:left; margin-top:5px; *margin-top:2px; }
+.tdinput label{ display:block; float:left; line-height:25px;}
+.apply_suc li.pl60{ padding:4px; padding-left:70px;clear:both; overflow:hidden;}
+.pleaseSel{clear:both; overflow:hidden; padding:15px 25px;}
+
+
+/*************************************** area box ***************************************/
+
+.areaCon{
+	clear:both;
+	padding:10px 22px;
+	float:left;
+	}
+
+.areaCon .tl{ 
+	float:left;
+	overflow:hidden;
+	width:52px;
+	text-align:right;
+	padding-top:10px;	
+	}
+
+.areaCon .tl2{ 
+	float:left;
+	overflow:hidden;
+	width:102px;
+	padding-top:10px;
+	font-weight:bold;
+	}
+
+
+.areaCon .tm{
+	width:400px;
+	float:left;
+	padding-top:10px;	
+	}
+.areaCon .tm span,.areaCon .tm a{
+	display:block;
+	float:left;
+	}
+	
+	
+.areaCon .tm span{padding-right:15px; padding-right:5px \9;padding-bottom:8px;}
+.areaCon .tr{
+	width:170px;
+	height:36px;
+	float:right;
+	text-align:right;
+	}
+
+.popLine{
+	width:100%;
+	clear:both;
+	overflow:hidden;
+	line-height:0;
+	height:0;
+	border-bottom:1px #fff solid;
+	border-top:1px #b2b2b2 solid;
+	margin:5px 0;
+	}
+
+.city_det{
+	width:12px;
+	height:12px;
+	border:0;
+	background:url(../images/city_det.gif) no-repeat;
+	float:left;
+	margin-top:1px;
+	cursor:pointer;
+	}
+.maoding li input.city_det{margin-top:3px;}
+
+.bigCity{
+	clear:both;
+	overflow:hidden;
+	width:550px;
+	padding:5px 0;
+	}
+
+.bigCity span{ display:block; float:left; padding-right:7px; _padding-right:3px;  padding-bottom:5px; cursor:pointer;}
+.bigCity input{ float:left;}
+.bigCity label{ display:block; float:left; line-height:18px;}
+
+.smaCity{ clear:both; line-height:32px; position:relative; z-index:9999;}
+.smaCity a{ display:block; float:left;  width:100px; margin-right:5px;}
+
+.smaCityChild{
+	width:530px;
+	position:absolute;
+	clear:both;
+	overflow:hidden;	
+	z-index:99999;
+	left:80px;
+	top:60px;
+	}
+
+.smaCityChild .t{
+	width:530px;
+	height:10px;
+	line-height:0;
+	font-size:0;
+	background:url(../images/smallcityT.png) no-repeat;
+	}
+.smaCityChild .b{
+	width:530px;
+	height:9px;
+	line-height:0;
+	font-size:0;
+	background:url(../images/smallcityb.png) no-repeat;
+	}
+.smaCityChild .m{
+	width:499px;
+	background:url(../images/smallcitym.png);
+	padding:0 20px 10px 11px;
+	}
+
+.smaCityChildbox{
+	clear:both;
+	padding-top:5px;
+	max-height:155px;
+	overflow-x:hidden;
+	overflow-y:auto;
+	}
+.smaCityChildbox div.fl{float:left; width:160px; }
+.smaCityChild .tit{ font-weight:bold; padding:8px 0; border-bottom:1px #b2b2b2 solid; width:500px;}
+.smaCityChild .bot{
+	width:25px;
+	height:25px;
+	position:absolute;
+	z-index:999999;
+	right:10px;
+	top:10px;
+	text-align:right;
+	padding-right:8px;
+	}
+
+.smaCityChild .bot_w95{ width:95px;}
+
+
+.popupBox .con .item{padding:0; clear:both;overflow:hidden;}
+
+.popupBox .con .item .tab{
+	clear: both;
+	overflow:hidden;
+    height: 30px;
+	border-bottom:2px #7ab521 solid;
+	}
+.popupBox .con .item .tab ul li{
+    background:#eeeeee;
+    color:#666666;
+    float:left;
+    height: 30px;
+	line-height: 30px;
+    text-align: center;
+	padding:0 20px;
+	cursor: pointer;
+	margin-right:1px;
+	}
+.popupBox .con .item .tab ul li.current{
+    background:#7ab521;
+	color:#fff;
+	}
+.popupBox .con .item .items{
+	clear:both;
+	overflow:hidden;
+	padding-top:20px;
+	}
+
+
+.pcon{
+	width:440px;
+	padding:10px 15px 20px;
+	color:#666;
+	}
+
+
+.pLoginBtn{
+	width:66px;
+	height:29px;
+	padding:5px 0;
+	text-align:center;
+	background:url(../images/btn.png) no-repeat -270px -170px;
+	font:normal normal 12px/19px "宋体","arial","微软雅黑";
+	color:#666;
+	border:0;
+	cursor:pointer;
+	}
+
+.pcon ul li{ clear:both;}
+.pcon .l{
+	width:105px;
+	padding-right:5px;
+	text-align:right;
+	float:left;
+	padding-top:6px;
+	line-height:27px;
+	}
+
+.pcon .r{
+	width:330px;
+	float:left;
+	padding-top:6px;
+	}
+
+.pcon li.pl145{
+	padding-left:110px;
+	height:auto;
+	line-height:normal;
+	padding-top:15px;
+	clear:both;
+	overflow:hidden;
+	}
+
+.pcon li.pl145 input{ margin-right:20px;}	
+
+.popLine{
+	width:100%;
+	clear:both;
+	overflow:hidden;
+	line-height:0;
+	height:0;
+	border-bottom:1px #fff solid;
+	border-top:1px #b2b2b2 solid;
+	margin:5px 0;
+	}
+
+
+.ico_warn{
+	clear:both;
+	overflow:hidden;
+	background:url(../images/btn.png) no-repeat -760px 10px;
+	padding-left:50px;
+	}
+
+.p_del{ margin-left:50px; width:400px;}
+.p_del h3{ font-size:16px;font-family:"微软雅黑"; font-weight:normal;}
+.p_del .con{clear:both; overflow:hidden; padding:0; padding-bottom:20px;}
+
+.popupBox .con .regCon .r{ width:325px;}
+
+
+
+/*************************************** prompt tip ***************************************/
+
+.promptBox{
+	float:left;
+	clear:both;
+	*min-width:180px;
+	_width:180px;
+	*overflow:visible;
+	}
+
+.promptBox .arrowRedT{
+	width:15px;
+	height:7px;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat 0 0;
+	margin:0 auto;
+	}
+	
+.promptBox .arrowRedL{
+	width:7px;
+	height:15px;
+	line-height:0;
+	font-size:0;
+	float:left;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -20px 0;
+	margin-top:5px;
+	}	
+
+.promptBox .arrowRedB{
+	width:16px;
+	height:8px;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -40px 0;
+	margin:0 auto;
+	top:-1px;
+	position:relative;
+	z-index:1;
+	}
+	
+.promptRedCon{
+	border:2px #e87a7a solid;
+	background:#efbbbb;
+	line-height:17px;
+	padding:2px 10px;
+	color:#cf0000;
+	}
+.promptConShadow{
+	float:left;
+	clear:both;
+	overflow:hidden;
+	border-right:1px #d3d3d3 solid;
+	border-bottom:1px #d3d3d3 solid;	
+	}
+
+.promptConShadowL{
+	float:left;
+	border-right:1px #d3d3d3 solid;
+	border-bottom:1px #d3d3d3 solid;
+	color:#cf0000;
+	}
+
+
+.promptBox .arrowGaryT{
+	width:15px;
+	height:7px;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -60px 0;
+	margin:0 auto;
+	}
+	
+.promptBox .arrowGaryL{
+	width:7px;
+	height:15px;
+	line-height:0;
+	font-size:0;
+	float:left;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -80px 0;
+	margin-top:5px;
+	}	
+
+.promptBox .arrowGaryB{
+	width:16px;
+	height:8px;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -100px 0;
+	margin:0 auto;
+	top:-1px;
+	position:relative;
+	z-index:1;
+	}
+	
+.promptGaryCon{
+	border:2px #afafaf solid;
+
+	background:#e1e1e1;
+	line-height:17px;
+	padding:2px 10px;
+	color:#333333;
+	}
+
+
+/*************************************** prompt tip ***************************************/
+
+.promptBox{
+	float:left;
+	clear:both;
+	*min-width:180px;
+	_width:380px;
+	*overflow:visible;
+	font-size:12px;
+	}
+
+.promptBox .arrowRedT{
+	width:15px;
+	height:7px;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat 0 0;
+	margin:0 auto;
+	}
+	
+.promptBox .arrowRedL{
+	width:7px;
+	height:15px;
+	line-height:0;
+	font-size:0;
+	float:left;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -20px 0;
+	margin-top:5px;
+	}	
+
+.promptBox .arrowRedB{
+	width:16px;
+	height:8px;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -40px 0;
+	margin:0 auto;
+	top:-1px;
+	position:relative;
+	z-index:1;
+	}
+	
+.promptRedCon{
+	border:2px #e87a7a solid;
+	background:#efbbbb;
+	line-height:17px;
+	padding:2px 10px;
+	color:#cf0000;
+	}
+.promptConShadow{
+	float:left;
+	clear:both;
+	overflow:hidden;
+	border-right:1px #d3d3d3 solid;
+	border-bottom:1px #d3d3d3 solid;	
+	}
+
+.promptConShadowL{
+	float:left;
+	border-right:1px #d3d3d3 solid;
+	border-bottom:1px #d3d3d3 solid;
+	color:#cf0000;
+	}
+
+
+.promptBox .arrowGaryT{
+	width:15px;
+	height:7px;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -60px 0;
+	margin:0 auto;
+	}
+	
+.promptBox .arrowGaryL{
+	width:7px;
+	height:15px;
+	line-height:0;
+	font-size:0;
+	float:left;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -80px 0;
+	margin-top:5px;
+	}	
+
+.promptBox .arrowGaryB{
+	width:16px;
+	height:8px;
+	line-height:0;
+	font-size:0;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/promptBox.png) no-repeat -100px 0;
+	margin:0 auto;
+	top:-1px;
+	position:relative;
+	z-index:1;
+	}
+	
+.promptGaryCon{
+	border:2px #afafaf solid;
+	background:#e1e1e1;
+	line-height:17px;
+	padding:2px 10px;
+	color:#333333;
+	}
+
+
+
+/*************************************** Pages popup layer ***************************************/
+.posRel{ position:relative; z-index:auto;}
+
+.popuplayer{
+	width:291px;
+	clear:both;
+	position:absolute;
+	z-index:998;
+	font-size:12px;
+	line-height:20px;
+	}
+	
+.padT{
+	padding-top:12px;
+	*padding-top:11px;
+	left:-45px;
+	top:-8px;
+	}
+.padL{
+	padding-left:13px;
+	left:45px;
+	top:-30px;
+	}
+	
+.popuplayer .arrowT{
+	width:22px;
+	height:13px;
+	background:url(../images/popupLayer.png) no-repeat -1px -0;
+	line-height:0;
+	font-size:0;
+	position:absolute;
+	z-index:999;
+	top:0;
+	left:60px;
+	}
+.popuplayer .arrowL{
+	width:15px;
+	height:20px;
+	background:url(../images/popupLayer.png) no-repeat -30px 0;
+	line-height:0;
+	font-size:0;
+	position:absolute;
+	z-index:999;
+	top:28px;
+	left:0;
+	}	
+	
+.popuplayer .t{
+	width:291px;
+	height:9px;
+	clear:both;
+	overflow:hidden;
+	margin-top:-1px;
+	line-height:0;
+	font-size:0;
+	background:url(../images/popupLayer.png) no-repeat 0 -20px;
+	}
+
+.popuplayer .b{
+	width:291px;
+	height:20px;
+	clear:both;
+	background:url(../images/popupLayer.png) no-repeat 0 -30px;
+	}
+	
+.popuplayer .m{
+	width:291px;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/popupLayer_bg.png) repeat-y;
+	}
+.popuplayer .m a,.popuplayer .m a:link,.popuplayer .m a:visited,.popuplayer .m a:hover{color:#666;}
+
+
+.xszs{ clear:both; overflow:hidden; padding:5px 25px 15px;}
+.xszs li{
+	width:120px;
+	float:left;
+	height:25px;
+	}
+.xszs li input{ float:left; margin-top:5px; _margin-top:2px;}
+.xszs li label{ display:block; float:left; line-height:25px;}
+.xszs li.queding{ width:240px; clear:both; height:30px;}
+.xszs li.queding input{ float:right;}
+
+
+.popLayerOut{
+	width:1px;
+	height:1px;
+	overflow:visible;
+	line-height:0;
+	font-size:0;
+	position:relative;
+	z-index:1;
+	clear:both;
+	}
+
+
+
+/*************************************** index top small popup begin ***************************************/
+.smaPopboxOut{
+	position:relative; 
+	width:1px; 
+	height:1px; 
+	line-height:0; 
+	font-size:0; 
+	z-index:1; 
+	overflow:visible;
+	clear:both;
+	}
+.smaPopbox{
+	width:73px;
+	clear:both;
+	overflow:hidden;
+	position:absolute;
+	z-index:999999;
+	top:-5px;
+	left:-37px;
+	font-size:12px;
+	}
+.smaPopbox .t{
+	width:73px;
+	height:18px;
+	background:url(../images/smaPopbox.png) no-repeat;
+	clear:both;
+	line-height:0;
+	font-size:0;
+	}
+
+.smaPopbox .b{
+	width:73px;
+	height:20px;
+	background:url(../images/smaPopbox.png) no-repeat 0 -18px;
+	clear:both;
+	line-height:0;
+	font-size:0;
+	}
+
+.smaPopbox .m{
+	width:73px;
+	clear:both;
+	overflow:hidden;
+	background:url(../images/smaPopboxBg.png) repeat-y;
+	}
+
+.smaPopbox .m .con{
+	clear:both;
+	overflow:hidden;
+	padding:5px 5px;
+	}
+
+.smaPopbox .m .con li{ 
+	clear:both;
+	overflow:hidden;
+	height:25px;
+	line-height:25px;
+	}
+/*************************************** index top small popup end ***************************************/
+
+
+
+
+/*************************************** inteligence tip begin ***************************************/
+/*inteligence box*/
+.autocomcss{ width:371px; position:absolute; top:0px; left:0; background:#fff; border:1px solid #c6c6c6; display:none; z-index:999;}
+.autocomcss p{padding:0 3px; background:#fff; cursor:default; height:auto; line-height:21px;}
+.autocomcss p.highlight{ background:#cbe2ea; color:#004065;}
+.autocomcss .sugtips{color:#888; border-bottom:1px dashed #888; padding-left:5px; line-height:21px;}
+.autocomcss span.inputcode{float:right;}
+.autocomcss p.narrow{ float:left; width:50px;}
+/*************************************** inteligence tip end ***************************************/
+
+
+
+/*************************************** city popup begin ***************************************/
+
+.city .popupBox{width:678px; *width:680px; _width:683px; height:278px;  *height:322px;}
+.city .popupBox .mp{width:676px; _width:679px;}
+.city .smaCity a{ width:100px;}
+.city .smaCityChildbox div.fl{ width:160px;}
+.city .smaCityChild{width:530px; left:80px;}
+.city .smaCityChild .tit{ width:500px;}
+.city .smaCityChild .t {width:530px; background: url("../images/c_smallcityT.png") no-repeat;}
+.city .smaCityChild .m {width:499px; padding:0 20px 10px 11px;background: url("../images/c_smallcitym.png") repeat-y;}
+.city .smaCityChild .b {width: 530px; background: url("../images/c_smallcityb.png") no-repeat;}
+
+/*************************************** city popup end ***************************************/
+
+
+/*************************************** zhilei popup begin ***************************************/
+.close_sma{
+	width:21px;
+	height:21px;
+	border:0;
+	background: url("../images/close_sma.png") no-repeat;
+	cursor:pointer;
+	}
+.zhilei .popupBox{width:678px; *width:683px; height:278px;  *height:322px;}
+.zhilei .popupBox .mp{width:676px; *width:679px;}
+.zhilei .smaCity a{width:200px;}
+.zhilei .smaCityChildbox{
+	clear:both;
+	padding-top:5px;
+	max-height:155px;
+	overflow-x:hidden;
+	overflow-y:auto;
+	*height:165px;
+	*width:580px;	
+	}
+.zhilei .smaCityChildbox div.fl{width:280px;}
+.zhilei .smaCityChild{width:610px;left: 50px;}
+.zhilei .smaCityChild .tit{width:580px;}
+.zhilei .smaCityChild .t {width: 610px; background: url("../images/z_smallcityT.png") no-repeat;}
+.zhilei .smaCityChild .m {width: 580px; padding:0 20px 10px 10px; background: url("../images/z_smallcitym.png") repeat-y;}
+.zhilei .smaCityChild .b {width: 610px; background: url("../images/z_smallcityb.png") no-repeat;}
+
+/*************************************** zhilei popup end ***************************************/
+
+
+
+
+
+
+/*******  new popur 20121007    ********/
+
+.p_outbox{
+	width:0px;
+	height:0px;
+	clear:both;
+	overflow:visible;
+	font-size:0;
+	line-height:0;
+	position:relative;
+	z-index:1;
+	}
+
+.setbox{
+	font-size:12px;
+	line-height:23px;
+	position:absolute;
+	z-index:2;
+	width:290px;
+	clear:both;
+	
+	}
+.t164{top:-164px;}
+.t7{top:8px; left:220px;}
+.t20{top:-35px;left:95px;}
+.t8{top:0;left:-200px;}
+
+.t25{top:-30px;left:75px;}
+.setbox .arr_t{
+	width:9px;
+	height:9px;
+	background:url(../images/arr_t.gif) no-repeat;
+	position:absolute;
+	z-index:3;
+	top:-8px;
+	left:30px;
+	}
+
+.setbox .arr_b{
+	width:9px;
+	height:9px;
+	background:url(../images/arr_b.gif) no-repeat;
+	position:absolute;
+	z-index:3;
+	bottom:-8px;
+	_bottom:-12px;
+	left:30px;
+	}
+
+.setbox .arr_l{
+	width:9px;
+	height:9px;
+	background:url(../images/arr_l.gif) no-repeat;
+	position:absolute;
+	z-index:3;
+	top:20px;
+	_bottom:-12px;
+	left:-8px;
+	}
+.setbox .arr_r{
+	width:9px;
+	height:9px;
+	background:url(../images/arr_r.gif) no-repeat;
+	position:absolute;
+	z-index:3;
+	top:-8px;
+	right:75px;
+	}
+
+
+.setbox .con{
+	border:1px #d6d6d6 solid;
+	background:#f6f6f6;
+	width:288px;
+	clear:both;
+	overflow:hidden;
+	text-align:left;
+	}
+
+/**** 20130313 new login begin  *****/
+.poplog_tip{
+	clear:both;
+	height:30px;
+	text-align:center;
+	font-size:14px;
+	font-weight:nomal;
+	color:#666;
+	}
+/**** 20130313 new login end  *****/

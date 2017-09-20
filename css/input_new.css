@@ -1,0 +1,79 @@
+/* CSS Document */
+
+/************* button begin **************/
+.my_btngreen28{
+	display:block;
+	float:left;
+	height:28px;
+	background:#7ab521;
+	font:normal normal 14px/28px "微软雅黑";
+	color:#fff;
+	text-align:center;
+	padding:0 15px;
+	}
+.my_btngreen28:link,.my_btngreen28:visited,.my_btngreen28:hover{color:#fff;}
+.my_btngreen28:hover{color:#fff;}
+.myw154{width:128px;}
+/************* button end **************/
+
+/************* text begin **************/
+.myw90{width:80px}
+.myw125{width:100px}
+
+.my_txtare{
+	border:1px #ccc solid;
+	padding:2px 3px;
+	background:#fff;
+	color:#333;
+	font:normal normal 12px/19px "宋体";
+	}
+.myfebk{
+	width:510px;
+	height:85px;
+	overflow-y:scroll;
+	margin-bottom:10px;
+	}
+/************* text end **************/
+
+/************* select begin **************/
+.my_selearr{
+	height:16px;
+	line-height:16px;
+	background:#fff url(../images/my_selearr.gif) no-repeat right 11px;
+	padding:5px 5px;
+	padding-right:25px;
+	border:1px #d8d8d8 solid;
+	color:#333;
+	font-size:12px;
+	}
+
+.my_seleul {
+	position:absolute; 
+	left:0; 
+	top:26px; 
+	border:1px solid #C6C6C6; 
+	background:#fff; 
+	color:#666;
+	overflow: hidden;
+	display:none;
+	z-index:99999;
+	}	
+.my_seleul li {
+	display:block;
+	height:26px;
+	overflow:hidden;
+	line-height:26px;
+	padding:0;
+	padding-left:10px;
+	cursor:pointer;
+	clear:both;
+	width:100%;
+	}
+.my_seleul li:hover {background:#cbe2ea; color:#004065;}
+
+.mysele425{width:395px;}
+.myul425{width:425px;}
+
+.mysele236{width:206px;}
+.myul236{width:236px;}
+/************* select end **************/

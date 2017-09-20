@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>项目选址意见书、用地红线、国土测绘</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, artid, yongid, guoid;
+			$(function() {
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				if (action != "" && action != undefined) {
+					SetData(projectId);
+					if (action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/site/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							//项目选址意见书
+							$('#artNo').val(res["result"][0]["docNo"]);
+							$('#arttime').val(res["result"][0]["dispatchTime"]);
+							$('#fileurl_uploader').val(res["result"][0]["fileUrl"]);
+							upload.show(res["result"][0]["fileUrl"], "files_uploader");
+							artid = res["result"][0]["id"];
+							//用地红线
+							$('#yongNo').val(res["result"][1]["docNo"]);
+							$('#yongtime').val(res["result"][1]["dispatchTime"]);
+							$('#fileurl_uploader1').val(res["result"][1]["fileUrl"]);
+							upload.show(res["result"][1]["fileUrl"], "files_uploader1");
+							yongid = res["result"][1]["id"];
+							//国土测绘
+							$('#guoNo').val(res["result"][2]["docNo"]);
+							$('#guotime').val(res["result"][2]["dispatchTime"]);
+							$('#fileurl_uploader2').val(res["result"][2]["fileUrl"]);
+							upload.show(res["result"][2]["fileUrl"], "files_uploader2");
+							guoid = res["result"][2]["id"];
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				//项目选址意见书
+				var artNo = $('#artNo').val();
+				var arttime = $('#arttime').val();
+				var artfu = $('#fileurl_uploader').val();
+				//用地红线
+				var yongNo = $('#yongNo').val();
+				var yongtime = $('#yongtime').val();
+				var yongfile = $('#fileurl_uploader1').val();
+				//国土测绘
+				var guoNo = $('#guoNo').val();
+				var guotime = $('#guotime').val();
+				var guofile = $('#fileurl_uploader2').val();
+				var data;
+				if (action == "edit") {
+					data = {
+						"psList": [{
+							"dispatchTime": arttime,
+							"docNo": artNo,
+							"fileUrl": artfu,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteType": "Submissions",
+							"status": status,
+							"id": artid
+						}, {
+							"dispatchTime": yongtime,
+							"docNo": yongNo,
+							"fileUrl": yongfile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteType": "Property_line",
+							"status": status,
+							"id": yongid
+						}, {
+							"dispatchTime": guotime,
+							"docNo": guoNo,
+							"fileUrl": guofile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteType": "Land_draw",
+							"status": status,
+							"id": guoid
+						}]
+					}
+				} else {
+					data = {
+						"psList": [{
+							"dispatchTime": arttime,
+							"docNo": artNo,
+							"fileUrl": artfu,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteType": "Submissions",
+							"status": status
+						}, {
+							"dispatchTime": yongtime,
+							"docNo": yongNo,
+							"fileUrl": yongfile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteType": "Property_line",
+							"status": status
+						}, {
+							"dispatchTime": guotime,
+							"docNo": guoNo,
+							"fileUrl": guofile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteType": "Land_draw",
+							"status": status
+						}]
+					}
+				}
+				meetAdd('/api/site/save', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">项目选址意见书、用地红线、国土测绘</h2>
+		<h3 class="ydsxHead">项目选址意见书</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="artNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="arttime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+		<h3 class="ydsxHead">用地红线</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="yongNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="yongtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader1" class="fjStyle"></div>
+		<h3 class="ydsxHead">国土测绘</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="guoNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="guotime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader2" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>用地手续</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, yongid, diid, zeid;
+			$(function() {
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				if (action != "" && action != undefined) {
+					SetData(projectId)
+					if (action == "view") {
+						$("body").find("input").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/siteformalities/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							//用地预审
+							$("#yongNo").val(res["result"][0]["docNo"]);
+							$("#yongtime").val(res["result"][0]["dispatchTime"]);
+							$("#fileurl_uploader").val(res["result"][0]["fileUrl"]);
+							yongid = res["result"][0]["id"];
+							upload.show(res["result"][0]["fileUrl"], "files_uploader"); //附件赋值
+							//用地批准
+							$("#diNo").val(res["result"][1]["docNo"]);
+							$("#ditime").val(res["result"][1]["dispatchTime"]);
+							$("#fileurl_uploader1").val(res["result"][0]["fileUrl"]);
+							diid = res["result"][1]["id"];
+							upload.show(res["result"][1]["fileUrl"], "files_uploader1"); //附件赋值
+							//土地证
+							$("#zeNo").val(res["result"][2]["docNo"]);
+							$("#zetime").val(res["result"][2]["dispatchTime"]);
+							$("#fileurl_uploader2").val(res["result"][2]["fileUrl"]);
+							zeid = res["result"][2]["id"];
+							upload.show(res["result"][2]["fileUrl"], "files_uploader2"); //附件赋值
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				//用地预审
+				var yongNo = $("#yongNo").val();
+				var yongtime = $("#yongtime").val();
+				var yongfile = $("#fileurl_uploader").val();
+				//用地批准
+				var diNo = $("#diNo").val();
+				var ditime = $("#ditime").val();
+				var difile = $("#fileurl_uploader1").val();
+				//土地证
+				var zeNo = $("#zeNo").val();
+				var zetime = $("#zetime").val();
+				var zefile = $("#fileurl_uploader2").val();
+				var data;
+				if (action == "edit") {
+					data = {
+						"sfList": [{
+							"dispatchTime": yongtime,
+							"docNo": yongNo,
+							"fileUrl": yongfile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteFormalities": "SITE_PRE",
+							"status": status,
+							"id": yongid
+						}, {
+							"dispatchTime": ditime,
+							"docNo": diNo,
+							"fileUrl": difile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteFormalities": "SITE_APPROVE",
+							"status": status,
+							"id": diid
+						}, {
+							"dispatchTime": zetime,
+							"docNo": zeNo,
+							"fileUrl": zefile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteFormalities": "SITE_CARD",
+							"status": status,
+							"id": zeid
+						}]
+					}
+				} else {
+					data = {
+						"sfList": [{
+							"dispatchTime": yongtime,
+							"docNo": yongNo,
+							"fileUrl": yongfile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteFormalities": "SITE_PRE",
+							"status": status
+						}, {
+							"dispatchTime": ditime,
+							"docNo": diNo,
+							"fileUrl": difile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteFormalities": "SITE_APPROVE",
+							"status": status
+						}, {
+							"dispatchTime": zetime,
+							"docNo": zeNo,
+							"fileUrl": zefile,
+							"projectId": projectId,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"siteFormalities": "SITE_CARD",
+							"status": status
+						}]
+					}
+				}
+				meetAdd('/api/siteformalities/save', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">用地手续报批</h2>
+		<h3 class="ydsxHead">用地预审</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="yongNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="yongtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+
+		<h3 class="ydsxHead">用地批准</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="diNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ditime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader1" class="fjStyle"></div>
+		<h3 class="ydsxHead">土地证</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="zeNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="zetime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader2" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

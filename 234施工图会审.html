@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>施工图会审</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css"/>
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, id;
+			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+
+				SelectUnitList("txtUnitName", "A0004", projectType);
+
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/construction/drawreview/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							$('#txtdocNo').val(res["result"]["docNo"]);
+							$('#txtUnitName').val(res["result"]["participatoryUnitList"]["name"]);
+							$('#txtinoutAmount').val(res["result"]["inoutAmount"]);
+							$('#txtreviewingTime').val(res["result"]["reviewingTime"]);
+							$('#txtcomment').val(res["result"]["comment"]);
+							var constructionUnit = res["result"]["participatoryUnitList"];
+							SetUnitList(constructionUnit, "txtUnitName");
+							id = res["result"]["id"];
+							//附件加上
+							upload.show(res["result"]["fileUrl"], "files_uploader")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var docNo = $('#txtdocNo').val();
+				var name = $('#txtUnitName').val();
+				var artfu = $('#fileurl_uploader').val();
+				var inoutAmount = $('#txtinoutAmount').val();
+				var reviewingTime = $('#txtreviewingTime').val();
+				var UnitIdList = [];
+				var comment = $('#txtcomment').val();
+				var UnitList = $("#txtUnitName").attr("data-id");
+
+				if(UnitList != "" || UnitList != undefined) {
+					var constructionUnitList = UnitList.split("-");
+					UnitIdList = constructionUnitList.map(function(data) {
+						return +data;
+					});
+				} else {
+					Toast.Err("错误", "请选择参与单位~", 'top-center', 'left')
+				}
+
+				var data = {
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectType": projectType,
+					"docNo": docNo,
+					"fileUrl": artfu,
+					"inoutAmount": inoutAmount,
+					"reviewingTime": reviewingTime,
+					"comment": comment,
+					"participatoryUnitIdList": UnitIdList,
+					"status": status
+				}
+				if(action == "edit")
+					data["id"] = id;
+				meetAdd('/api/construction/drawreview/save', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">施工图会审</h2>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="txtdocNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<div id="txtUnitName"></div>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>增减金额：</span>
+			<input type="text" id="txtinoutAmount" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>会审时间：</span>
+			<input type="text" id="txtreviewingTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" id="txtfileUrl" />-->
+		</div>
+		<div id="uploader" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>备注及存在问题：</span>
+			<textarea id="txtcomment"></textarea>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

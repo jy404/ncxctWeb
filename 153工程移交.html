@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>工程移交</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id;
+			$(function() {
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				//判断编辑或者查看
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = $.getUrlParam("projectName");
+
+				SelectUnitList("txtouterUnitIds", "A0004", projectType);
+				SelectUnitList("txtinnerUnitIds", "A0004", projectType);
+
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.szxmTjPageRightFormBc').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					SubmitData(2)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/projectHandover/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							$('#txtdocNo').val(res["result"]["docNo"]);
+							$('#txtresponsibleDeptId').val(res["result"]["responsibleDeptId"]);
+							$('#txtresponsiblePerson').val(res["result"]["responsiblePerson"]);
+							$('#txtexperts').val(res["result"]["experts"]);
+							
+							var outerUnitIds = res["result"]["outerUnitIds"];
+							SetUnitList(outerUnitIds, "txtouterUnitIds");
+							//$('#txtouterUnitIds').val(res["result"]["outerUnitIds"]);
+							$('#txtouterParticipants').val(res["result"]["outerParticipants"]);
+							$('#txthandoverProgress').val(res["result"]["handoverProgress"]);
+							$('#txtfinishTime').val(res["result"]["finishTime"]);
+							$('#txtproblem').val(res["result"]["problem"]);
+							$('#txtrectification').val(res["result"]["rectification"]);
+							
+							var innerUnitIds = res["result"]["innerUnitIds"];
+							SetUnitList(innerUnitIds, "txtinnerUnitIds");
+							//$('#txtinnerUnitIds').val(res["result"]["innerUnitIds"]);
+							$('#txtinnerParticipants').val(res["result"]["innerParticipants"]);
+							
+							id = res["result"]["id"];
+							//附件加上
+							upload.show(res["result"]["fileUrl"], "files_uploader1")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var docNo = $('#txtdocNo').val();
+				var responsibleDeptId = $('#txtresponsibleDeptId').val();
+				var responsiblePerson = $('#txtresponsiblePerson').val();
+				
+				//var outerUnitIds = $('#txtouterUnitIds').val();
+				var outerParticipants = $('#txtouterParticipants').val();
+				var handoverProgress = $('#txthandoverProgress').val();
+				var finishTime = $('#txtfinishTime').val();
+				var problem = $('#txtproblem').val();
+				var rectification = $('#txtrectification').val();
+				var artfu = $('#fileurl_uploader1').val() == "" ? "ss" : $('#fileurl_uploader1').val();
+				var outerUnitIds = [];
+				var outUnitList = $("#txtouterUnitIds").attr("data-id");
+
+				if(outUnitList != "" || outUnitList != undefined) {
+					var constructionOutUnitList = outUnitList.split("-");
+					outerUnitIds = constructionOutUnitList.map(function(data) {
+						return +data;
+					});
+				} else {
+					Toast.Err("错误", "请选择外业参与单位~", 'top-center', 'left')
+				}
+				
+				//var innerUnitIds = $('#txtinnerUnitIds').val();
+				var innerParticipants = $('#txtinnerParticipants').val();
+				var innerhandoverProgress = $('#txtinnerhandoverProgress').val();
+				var innerfinishTime = $('#txtinnerfinishTime').val();
+				var innerproblem = $('#txtinnerproblem').val();
+				var innerrectification = $('#txtinnerrectification').val();
+				var innerartfu = $('#fileurl_uploader2').val() == "" ? "ss" : $('#fileurl_uploader2').val();
+				var innerUnitIds = [];
+				var innerUnitList = $("#txtinnerUnitIds").attr("data-id");
+				if(innerUnitList != "" || innerUnitList != undefined) {
+					var constructioninnerUnitList = innerUnitList.split("-");
+					innerUnitIds = constructioninnerUnitList.map(function(data) {
+						return +data;
+					});
+				} else {
+					Toast.Err("错误", "请选择内业参与单位~", 'top-center', 'left')
+				}
+
+				var data = {
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectName": projectName,
+					"projectType": projectType,
+
+					"docNo": docNo,
+					"responsibleDeptId": responsibleDeptId,
+					"responsiblePerson": responsiblePerson,
+					
+					"outerUnitIds": outerUnitIds,
+					"outerParticipants": outerParticipants,
+					"handoverProgress": handoverProgress,
+					"finishTime": finishTime,
+					"problem": problem,
+					"rectification": rectification,
+					"fileUrl": artfu,
+					
+					"innerUnitIds": innerUnitIds,
+					"innerParticipants": innerParticipants,
+
+					"status": status
+				}
+				if(action == "edit")
+					data["id"] = id;
+				meetAdd('/api/projectHandover', JSON.stringify(data));
+			}
+		</script>
+	</head>
+
+	<body>
+
+		<h2 class="szTitle">工程移交</h2>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="txtdocNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>责任部门：</span>
+			<input type="text" id="txtresponsibleDeptId" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>责任人：</span>
+			<input type="text" id="txtresponsiblePerson" />
+		</div>
+		<h3 class="ydsxHead">外业移交</h3>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<div id="txtouterUnitIds"></div>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<input type="text" id="txtouterParticipants"/>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>移交进度：</span>
+			<input type="text" id="txthandoverProgress"/>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtfinishTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader1" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtproblem"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtrectification"></textarea>
+		</div>
+		<h3 class="ydsxHead">内业移交</h3>
+		<div class="szxmTjPageRightForm">
+			<span>参与单位：</span>
+			<div id="txtinnerUnitIds"></div>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>参与人员：</span>
+			<input type="text" id="txtinnerParticipants"/>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>移交进度：</span>
+			<input type="text" id="txtinnerhandoverProgress"/>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="txtinnerfinishTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+			<!--<input type="text" />-->
+		</div>
+		<div id="uploader2" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="txtinnerproblem"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="txtinnerrectification"></textarea>
+		</div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

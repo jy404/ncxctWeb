@@ -1,0 +1,441 @@
+/* CSS Document */
+@charset "utf-8";
+/* resume detail begin */
+/*hire“‚º˚∑¥¿°*/
+.hir_popupBox{
+	width:510px;
+	clear:both;
+	float:left;
+	background:#fff;
+	padding-bottom:20px;
+	overflow:hidden;
+	border:1px #666666 solid;
+	box-shadow:1px 1px 1px #ccc;	
+	}
+.my614{width:614px;}
+.myh345{height:345px;}
+	.hir_popupBox .mp{
+	clear:both;
+	position:relative;
+	}
+.hir_seleul {
+	position:absolute; 
+	left:0; 
+	top:26px; 
+	border:1px solid #C6C6C6; 
+	background:#fff; 
+	color:#666;
+	overflow: hidden;
+	display:none;
+	z-index:99999;
+	}	
+.hir_seleul li {
+	display:block;
+	height:26px;
+	overflow:hidden;
+	line-height:26px;
+	padding:0;
+	padding-left:10px;
+	cursor:pointer;
+	clear:both;
+	width:100%;
+	}
+.hir_seleul li:hover {background:#cbe2ea; color:#004065;}
+.myul236{width:236px;}
+.m_select_ul {
+	position:absolute; 
+	left:0; 
+	top:26px; 
+	border:1px solid #C6C6C6; 
+	background:#fff; 
+	color:#666;
+	overflow: hidden;
+	display:none;
+	z-index:99999;
+	}	
+.m_select_ul li {
+	display:block;
+	height:26px;
+	overflow:hidden;
+	line-height:26px;
+	padding:0;
+	padding-left:10px;
+	cursor:pointer;
+	clear:both;
+	width:100%;
+	}
+.m_select_ul li:hover {background:#cbe2ea; color:#004065;}
+.p_w90{ width:88px;}
+.hir_winning_tip {
+	clear: both;
+	overflow: hidden;
+	height: 37px;
+	line-height: 37px;
+	font-size: 16px;
+	text-align: center;
+	color: #FFFFFF;
+	background-color: #6F6F6F;
+}
+.popclose{
+	width:12px;
+	height:12px;
+	background:#737373 url(../images/hir_popclose.png) no-repeat 2px 2px;
+	border:none;
+	float:right;
+	cursor:pointer;
+	top:10px;
+	right:10px;
+	position:absolute;
+	z-index:99999;
+	margin:0;
+	border:0;
+	padding:0;
+	}
+	.hir_popupBox .con{
+	clear:both;
+	overflow:hidden;
+	padding:5px 25px 10px;
+	_zoom:1;
+	}
+	.mysele236{width:206px;}
+
+	.myw90{width:80px}
+	.myw125{width:100px}
+	.my_selearr{
+	height:16px;
+	line-height:16px;
+	background:#fff url(../images/my_selearr.gif) no-repeat right 11px;
+	padding:5px 5px;
+	padding-right:25px;
+	border:1px #d8d8d8 solid;
+	color:#333;
+	font-size:12px;
+	}
+	.my_txtare{
+	border:1px #ccc solid;
+	padding:2px 3px;
+	background:#fff;
+	color:#333;
+	font:normal normal 12px/19px "ÀŒÃÂ";
+	}
+	.myfebk{
+	width:510px;
+	height:85px;
+	overflow-y:scroll;
+	margin-bottom:10px;
+	}
+	.my_feedboxcon{
+	clear:both;
+	overflow:hidden;
+	border:1px #cccccc dashed;
+	background:#ededed;
+	padding:10px 15px;
+	}
+	.my_btngreen28{
+	display:block;
+	float:left;
+	height:28px;
+	color:#fff;
+	text-align:center;
+	padding:0 15px;
+	background-color: #6F6F6F;
+	font-family: "Œ¢»Ì—≈∫⁄";
+	font-size: 14px;
+	font-style: normal;
+	line-height: 28px;
+	font-weight: normal;
+	font-variant: normal;
+	text-decoration: none;
+	}
+.my_btngreen28:link,.my_btngreen28:visited,.my_btngreen28:hover{color:#fff;}
+.my_resmailli{
+	clear:both;
+	height:28px;
+	line-height:28px;
+	overflow:visibel;
+	margin:8px 0;
+	}
+.my_resmailli li{
+	float:left;
+	padding-right:10px;
+	}
+.hir_resmail_tip{
+	clear:both;
+	overflow:hidden;
+	font-family: "Œ¢»Ì—≈∫⁄";
+	font-size: 14px;
+	font-style: normal;
+	line-height: 30px;
+	font-weight: normal;
+	font-variant: normal;
+	padding-top: 10px;
+	padding-right: 0px;
+	padding-bottom: 10px;
+	padding-left: 0px;
+	font-size-adjust: none;
+	font-stretch: normal;
+	}
+	.mymt20{margin-top:20px;}
+/*hire feed back begin*/
+.my_feedbtn{
+	display:block;
+	width:12px;
+	padding:7px;
+	white-space:normal;
+	overflow:hidden;
+	line-height:15px;
+	position:absolute;
+	z-index:9999;
+	right:10px;
+	top:280px;
+	color:#336600;
+	background:#e8f4d0 url(../images/my_feedbtn.gif) no-repeat left bottom;
+	}
+.my_feedbtn:link,.my_feedbtn:visited,.my_feedbtn:hover{color:#336600; text-decoration:none;}
+/*hireΩ±œÓ…Ë÷√*/
+.hir_prize{
+	margin-top: 25px;
+	margin-bottom: 31px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.hir_sz{
+	font-family: "Œ¢»Ì—≈∫⁄";
+	font-size: 20px;
+	font-weight: bold;
+	color: #000000;
+	margin-right: 15px;
+	margin-bottom: 12px;
+}
+.hir_sx{
+	font-family: "ÀŒÃÂ";
+	font-size: 16px;
+	color: #FF9800;
+}
+.hir_prize_bj{
+	background-image: url(../images/hir_prize_bj.gif);
+	background-repeat: repeat-x;
+	background-position: 0px 0px;
+	width: 960px;
+	height: 5px;
+	margin-top: 12px;
+	float: left;
+	margin-bottom: 31px;
+}
+.hir_pr_info{
+	width: 950px;
+	margin-top: 0px;
+	margin-right: auto;
+	margin-bottom: 33px;
+	margin-left: auto;
+	border: 1px solid #D8D8D8;
+	float: left;
+}
+.hir_pr_left{
+	float: left;
+	width: 381px;
+	padding-top: 24px;
+	padding-bottom: 25px;
+	padding-right: 20px;
+	padding-left: 20px;
+	background-color: #F8F8F8;
+	border-right-width: 1px;
+	border-right-style: dashed;
+	border-right-color: #CCCCCC;
+}
+.hir_pr_right{
+	margin: 0px;
+	width: 481px;
+	float: left;
+	padding-top: 18px;
+	padding-right: 24px;
+	padding-bottom: 19px;
+	padding-left: 23px;
+}
+.z1{
+	width:250px;
+	height:18px;
+}
+.z2{
+	width:192px;
+	height:18px;
+}
+.z3{
+	width:250px;
+	height:18px;
+}
+.z4{
+	width:178px;
+	height:18px;
+}
+
+
+.hir_x_browse{
+	background:url(../images/hir_pr_left_bj.gif) no-repeat;
+	width:68px;
+	height:28px;
+	float:right;
+	cursor:pointer;
+	*bottom:20px;
+	}
+.hir_scamper{
+	line-height:28px;
+	margin-left:15px;
+	}
+
+
+.gray_z1{
+	display:block;
+	height:28px;
+	line-height:28px;
+	padding-left:15px;
+	background:url(../images/gray_z1.gif) no-repeat;
+	float:left;
+	cursor:pointer;
+	margin-top: 5px;
+}
+.gray_z1 a,.gray_z1 a:link,.gray_z1 a:visited,.gray_z1 a:hover{
+	display:block;
+	height:28px;
+	background:url(../images/gray_z1.gif) no-repeat;
+	padding-right:15px;
+	color:#fff;
+	text-decoration:none;
+	float:left;
+	background-repeat: no-repeat;
+	background-position: right -24px;
+	margin-top: 1px;
+}
+.hir_pr_rtxt{
+	font-family: "ÀŒÃÂ";
+	color: #666666;
+	font-size: 12px;
+	margin-bottom: 14px;
+	font-weight: bold;
+	width:380px;
+	text-align: left;
+}
+.hir_award li.pr_nam{width:103px;}
+.hir_award li.pr_num{width:51px;}
+.hir_award li.pr_des{width:92px;}
+.hir_award li.pr_img{width:98px;}
+.hir_award li.pr_opr{width:80px;}
+.hir_award li.pr_opr_hjgz{width:80px;line-height: 26px;}
+.t_hir_area{
+	width:250px;
+	height:142px;
+	overflow-y:auto;
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #E8E8E8;
+	color: #999;
+	font: 12px/17px "ÀŒÃÂ","arial","Œ¢»Ì—≈∫⁄";
+	padding-left: 1px;
+}
+.gray_z2{
+	display:block;
+	height:28px;
+	line-height:28px;
+	padding-left:15px;
+	background:url(../images/gray_z1.gif) no-repeat;
+	float:left;
+	cursor:pointer;
+	margin-left: 97px;
+	margin-top: 126px;
+}
+.gray_z21 a,.gray_z2 a:link,.gray_z2 a:visited,.gray_z2 a:hover{
+	display:block;
+	height:28px;
+	background:url(../images/gray_z1.gif) no-repeat;
+	padding-right:15px;
+	color:#fff;
+	text-decoration:none;
+	float:left;
+	background-repeat: no-repeat;
+	background-position: right -24px;
+	margin-top: 1px;
+}
+.hir_pr_duanluo{
+	margin-right: auto;
+	margin-bottom: 0px;
+	margin-left: auto;
+	line-height: 150%;
+	width: 468px;
+	height:163px;
+	overflow: hidden;
+}
+.hir_bot{
+	overflow:hidden;
+	margin-top: 19px;
+	margin-right: 0px;
+	margin-bottom: 28px;
+	margin-left: 106px;
+	padding-right: 0;
+	clear: both;
+}
+.hir_bl_btn{
+	display:block;
+	height:40px;
+	width:110px;
+	line-height:40px;
+	background:#2980a9;
+	color:#fff;
+	padding-top: 0;
+	padding-right: 10px;
+	padding-bottom: 0;
+	padding-left: 10px;
+	font-family: "Œ¢»Ì—≈∫⁄";
+	font-size: 18px;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-align: center;
+	}
+
+.hir_bl_btn:link,.hir_bl_btn:visited,.hir_bl_btn:hover{ color:#fff; text-decoration:noen;}
+.hir_bl_btn:hover{ background:#228ec1; }
+.hir_award ul{
+	clear:both; 
+	overflow:hidden; 
+	height:43px; 
+	line-height:43px; 
+	text-align:center; 
+	}
+.hir_award li{float:left; padding:0 5px;}
+.hir_award .pr_tip li{float:left;border-right:1px #E6E6E6 solid;}
+.hir_award .pr_tip{
+	color:#656565;
+	background-color: #E6E6E6;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: #E6E6E6;
+}
+.hir_award .pr_con li{
+	float:left;
+	border-right-width: 1px;
+	border-right-color: #E6E6E6;
+	border-right-style: solid;
+}
+.hir_award .pr_con{
+	border-top-width: 0;
+	border-right-width: 0px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #E6E6E6;
+	border-right-color: #E6E6E6;
+	border-bottom-color: #E6E6E6;
+	border-left-color: #E6E6E6;
+	}
+.hir_pr_hjgz{
+	font-family: "ÀŒÃÂ";
+	color: #666666;
+	font-size: 12px;
+	margin-bottom: 14px;
+	font-weight: bold;
+	width:380px;
+	text-align: left;
+	line-height: 26px;
+}

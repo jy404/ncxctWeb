@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>无标题文档</title>
+	</head>
+
+	<body>
+		<!--区域弹出层-->
+		<script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
+		<link type="text/css" href="css/commen.css" rel="stylesheet" />
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<style type="text/css">
+			body {
+				background: none;
+			}
+		</style>
+		<div>
+			<div class="zhilei">
+				<div class="popupBox">
+					<div class="lp"></div>
+					<div class="mp">
+						<div class="areaCon">
+							<div class="tl">已选择：</div>
+							<div class="tm" id="selected"> </div>
+							<div class="promptBox" style=" margin-left:450px; margin-top:30px; position:absolute; display:none " id="AreaValadate">
+								<div class="arrowRedL png"></div>
+								<div class="promptConShadowL">
+									<div class="promptRedCon"> 您好，最多只能选择999个！ </div>
+								</div>
+							</div>
+							<div class="tr">
+								<button onclick="sub()" class="gbtn80 png">确定</button>
+								<input type="button" class="gbtn80 png" onclick="parent.m.Close()" value="取 消" />
+							</div>
+							<div class="popLine"></div>
+							<div id="city" class="bigCity"> </div>
+							<div id="province" class="smaCity"> </div>
+							<div class="smaCityChild" id="hidden_div11" style="display:none;">
+								<div class="t png"></div>
+								<div class="m png">
+									<div class="tit" id="provincename"></div>
+									<div class="smaCityChildbox" id="theCity"></div>
+								</div>
+								<div class="bot">
+									<input type="button" class="close_sma" value="" id="smaCityChildClose" />
+								</div>
+								<div class="b png"></div>
+							</div>
+						</div>
+					</div>
+					<div class="lp"></div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			$(function() {
+				document.getElementById('selected').innerHTML = parent.document.getElementById('RegionJobBusinessTag').innerHTML;
+				$("#smaCityChildClose").click(function() {
+					$("#hidden_div11").hide();
+				});
+				GetDept();
+			});
+
+			function selectCity(id, name) {
+				//最大选择5个
+				var SelectedCount = 1;
+				$("#selected span").each(function() {
+					SelectedCount = SelectedCount + 1;
+				});
+				if (SelectedCount <= 999) {
+					if ($('#' + id).attr('checked') == true) {
+						var str = "";
+						str += "<span ty='r' id='" + id + "_ed'>";
+						str += "<a href=\"#\">" + name + "</a>";
+						str += "<input type='button' onclick='del(" + id + ")' name='selectedCity'  id='" + id + "_ch' class=\"city_det\" />";
+						str += "</span>";
+						if ($("#selected").html().indexOf(id) == -1) {
+							$("#selected").append(str);
+						}
+						$("#AreaValadate").hide();
+					} else {
+						$("#AreaValadate").hide();
+						del(id);
+					}
+				} else {
+					$('#' + id).attr('checked', false);
+					$("#AreaValadate").show();
+					//del(id);               
+				}
+			}
+
+			function del(id) {
+				$("#AreaValadate").hide();
+				$('#' + id).attr('checked', false);
+				$('#' + id + '_ed').remove();
+			}
+
+			function openCity(id, provincename) {
+				var ObjSubject = $('#theCity');
+				var cityList = request("cl");
+				var selected = $("#selected").html();
+				if (selected != "") {
+					cityList = selected;
+				}
+				$.getJSON(
+					domain + '/api/org/user/' + id,
+					function(res) {
+						if (res["code"] == 0) {
+							var data = eval(res["result"]);
+							ObjSubject.html('');
+							$.each(data, function(i, item) {
+								var str = "<div class='fl'>";
+								if (cityList.indexOf(item.id) > -1) {
+									str += '<input type="checkbox" checked="checked" onclick="selectCity(\'' + item.name + '\',\'' + item.id + '\')" name="sCity" id="' + item.name + '" />';
+								} else {
+									str += '<input type="checkbox" onclick="selectCity(\'' + item.id + '\',\'' + item.name + '\')" name="sCity" id="' + item.id + '" />';
+								}
+								str += "<label>" + item.name + "</label>";
+								str += "</div>";
+								ObjSubject.append(str);
+							});
+						} else
+							Toast.Err('错误', res["description"], 'top-center', 'left');
+					},
+					function() {
+						Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+					}
+				);
+				
+				$("#provincename").html(provincename);
+				$("#hidden_div11").show();
+			}
+
+			function sub() {
+				parent.document.getElementById('RegionJobBusinessTag').innerHTML = document.getElementById('selected').innerHTML;
+				var cityNames = "";
+				parent.$("#RegionJobBusinessTag span a").each(function() {
+					cityNames += $(this).html() + " ";
+				});
+				parent.$("#ApplicationDirection").val(cityNames);
+				var cityIDs = "";
+				parent.$("#RegionJobBusinessTag span input").each(function() {
+					cityIDs += $(this).attr("id").toString().split('_')[0] + ",";
+				});
+				cityIDs = cityIDs.substring(0, cityIDs.length - 1);
+				parent.m.Close();
+			}
+
+			function request(paras) {
+				var url = location.href;
+				var paraString = url.substring(url.indexOf("?") + 1, url.length).split("&");
+				var paraObj = {}
+				for (i = 0; j = paraString[i]; i++) {
+					paraObj[j.substring(0, j.indexOf("=")).toLowerCase()] = j.substring(j.indexOf("=") + 1, j.length);
+				}
+				var returnValue = paraObj[paras.toLowerCase()];
+				if (typeof(returnValue) == "undefined") {
+					return "";
+				} else {
+					return returnValue;
+				}
+			}
+		</script>
+	</body>
+
+</html>

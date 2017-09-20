@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>财政复函、财政出具预算控制价审核报告</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, cid, fid;
+			$(function() {
+				/*页面传参并判断类型 start*/
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = unescape($.getUrlParam("projectName"));
+				if (action != "" && action != undefined) {
+					SetData(projectId)
+					if (action == "view") {
+						$("body").find("input").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				$('#saveBtn').click(function() {
+					SubmitData(1)
+				});
+				$('#submitBtn').click(function() {
+					SubmitData(2)
+				});
+				$('#updateBtn').click(function() {
+					SubmitData(3)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/fiscalReply/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							//财政出具预算控制价审核报告
+							$("#cNo").val(res["result"][0]["docNo"]);
+							$("#cpiace").val(res["result"][0]["amount"]);
+							$("#ctime").val(res["result"][0]["createTime"]);
+							$("#fileurl_uploader").val(res["result"][0]["fileUrl"]);
+							cid = res["result"][0]["id"];
+							upload.show(res["result"][0]["fileUrl"], "files_uploader");
+							//财政复函
+							$("#fNo").val(res["result"][1]["docNo"]);
+							$("#fpiace").val(res["result"][1]["amount"]);
+							$("#ftime").val(res["result"][1]["createTime"]);
+							$("#fileurl_uploader1").val(res["result"][1]["fileUrl"]);
+							fid = res["result"][1]["id"];
+							upload.show(res["result"][1]["fileUrl"], "files_uploader1")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				//财政复函
+				var fNo = $("#fNo").val();
+				var fpiace = $("#fpiace").val();
+				var ftime = $("#ftime").val();
+				var ffile = $("#fileurl_uploader1").val();
+				//财政出具预算控制价审核报告
+				var cNo = $("#cNo").val();
+				var cpiace = $("#cpiace").val();
+				var ctime = $("#ctime").val();
+				var cfile = $("#fileurl_uploader").val();
+				var data;
+				data = {
+					"fiscalReplyList": [{
+						"amount": cpiace,
+						"dispatchTime": ctime,
+						"docNo": cNo,
+						"fileUrl": cfile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"projectType": projectType,
+						"stepType": 'BUDGET_CONTROL_PRICE_AUDIT_REPORT'
+					}, {
+						"amount": fpiace,
+						"dispatchTime": ftime,
+						"docNo": fNo,
+						"fileUrl": ffile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"projectType": projectType,
+						"stepType": 'FISCALREPLY'
+					}]
+				}
+				if (status == 1) {
+					data["fiscalReplyList"][0]["id"] = cid;
+					data["fiscalReplyList"][1]["id"] = fid;
+					meetAdd('/api/fiscalReply/submit', JSON.stringify(data));
+				} else if (status == 2) {
+					meetAdd('/api/fiscalReply/submit', JSON.stringify(data));
+				} else {
+					data["fiscalReplyList"][0]["id"] = cid;
+					data["fiscalReplyList"][1]["id"] = fid;
+					meetPut('/api/fiscalReply', JSON.stringify(data));
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<h2 class="szTitle">财政复函、财政出具预算控制价审核报告</h2>
+		<h3 class="ydsxHead">财政复函</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="fNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="fpiace" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ftime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+		</div>
+		<div id="uploader1" class="fjStyle"></div>
+
+		<h3 class="ydsxHead">财政出具预算控制价审核报告</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="cNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>金额：</span>
+			<input type="text" id="cpiace" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ctime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+
+		<div class="szBtn">
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

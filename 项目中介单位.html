@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>项目参建单位</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link type="text/css" rel="stylesheet" href="css/commen.css" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('.zjdw .addBb').click(function() {
+					$('.window').show();
+				});
+				$('.window .windowBox h2 b').click(function() {
+					$('.window').hide();
+				});
+				var currentpage = 1;
+				var pagesize = 3;
+				var data={"orgType":"AGENT"};
+				GetUnitList(currentpage,pagesize,data,"unitList",$("#unitList_page"),true,"/api/proorg/page/list")
+			});
+		</script>
+	</head>
+
+	<body>
+		<div class="title">
+			<div class="page">
+				<b>当前位置：</b>
+				<span>> 首页</span>
+				<span>> 项目综合管理</span>
+				<span>> 项目参建单位</span>
+			</div>
+		</div>
+		<div class="zjdw">
+			<h2 class="zjdwTitle">项目参建单位</h2>
+			<a class="addBb">新增单位</a>
+			<div class="zjdwSerach">
+				<div class="zjdwSerachTitle">
+					<span>单位名称</span>
+					<input type="text" class="zjdwSerachTypeSelect" />
+				</div>
+				<div class="zjdwSerachTitle">
+					<span>单位地址</span>
+					<input type="text" class="zjdwSerachTypeSelect" />
+				</div>
+				<div class="zjdwSerachTitle">
+					<span>项目法人</span>
+					<input type="text" class="zjdwSerachTypeSelect" />
+				</div>
+				<div class="zjdwSerachTitle">
+					<span>负责人</span>
+					<input type="text" class="zjdwSerachTypeSelect" />
+				</div>
+				<div class="zjdwSerachTitle">
+					<span>电话</span>
+					<input type="text" class="zjdwSerachTypeSelect" />
+				</div>
+				<div class="zjdwSerachTitle">
+					<span>单位法人</span>
+					<input type="text" class="zjdwSerachTypeSelect" />
+				</div>
+				<div class="zjdwSerachBtn">
+					<a href="#" class="zjdwSerachBtn1">搜索</a>
+					<a href="#" class="zjdwSerachreset">清空</a>
+				</div>
+			</div>
+			<div class="zjdwTable">
+				<table cellpadding="0" cellspacing="0" id="unitList">
+					<tr>
+						<td width="6%">序号</td>
+						<td width="15%">单位类型</td>
+						<td width="14%">单位名称</td>
+						<td width="8%">单位法人</td>
+						<td width="8%">项目负责人</td>
+						<td width="8%">负责人电话</td>
+						<td width="14%">单位地址</td>
+						<td width="14%">工作备注</td>
+						<td width="13%">操作</td>
+					</tr>
+
+				</table>
+
+			</div>
+			<div class="page_div fy" id="unitList_page">
+
+			</div>
+		</div>
+
+		<div class="window">
+			<div class="windowBox">
+				<h2>单位类型<b></b></h2>
+				<ul>
+					<a href="新增参建单位.html?orgCategory=A0001">
+						<li>业主单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0002">
+						<li>地勘单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0003">
+						<li>设计单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0004">
+						<li>施工单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0005">
+						<li>监理单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0006">
+						<li>监督单位</li>
+					</a>
+					<!--<a href="新增参建单位.html?orgCategory=A0007"><li>测绘单位</li></a>-->
+					<a href="新增参建单位.html?orgCategory=A0007">
+						<li>可研及初设评审单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0008">
+						<li>可研编制单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0009">
+						<li>初设单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0010">
+						<li>土建设计单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0011">
+						<li>强电设计单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0012">
+						<li>检测单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0013">
+						<li>图审单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0014">
+						<li>水保咨询单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0015">
+						<li>环评咨询单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0016">
+						<li>交评咨询单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0017">
+						<li>地质灾害、压覆矿评估单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0018">
+						<li>防洪咨询单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0019">
+						<li>稳定咨询单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0020">
+						<li>招标代理单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0021">
+						<li>清单编制单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0022">
+						<li>监督单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=A0023">
+						<li>行业主管部门</li>
+					</a>
+
+					<a href="新增参建单位.html?orgCategory=B0024">
+						<li>交评单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0025">
+						<li>环评单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0026">
+						<li>可研编制、评估单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0027">
+						<li>地勘见证单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0028">
+						<li>初设评估单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0029">
+						<li>设计审查单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0030">
+						<li>招标代理单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0031">
+						<li>预算编制单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0032">
+						<li>测量测绘单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0033">
+						<li>桩基检测单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0034">
+						<li>房屋检测单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0035">
+						<li>防雷检测单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0036">
+						<li>室内环境及节能检测单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0037">
+						<li>沉降观测单位</li>
+					</a>
+					<a href="新增参建单位.html?orgCategory=B0038">
+						<li>消防检测单位</li>
+					</a>
+				</ul>
+			</div>
+		</div>
+	</body>
+
+</html>

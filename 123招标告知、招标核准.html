@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>招标告知、招标核准</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id, zid, bid;
+			$(function() {
+				/*页面传参并判断类型 start*/
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = unescape($.getUrlParam("projectName"));
+				if (action != "" && action != undefined) {
+					SetData(projectId)
+					if (action == "view") {
+						$("body").find("input").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.xmjyshkypfList li').click(function() {
+					$(this).addClass('xmjyshkypfListSelect').siblings('li').removeClass('xmjyshkypfListSelect');
+					$('.xmjyshkypfTab').eq($(this).index()).show().siblings('.xmjyshkypfTab').hide();
+				});
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				$('#saveBtn').click(function() {
+					SubmitData(1)
+				});
+				$('#submitBtn').click(function() {
+					SubmitData(2)
+				});
+				$('#updateBtn').click(function() {
+					SubmitData(3)
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/theTenderNotify/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							if (res["result"][0]["stepType"] == "NOTIFY") {
+								$('#zNo').val(res["result"][0]["docNo"]);
+								$('#ztime').val(res["result"][0]["createTime"]);
+								$('#fileurl_uploader').val(res["result"][0]["fileUrl"]);
+								zid = res["result"][0]["id"];
+								upload.show(res["result"][0]["fileUrl"], "files_uploader")
+								$('#bNo').val(res["result"][1]["docNo"]);
+								$('#btime').val(res["result"][1]["createTime"]);
+								$('#fileurl_uploader1').val(res["result"][1]["fileUrl"]);
+								upload.show(res["result"][1]["fileUrl"], "files_uploader1")
+								bid = res["result"][1]["id"];
+							} else {
+								$('#bNo').val(res["result"][0]["docNo"]);
+								$('#btime').val(res["result"][0]["createTime"]);
+								$('#fileurl_uploader1').val(res["result"][0]["fileUrl"]);
+								upload.show(res["result"][0]["fileUrl"], "files_uploader1")
+								bid = res["result"][0]["id"];
+							}
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				//招标告知
+				var zNo = $("#zNo").val();
+				var ztime = $("#ztime").val();
+				var zfile = $("#fileurl_uploader").val();
+				//招标核准
+				var bNo = $("#bNo").val();
+				var btime = $("#btime").val();
+				var bfile = $("#fileurl_uploader1").val();
+				data = {
+					"theTenderNotifyList": [{
+						"dispatchTime": ztime,
+						"docNo": zNo,
+						"fileUrl": zfile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"projectType": projectType,
+						"stepType": 'NOTIFY'
+					}, {
+						"dispatchTime": btime,
+						"docNo": bNo,
+						"fileUrl": bfile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"projectType": projectType,
+						"stepType": 'CHECK'
+					}]
+				}
+				if (status == 1) {
+					meetAdd('/api/theTenderNotify', JSON.stringify(data));
+				} else if (status == 2) {
+					data["theTenderNotifyList"][0]["id"] = zid;
+					data["theTenderNotifyList"][1]["id"] = bid;
+					meetAdd('/api/theTenderNotify/submit', JSON.stringify(data));
+				} else {
+					data["theTenderNotifyList"][0]["id"] = zid;
+					data["theTenderNotifyList"][1]["id"] = bid;
+					meetPut('/api/theTenderNotify', JSON.stringify(data));
+				}
+			}
+		</script>
+		</script>
+	</head>
+
+	<body>
+
+		<h2 class="szTitle">招标告知、招标核准</h2>
+		<h3 class="ydsxHead">招标告知</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="zNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ztime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+		<h3 class="ydsxHead">招标核准</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="bNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="btime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader1" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+	</body>
+
+</html>

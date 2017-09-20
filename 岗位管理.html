@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)http://localhost:43463/admin/manager/role_edit.aspx?action=Edit&id=1 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>编辑角色</title>
+<link href="css/ui-dialog.css" rel="stylesheet" type="text/css">
+<link href="css/qstyle.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="js/Validform_v5.3.2_min.js"></script>
+<script type="text/javascript" src="js/dialog-plus-min.js"></script>
+<script type="text/javascript" charset="utf-8" src="js/laymain.js"></script>
+<script type="text/javascript" charset="utf-8"src="js/common.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //初始化表单验证
+        $("#form1").initValidform();
+        //是否启用权限
+        if ($("#ddlRoleType").find("option:selected").attr("value") == 1) {
+            $(".border-table").find("input[type='checkbox']").prop("disabled", true);
+        }
+        $("#ddlRoleType").change(function () {
+            if ($(this).find("option:selected").attr("value") == 1) {
+                $(".border-table").find("input[type='checkbox']").prop("checked", false);
+                $(".border-table").find("input[type='checkbox']").prop("disabled", true);
+            } else {
+                $(".border-table").find("input[type='checkbox']").prop("disabled", false);
+            }
+        });
+        //权限全选
+        $("input[name='checkAll']").click(function () {
+            if ($(this).prop("checked") == true) {
+                $(this).parent().siblings("td").find("input[type='checkbox']").prop("checked", true);
+            } else {
+                $(this).parent().siblings("td").find("input[type='checkbox']").prop("checked", false);
+            }
+        });
+    });
+</script>
+</head>
+
+<body class="mainbody">
+<form>
+<div id="floatHead" class="content-tab-wrap">
+  <div class="content-tab">
+    <div class="content-tab-ul-wrap">
+      <div class="tab-title"><span>编辑岗位信息</span><i></i></div><ul>
+        <li><a class="selected" href="javascript:;">编辑岗位信息</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="tab-content">
+  <dl>
+    <dt>岗位类型</dt>
+    <dd>
+      <div class="rule-single-select single-select">
+      	<div class="boxwrap">
+      		<a class="select-tit" href="javascript:;">
+      			<span>超级用户</span>
+      			<i></i>
+      		</a>
+      		<div class="select-items">
+      			<ul>
+      				<li>请选择类型...</li>
+      				<li class="selected">超级用户</li>
+      				<li>系统用户</li>
+      			</ul>
+      		</div>
+      		<i class="arrow"></i>
+      	</div>
+       <select name="ddlRoleType" style="display: none;">
+	<option value="">请选择类型...</option>
+	<option selected="selected" value="1">超级用户</option>
+	<option value="2">系统用户</option>
+
+</select>
+      </div>
+    </dd>
+  </dl>
+  <dl>
+    <dt>岗位名称</dt>
+    <dd><input name="txtRoleName" type="text" value="超级管理组" id="txtRoleName" class="input normal" datatype="*1-100" sucmsg=" "> <span class="Validform_checktip">*角色中文名称，100字符内</span></dd>
+  </dl>   
+  <dl>
+    <dt>管理权限</dt>
+    <dd>
+      <table border="0" cellspacing="0" cellpadding="0" class="border-table" width="98%">
+        <thead>
+          <tr>
+            <th width="30%">导航名称</th>
+            <th>权限分配</th>
+            <th width="10%">全选</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+               <span class="folder-open"></span>
+              站点管理
+            </td>
+            <td>
+              <span id="rptList_cblActionType_0" class="cbllist"><input id="rptList_cblActionType_0_0_0" type="checkbox" name="rptList$ctl00$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_0_0_0"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+            <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              资源包管理
+            </td>
+            <td>
+              
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+              <input type="hidden" name="rptList$ctl02$hidName" id="rptList_hidName_2" value="channel_web">
+              <input type="hidden" name="rptList$ctl02$hidActionType" id="rptList_hidActionType_2" value="Show">
+              <input type="hidden" name="rptList$ctl02$hidLayer" id="rptList_hidLayer_2" value="2">
+              <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              消息中心
+            </td>
+            <td>
+              <span id="rptList_cblActionType_2" class="cbllist"><input id="rptList_cblActionType_2_0_2" type="checkbox" name="rptList$ctl02$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_2_0_2"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+              <input type="hidden" name="rptList$ctl07$hidName" id="rptList_hidName_7" value="channel_snfw">
+              <input type="hidden" name="rptList$ctl07$hidActionType" id="rptList_hidActionType_7" value="Show">
+              <input type="hidden" name="rptList$ctl07$hidLayer" id="rptList_hidLayer_7" value="3">
+              <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              消息通知
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              公告通知
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          
+          
+          
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              项目综合管理
+            </td>
+            <td>
+              <span id="rptList_cblActionType_3" class="cbllist"><input id="rptList_cblActionType_3_0_3" type="checkbox" name="rptList$ctl03$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_3_0_3"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+              <input type="hidden" name="rptList$ctl07$hidName" id="rptList_hidName_7" value="channel_snfw">
+              <input type="hidden" name="rptList$ctl07$hidActionType" id="rptList_hidActionType_7" value="Show">
+              <input type="hidden" name="rptList$ctl07$hidLayer" id="rptList_hidLayer_7" value="3">
+              <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              财务报表
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              项目报表
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              项目进度
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              项目查询
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              房建项目管理
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+           <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:48px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              前期
+            </td>
+            <td>
+              <span id="rptList_cblActionType_12" class="cbllist"><input id="rptList_cblActionType_12_0_12" type="checkbox" name="rptList$ctl12$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_12_0_12"> 显示 </label><input id="rptList_cblActionType_12_1_12" type="checkbox" name="rptList$ctl12$cblActionType$1" value="View" disabled=""><label for="rptList_cblActionType_12_1_12"> 查看 </label><input id="rptList_cblActionType_12_2_12" type="checkbox" name="rptList$ctl12$cblActionType$2" value="Add" disabled=""><label for="rptList_cblActionType_12_2_12"> 添加 </label><input id="rptList_cblActionType_12_3_12" type="checkbox" name="rptList$ctl12$cblActionType$3" value="Edit" disabled=""><label for="rptList_cblActionType_12_3_12"> 修改 </label><input id="rptList_cblActionType_12_4_12" type="checkbox" name="rptList$ctl12$cblActionType$4" value="Delete" disabled=""><label for="rptList_cblActionType_12_4_12"> 删除 </label><input id="rptList_cblActionType_12_5_12" type="checkbox" name="rptList$ctl12$cblActionType$5" value="Audit" disabled=""><label for="rptList_cblActionType_12_5_12"> 审核 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:48px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              征地拆迁
+            </td>
+            <td>
+              <span id="rptList_cblActionType_12" class="cbllist"><input id="rptList_cblActionType_12_0_12" type="checkbox" name="rptList$ctl12$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_12_0_12"> 显示 </label><input id="rptList_cblActionType_12_1_12" type="checkbox" name="rptList$ctl12$cblActionType$1" value="View" disabled=""><label for="rptList_cblActionType_12_1_12"> 查看 </label><input id="rptList_cblActionType_12_2_12" type="checkbox" name="rptList$ctl12$cblActionType$2" value="Add" disabled=""><label for="rptList_cblActionType_12_2_12"> 添加 </label><input id="rptList_cblActionType_12_3_12" type="checkbox" name="rptList$ctl12$cblActionType$3" value="Edit" disabled=""><label for="rptList_cblActionType_12_3_12"> 修改 </label><input id="rptList_cblActionType_12_4_12" type="checkbox" name="rptList$ctl12$cblActionType$4" value="Delete" disabled=""><label for="rptList_cblActionType_12_4_12"> 删除 </label><input id="rptList_cblActionType_12_5_12" type="checkbox" name="rptList$ctl12$cblActionType$5" value="Audit" disabled=""><label for="rptList_cblActionType_12_5_12"> 审核 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:48px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              施工
+            </td>
+            <td>
+              <span id="rptList_cblActionType_12" class="cbllist"><input id="rptList_cblActionType_12_0_12" type="checkbox" name="rptList$ctl12$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_12_0_12"> 显示 </label><input id="rptList_cblActionType_12_1_12" type="checkbox" name="rptList$ctl12$cblActionType$1" value="View" disabled=""><label for="rptList_cblActionType_12_1_12"> 查看 </label><input id="rptList_cblActionType_12_2_12" type="checkbox" name="rptList$ctl12$cblActionType$2" value="Add" disabled=""><label for="rptList_cblActionType_12_2_12"> 添加 </label><input id="rptList_cblActionType_12_3_12" type="checkbox" name="rptList$ctl12$cblActionType$3" value="Edit" disabled=""><label for="rptList_cblActionType_12_3_12"> 修改 </label><input id="rptList_cblActionType_12_4_12" type="checkbox" name="rptList$ctl12$cblActionType$4" value="Delete" disabled=""><label for="rptList_cblActionType_12_4_12"> 删除 </label><input id="rptList_cblActionType_12_5_12" type="checkbox" name="rptList$ctl12$cblActionType$5" value="Audit" disabled=""><label for="rptList_cblActionType_12_5_12"> 审核 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:48px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              竣工结算
+            </td>
+            <td>
+              <span id="rptList_cblActionType_12" class="cbllist"><input id="rptList_cblActionType_12_0_12" type="checkbox" name="rptList$ctl12$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_12_0_12"> 显示 </label><input id="rptList_cblActionType_12_1_12" type="checkbox" name="rptList$ctl12$cblActionType$1" value="View" disabled=""><label for="rptList_cblActionType_12_1_12"> 查看 </label><input id="rptList_cblActionType_12_2_12" type="checkbox" name="rptList$ctl12$cblActionType$2" value="Add" disabled=""><label for="rptList_cblActionType_12_2_12"> 添加 </label><input id="rptList_cblActionType_12_3_12" type="checkbox" name="rptList$ctl12$cblActionType$3" value="Edit" disabled=""><label for="rptList_cblActionType_12_3_12"> 修改 </label><input id="rptList_cblActionType_12_4_12" type="checkbox" name="rptList$ctl12$cblActionType$4" value="Delete" disabled=""><label for="rptList_cblActionType_12_4_12"> 删除 </label><input id="rptList_cblActionType_12_5_12" type="checkbox" name="rptList$ctl12$cblActionType$5" value="Audit" disabled=""><label for="rptList_cblActionType_12_5_12"> 审核 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              市政项目管理
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+           <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:48px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              前期
+            </td>
+            <td>
+              <span id="rptList_cblActionType_12" class="cbllist"><input  type="checkbox" name="rptList$ctl12$cblActionType$0" value="Show" disabled=""><label > 显示 </label><input id="rptList_cblActionType_12_1_12" type="checkbox" name="rptList$ctl12$cblActionType$1" value="View" disabled=""><label for="rptList_cblActionType_12_1_12"> 查看 </label><input id="rptList_cblActionType_12_2_12" type="checkbox" name="rptList$ctl12$cblActionType$2" value="Add" disabled=""><label for="rptList_cblActionType_12_2_12"> 添加 </label><input id="rptList_cblActionType_12_3_12" type="checkbox" name="rptList$ctl12$cblActionType$3" value="Edit" disabled=""><label for="rptList_cblActionType_12_3_12"> 修改 </label><input id="rptList_cblActionType_12_4_12" type="checkbox" name="rptList$ctl12$cblActionType$4" value="Delete" disabled=""><label for="rptList_cblActionType_12_4_12"> 删除 </label><input id="rptList_cblActionType_12_5_12" type="checkbox" name="rptList$ctl12$cblActionType$5" value="Audit" disabled=""><label for="rptList_cblActionType_12_5_12"> 审核 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:48px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              征地拆迁
+            </td>
+            <td>
+              <span id="rptList_cblActionType_12" class="cbllist"><input id="rptList_cblActionType_12_0_12" type="checkbox" name="rptList$ctl12$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_12_0_12"> 显示 </label><input id="rptList_cblActionType_12_1_12" type="checkbox" name="rptList$ctl12$cblActionType$1" value="View" disabled=""><label for="rptList_cblActionType_12_1_12"> 查看 </label><input id="rptList_cblActionType_12_2_12" type="checkbox" name="rptList$ctl12$cblActionType$2" value="Add" disabled=""><label for="rptList_cblActionType_12_2_12"> 添加 </label><input id="rptList_cblActionType_12_3_12" type="checkbox" name="rptList$ctl12$cblActionType$3" value="Edit" disabled=""><label for="rptList_cblActionType_12_3_12"> 修改 </label><input id="rptList_cblActionType_12_4_12" type="checkbox" name="rptList$ctl12$cblActionType$4" value="Delete" disabled=""><label for="rptList_cblActionType_12_4_12"> 删除 </label><input id="rptList_cblActionType_12_5_12" type="checkbox" name="rptList$ctl12$cblActionType$5" value="Audit" disabled=""><label for="rptList_cblActionType_12_5_12"> 审核 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:48px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              施工
+            </td>
+            <td>
+              <span id="rptList_cblActionType_12" class="cbllist"><input id="rptList_cblActionType_12_0_12" type="checkbox" name="rptList$ctl12$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_12_0_12"> 显示 </label><input id="rptList_cblActionType_12_1_12" type="checkbox" name="rptList$ctl12$cblActionType$1" value="View" disabled=""><label for="rptList_cblActionType_12_1_12"> 查看 </label><input id="rptList_cblActionType_12_2_12" type="checkbox" name="rptList$ctl12$cblActionType$2" value="Add" disabled=""><label for="rptList_cblActionType_12_2_12"> 添加 </label><input id="rptList_cblActionType_12_3_12" type="checkbox" name="rptList$ctl12$cblActionType$3" value="Edit" disabled=""><label for="rptList_cblActionType_12_3_12"> 修改 </label><input id="rptList_cblActionType_12_4_12" type="checkbox" name="rptList$ctl12$cblActionType$4" value="Delete" disabled=""><label for="rptList_cblActionType_12_4_12"> 删除 </label><input id="rptList_cblActionType_12_5_12" type="checkbox" name="rptList$ctl12$cblActionType$5" value="Audit" disabled=""><label for="rptList_cblActionType_12_5_12"> 审核 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:48px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              竣工结算
+            </td>
+            <td>
+              <span id="rptList_cblActionType_12" class="cbllist"><input id="rptList_cblActionType_12_0_12" type="checkbox" name="rptList$ctl12$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_12_0_12"> 显示 </label><input id="rptList_cblActionType_12_1_12" type="checkbox" name="rptList$ctl12$cblActionType$1" value="View" disabled=""><label for="rptList_cblActionType_12_1_12"> 查看 </label><input id="rptList_cblActionType_12_2_12" type="checkbox" name="rptList$ctl12$cblActionType$2" value="Add" disabled=""><label for="rptList_cblActionType_12_2_12"> 添加 </label><input id="rptList_cblActionType_12_3_12" type="checkbox" name="rptList$ctl12$cblActionType$3" value="Edit" disabled=""><label for="rptList_cblActionType_12_3_12"> 修改 </label><input id="rptList_cblActionType_12_4_12" type="checkbox" name="rptList$ctl12$cblActionType$4" value="Delete" disabled=""><label for="rptList_cblActionType_12_4_12"> 删除 </label><input id="rptList_cblActionType_12_5_12" type="checkbox" name="rptList$ctl12$cblActionType$5" value="Audit" disabled=""><label for="rptList_cblActionType_12_5_12"> 审核 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              项目参建单位
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              项目中介单位
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              文档管理
+            </td>
+            <td>
+              <span id="rptList_cblActionType_3" class="cbllist"><input id="rptList_cblActionType_3_0_3" type="checkbox" name="rptList$ctl03$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_3_0_3"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              系统管理
+            </td>
+            <td>
+              <span id="rptList_cblActionType_3" class="cbllist"><input id="rptList_cblActionType_3_0_3" type="checkbox" name="rptList$ctl03$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_3_0_3"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              单位信息
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              组织架构
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              岗位管理
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:24px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              用户管理
+            </td>
+            <td>
+              <span id="rptList_cblActionType_7" class="cbllist"><input id="rptList_cblActionType_7_0_7" type="checkbox" name="rptList$ctl07$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_7_0_7"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap;word-break:break-all;overflow:hidden;">
+             <span style="display:inline-block;width:0px;"></span><span class="folder-line"></span><span class="folder-open"></span>
+              我的账户
+            </td>
+            <td>
+              <span id="rptList_cblActionType_3" class="cbllist"><input id="rptList_cblActionType_3_0_3" type="checkbox" name="rptList$ctl03$cblActionType$0" value="Show" disabled=""><label for="rptList_cblActionType_3_0_3"> 显示 </label></span>
+            </td>
+            <td align="center"><input name="checkAll" type="checkbox" disabled=""></td>
+          </tr>
+          
+          
+          
+        </tbody>
+      </table>
+    </dd>
+  </dl>
+</div>
+<!--/内容-->
+
+<!--工具栏-->
+<div class="page-footer">
+  <div class="btn-wrap" style="position: fixed;">
+    <input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn">
+    <input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);">
+  </div>
+</div>
+<!--/工具栏-->
+</form>
+
+
+</body></html>
