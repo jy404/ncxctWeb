@@ -5,7 +5,6 @@
 @import "zhangpeng.css";
 body {
     color: #666666;
-    font-family: "宋体",Arial,"微软雅黑";
     font-size: 12px;
     margin: 0;
     padding: 0;
@@ -40,7 +39,6 @@ a:hover {
     font-family: Arial,Helvetica,sans-serif;
 }
 .fs {
-    font-family: "宋体";
 }
 .fw {
     font-family: "微软雅黑";
@@ -406,7 +404,6 @@ a:hover {
 	padding:5px 0;
 	text-align:center;
 	background:url(../images/btn.png) no-repeat -270px -170px;
-	font:normal normal 12px/19px "宋体","arial","微软雅黑";
 	color:#666;
 	border:0;
 	cursor:pointer;
@@ -773,7 +770,6 @@ a:hover {
 	border:1px #d8d8d8 solid;
 	background:#fff;
 	padding:4px 10px;
-	font:normal normal 12px/18px "宋体","arial","微软雅黑";
 	color:#999999;
 	}
 .w293{width:473px;}	
@@ -1323,7 +1319,6 @@ a:hover {
 	background:#fff;
 	border:1px #d8d8d8 solid;
 	padding:5px 5px;
-	font:normal normal 12px/16px "宋体";
 	color:#666666;
 	}
 
@@ -1783,7 +1778,6 @@ a:hover {
 	overflow:hidden;
 	background:#7f7f7f;
 	background:rgba(0,0,0,0.6);
-	font:normal bold 12px/20px "宋体";
 	position:absolute;
 	z-index:3;
 	bottom:0;
