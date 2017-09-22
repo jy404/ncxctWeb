@@ -9,7 +9,6 @@
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
 		<script type="text/javascript" src="js/json2.js"></script>
 		<script type="text/javascript" src="js/GetData.js"></script>
@@ -24,7 +23,19 @@
 			var data = {};
 
 			$(function() {
-				GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/system/org/list");
+				$('.fjxmSerachreset').click(function() {
+					$(".fjxmSerachTypeSelect").val("");
+				});
+				$('.fjxmSerachBtn1').click(function() {
+					currentpage = 1;
+					pagesize = 2;
+					data = {
+						"activation": $("#activation").val(),
+						"orgName": $("#orgName").val()
+					};
+					GetOrgList(currentpage, pagesize, data, "projectList", $("#fj_page"), false, "/api/system/org/tier/list");
+				});
+				GetOrgList(currentpage, pagesize, data, "projectList", $("#fj_page"), false, "/api/system/org/tier/list");
 			})
 		</script>
 	</head>
@@ -45,11 +56,11 @@
 				<div class="fjxmSerachList">
 					<div class="fjxmSerachTitle">
 						<span>状态</span>
-						<input type="text" class="fjxmSerachTypeSelect" />
+						<input type="text" id="activation" class="fjxmSerachTypeSelect" />
 					</div>
 					<div class="fjxmSerachTitle">
 						<span>部门名称</span>
-						<input type="text" class="fjxmSerachTypeSelect" />
+						<input type="text" id="orgName" class="fjxmSerachTypeSelect" />
 					</div>
 				</div>
 				<div class="fjxmSerachBtn">
@@ -69,9 +80,9 @@
 				</table>
 
 			</div>
-			<div class="page_div fy" id="fj_page">
+			<!--<div class="page_div fy" id="fj_page">
 
-			</div>
+			</div>-->
 		</div>
 	</body>
 

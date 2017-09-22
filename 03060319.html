@@ -100,8 +100,10 @@
 					data["projectType"] = projectType;
 					meetAdd('/api/budgetControlPrice', JSON.stringify(data));
 				} else if (status == 2) {
+					data["projectType"] = projectType;
 					meetAdd('/api/budgetControlPrice/submit', JSON.stringify(data));
 				} else {
+					data["id"]=id;
 					meetPut('/api/budgetControlPrice', JSON.stringify(data));
 				}
 			}

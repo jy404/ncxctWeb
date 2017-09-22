@@ -1,13 +1,124 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>用户管理详情页</title>
-		<link rel="stylesheet" href="css/style.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/jquery-3.2.1.min.js" ></script>
-		<script type="text/javascript" src="js/js.js" ></script>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var action, id, status = 1,
+				password;
+			$(function() {
+				$.ajaxSettings.async = false;
+				action = $.getUrlParam("action");
+				id = $.getUrlParam("id");
+				//判断编辑或者查看
+
+				GetDept1("deptId");
+				GetRole1("roleId");
+				if(action != "" && action != undefined) {
+					SetData()
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".lyhglxqyBot").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('.lyhglxqyBot').click(function() {
+					SubmitData()
+				});
+			});
+
+			function SetData() {
+				$.getJSON(
+					domain + "/api/user/" + id,
+					function(res) {
+						if(res["code"] == "0") {
+							$('#userName').val(res["result"]["userName"]);
+							$('#name').val(res["result"]["name"]);
+							$('#gender').val(res["result"]["gender"]);
+							$('#birthTime').val(res["result"]["birthTime"]);
+							$('#nation').val(res["result"]["nation"]);
+							$('#tel').val(res["result"]["tel"]);
+							$('#deptId').val(res["result"]["deptId"]);
+							$('#roleId').val(res["result"]["roleId"]);
+							$('#joinTime').val(res["result"]["joinTime"]);
+							$('#jobContent').val(res["result"]["jobContent"]);
+
+							if(res["result"]["status"] == "1")
+								$("input[type='radio']:eq(0)").attr("checked", 'checked');
+							else
+								$("input[type='radio']:eq(1)").attr("checked", 'checked');
+
+							status = res["result"]["status"];
+							password = res["result"]["password"];
+
+							id = res["result"]["id"];
+							//附件加上
+							//upload.show(res["result"]["files"], "files_uploader")
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData() {
+				var parentId = $("#txtparentId").val();
+				var data = {
+					"userName": $("#userName").val(),
+					"password": $("#password").val() == "" ? password : $("#password").val(),
+					"name": $("#name").val(),
+					"gender": $("#gender option:selected").val(),
+					"birthTime": $("#birthTime").val(),
+					"nation": $("#nation").val(),
+					"tel": $("#tel").val(),
+					"deptId": $("#deptId option:selected").val(),
+					"roleId": $("#roleId option:selected").val(),
+					"joinTime": $("#joinTime").val(),
+					"jobContent": $("#jobContent").val(),
+					"status": $("input[type='radio']:checked").val() == "true" ? "1" : "2"
+				}
+				if(action == "edit")
+					data["id"] = id;
+				meetAdd('/api/saveUser', JSON.stringify(data), "用户管理.html");
+			}
+		</script>
 	</head>
-	<body>		
+
+	<body>
 		<div class="title">
 			<div class="page">
 				<b>当前位置：</b>
@@ -16,72 +127,80 @@
 				<span>> 用户管理</span>
 				<span>> 新增用户</span>
 			</div>
-		</div>	
+		</div>
 		<div class="lyhglxqyBigBox">
-			<h2 class="lyhglxqyTitle">新增用户</h2>	
+			<h2 class="lyhglxqyTitle">新增用户</h2>
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
 					<span>账号：</span>
-					<input type="text" />
+					<input type="text" id="userName" />
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>密码：</span>
-					<input type="text" />
+					<input type="text" id="password" />
 				</div>
-			</div>	
+			</div>
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
-					<span>工号：</span>
-					<input type="text" />
-				</div>
-				<div class="lyhglxqyBox1Right">
 					<span>姓名：</span>
-					<input type="text" />
-				</div>
-			</div>	
-			<div class="lyhglxqyBox1">
-				<div class="lyhglxqyBox1Left">
-					<span>性别：</span>
-					<input type="text" />
+					<input type="text" id="name" />
 				</div>
 				<div class="lyhglxqyBox1Right">
-					<span>出生日期：</span>
-					<input type="text" />
+					<span>性别：</span>
+					<select id="gender" style="width: 100px;height: 37px;">
+						<option value="MALE">男</option>
+						<option value="WOMAN">女</option>
+					</select>
 				</div>
 			</div>
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
 					<span>民族：</span>
-					<input type="text" />
+					<input type="text" id="nation" />
 				</div>
 				<div class="lyhglxqyBox1Right">
-					<span>电话：</span>
-					<input type="text" />
-				</div>
-			</div>
-			<div class="lyhglxqyBox1">
-				<div class="lyhglxqyBox1Left">
-					<span>所属部门：</span>
-					<input type="text" />
-				</div>
-				<div class="lyhglxqyBox1Right">
-					<span>职务：</span>
-					<input type="text" />
+					<span>出生日期：</span>
+					<input type="text" id="birthTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 				</div>
 			</div>
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
 					<span>入职时间：</span>
-					<input type="text" />
+					<input type="text" id="joinTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 				</div>
-			</div>	
-			<div class="lyhglxqyBoxSame">
-				<div class="lyhglxqyBoxSameLeft">
+				<div class="lyhglxqyBox1Right">
+					<span>手机号：</span>
+					<input type="text" id="tel" />
+				</div>
+			</div>
+			<div class="lyhglxqyBox1">
+				<div class="lyhglxqyBox1Left">
+					<span>所属部门：</span>
+					<!--<input type="text" id="deptId" />-->
+					<select id="deptId">
+						<option value="0">---请选择---</option>
+					</select>
+				</div>
+				<div class="lyhglxqyBox1Right">
+					<span>职务：</span>
+					<select id="roleId">
+						<option value="0">---请选择---</option>
+					</select>
+				</div>
+			</div>
+			<div class="lyhglxqyBox1">
+				<div class="lyhglxqyBox1Left">
 					<span>主管工作：</span>
-					<textarea></textarea>
+					<textarea id="jobContent" style="width: 272px;resize: none;"></textarea>
+				</div>
+				<div class="lyhglxqyBox1Right">
+					<span>状态：</span>
+					<input type="radio" name="txtState" value="true" checked="true" />在职
+					<input type="radio" name="txtState" value="false" />离职
 				</div>
 			</div>
 			<a href="#" class="lyhglxqyBot">确定</a>
 		</div>
 	</body>
-</html>		
+
+</html>

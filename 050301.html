@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!-- saved from url=(0068)http://localhost:43463/admin/manager/role_edit.aspx?action=Edit&id=1 -->
+<html>
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+		<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,initial-scale=1.0,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<title>编辑角色</title>
+		<link href="css/ui-dialog.css" rel="stylesheet" type="text/css">
+		<link href="css/qstyle.css" rel="stylesheet" type="text/css">
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/laymain.js"></script>
+		<script type="text/javascript" src="js/common.js"></script>
+		<script type="text/javascript" src="js/Validform_v5.3.2_min.js"></script>
+		<script type="text/javascript" src="js/dialog-plus-min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript">
+			var data = {};
+			$(function() {
+				$.ajaxSettings.async = false;
+
+				action = $.getUrlParam("action");
+				id = $.getUrlParam("id");
+				GetDept1("ddlRoleType");
+
+				//初始化表单验证
+				$("#form1").initValidform();
+				//是否启用权限
+				if($("#ddlRoleType").find("option:selected").attr("value") == 1) {
+					$(".border-table").find("input[type='checkbox']").prop("disabled", true);
+				}
+				$("#ddlRoleType").change(function() {
+					if($(this).find("option:selected").attr("value") == 1) {
+						$(".border-table").find("input[type='checkbox']").prop("checked", false);
+						$(".border-table").find("input[type='checkbox']").prop("disabled", true);
+					} else {
+						$(".border-table").find("input[type='checkbox']").prop("disabled", false);
+					}
+				});
+
+				//GetModuleList(data, "txtAuthDiv", $("#fj_page"), false, "/api/module/list");
+
+				//权限全选
+				$("input[name='checkAll']").on("click", function() {
+					if($(this).prop("checked") == true) {
+						$(this).parent().siblings("td").find("input[type='checkbox']").prop("checked", true);
+					} else {
+						$(this).parent().siblings("td").find("input[type='checkbox']").prop("checked", false);
+					}
+				});
+
+				//判断编辑或者查看
+				if(action != "" && action != undefined) {
+					//SetData()
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$("#btnSubmit").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				$('#btnSubmit').click(function() {
+					SubmitData()
+				});
+			});
+
+			function SetData() {
+				$.getJSON(
+					domain + "/api/system/role/view/" + id,
+					function(res) {
+						if(res["code"] == "0") {
+							//$('#txtSort').val(res["result"]["Sort"]);
+							$('#deptId').val(res["result"]["deptId"]);
+							$('#roleCode').val(res["result"]["roleCode"]);
+							$('#roleName').val(res["result"]["roleName"]);
+
+							id = res["result"]["id"];
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData() {
+				var deptId = $("#ddlRoleType option:selected").val();
+				var data = {
+					//"Sort": $("#txtSort").val(),
+					"deptId": deptId,
+					"roleCode": $("#roleCode").val(),
+					"roleName": $("#roleName").val()
+				}
+				if(action == "edit")
+					data["id"] = id;
+
+				meetAdd('/api/saveRole', JSON.stringify(data), "岗位管理.html");
+
+			}
+		</script>
+	</head>
+
+	<body class="mainbody">
+		<form>
+			<div id="floatHead" class="content-tab-wrap">
+				<div class="content-tab">
+					<div class="content-tab-ul-wrap">
+						<div class="tab-title"><span>编辑岗位信息</span><i></i></div>
+						<ul>
+							<li>
+								<a class="selected" href="javascript:;">编辑岗位信息</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<div class="tab-content">
+				<dl>
+					<dt>岗位类型</dt>
+					<dd>
+						<!--<div class="rule-single-select single-select">-->
+						<div>
+							<select name="ddlRoleType" id="ddlRoleType">
+								<option value="">请选择类型...</option>
+								<!--<option selected="selected" value="1">超级用户</option>
+								<option value="2">系统用户</option>-->
+							</select>
+						</div>
+					</dd>
+				</dl>
+				<dl>
+					<dt>岗位编码</dt>
+					<dd><input name="roleCode" type="text" id="roleCode" class="input normal" datatype="*1-100" sucmsg=" "> <span class="Validform_checktip">*岗位编码，100字符内</span></dd>
+				</dl>
+				<dl>
+					<dt>岗位名称</dt>
+					<dd><input name="roleName" type="text" id="roleName" class="input normal" datatype="*1-100" sucmsg=" "> <span class="Validform_checktip">*岗位名称，100字符内</span></dd>
+				</dl>
+				<dl>
+					<dt>管理权限</dt>
+					<dd>
+						<table border="0" cellspacing="0" cellpadding="0" class="border-table" width="98%">
+							<thead>
+								<tr>
+									<th width="30%">导航名称</th>
+									<th>权限分配</th>
+									<th width="10%">全选</th>
+								</tr>
+							</thead>
+							<tbody id="txtAuthDiv">
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			</div>
+			<!--/内容-->
+
+			<!--工具栏-->
+			<div class="page-footer">
+				<div class="btn-wrap" style="position: fixed;">
+					<input type="submit" name="btnSubmit" value="提交保存" id="btnSubmit" class="btn">
+					<input name="btnReturn" type="button" value="返回上一页" class="btn yellow" onclick="javascript:history.back(-1);">
+				</div>
+			</div>
+			<!--/工具栏-->
+		</form>
+
+	</body>
+
+</html>

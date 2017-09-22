@@ -10,6 +10,18 @@ var domain = "http://139.196.72.104:8082";
 		return null;
 	}
 })(jQuery);
+//获取字典
+function GetDirection(keyword) {
+	var data = {
+		"keyWord": keyword
+	};
+	$.axse(
+		domain + "/api/wordbook/list",
+		JSON.stringify(data),
+		function(res) {},
+		function() {}
+	);
+}
 
 //===========================公共方法结束=============================//
 
@@ -26,7 +38,7 @@ function UserLogin(data) {
 		'application/json; charset=utf-8',
 		function(res) {
 			if (res["code"] == 0)
-				window.location = "首页.html";
+				window.location = "index.html";
 			else
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
@@ -75,7 +87,7 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);
@@ -97,7 +109,7 @@ function GetDept() {
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);
@@ -119,7 +131,7 @@ function SelectDept(obj) {
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);
@@ -142,12 +154,264 @@ function GetEmp(orgCode) {
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);
 }
 
+function GetDept1(obj) {
+	$.getJSON(
+		domain + '/api/system/org/tier/list',
+		function(res) {
+			if (res["code"] == 0) {
+				var html = "";
+				var rows = res["result"];
+				for (i = 0; i < rows.length; i++) {
+					html += " <option value=\"" + rows[i]["id"] + "\">" + rows[i]["orgName"] + "</option>";
+				}
+				$("#" + obj).append(html)
+			} else
+				Toast.Err('错误', res["description"], 'top-center', 'left');
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+
+function GetRole1(obj) {
+	var data = {};
+	$.axse(
+		domain + '/api/role/query',
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == 0) {
+				var html = "";
+				var rows = res["result"]["list"];
+				for (i = 0; i < rows.length; i++) {
+					html += " <option value=\"" + rows[i]["id"] + "\">" + rows[i]["roleName"] + "</option>";
+				}
+				$("#" + obj).append(html)
+			} else
+				Toast.Err('错误', res["description"], 'top-center', 'left');
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+//*********************组织架构菜单列表查询*****************************//
+//注意：isInit是表示是否是第一次加载，首次加载，要把分页初始化
+function GetOrgList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+	data["currentPage"] = currentpage;
+	data["pageSize"] = pagesize;
+	$.getJSON(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				//$(obj).find("tr").remove();
+				$("#" + obj + " tr").not(':eq(0)').remove();
+				var html = "";
+				var rows = res["result"];
+				for (i = 0; i < rows.length; i++) {
+					html += SetOrgList("", rows[i], i, "", 0);
+				}
+				$("#" + obj).append(html);
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+
+function SetOrgList(html1, row, count, str, level) {
+	if (row["parentId"] == 0) {
+		html1 += "<tr>";
+	} else {
+		html1 += "<tr class=\"org" + level + "\" > ";
+	}
+	html1 += "<td>" + str + (count + 1) + "</td>"
+	html1 += "<td>" + row["orgCode"] + "</td>";
+	html1 += "<td>" + row["orgName"] + "</td>";
+	html1 += "<td>" + (row["activation"] == true ? "启用" : "停用") + "</td>";
+	html1 += "<td width=\"12%\">";
+
+	html1 += "<a href=\"050201.html?action=view&id=" + row["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
+	html1 += "<a href=\"050201.html?action=edit&id=" + row["id"] + "\" style=\"background: #ff0000;\">修改</a>";
+
+	html1 += "</td>";
+	html1 += "</tr>";
+	if (row["subOrgList"].length > 0) {
+		for (j = 0; j < row["subOrgList"].length; j++) {
+			html1 += SetOrgList("", row["subOrgList"][j], j, "├" + str, (level + 1));
+		}
+	}
+	return html1;
+}
+
+//*********************岗位列表查询*****************************//
+//注意：isInit是表示是否是第一次加载，首次加载，要把分页初始化
+function GetRoleList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+	data["currentPage"] = currentpage;
+	data["pageSize"] = pagesize;
+	$.axse(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
+					//$(obj).find("tr").remove();
+					$("#" + obj + " tr").not(':eq(0)').remove();
+					var html = "";
+					var rows = res["result"]["list"];
+					for (i = 0; i < rows.length; i++) {
+						html += "<tr>";
+						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
+						html += "<td>" + rows[i]["roleCode"] + "</td>";
+						html += "<td>" + rows[i]["roleName"] + "</td>";
+						html += "<td>" + rows[i]["deptId"] + "</td>";
+						html += "<td width=\"12%\">";
+
+						html += "<a href=\"新增岗位.html?action=view&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
+						html += "<a href=\"新增岗位.html?action=edit&id=" + rows[i]["id"] + "\" style=\"background: #ff0000;\">修改</a>";
+
+						html += "</td>";
+						html += "</tr>";
+					}
+					$("#" + obj).append(html);
+				}
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
+						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
+							GetRoleList(index, pagesize, data, obj, pageobj, false, url)
+						});
+				}
+
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "登录.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+//*********************岗位权限菜单列表查询*****************************//
+//注意：isInit是表示是否是第一次加载，首次加载，要把分页初始化
+function GetModuleList(data, obj, pageobj, isInit, url) {
+	$.getJSON(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				//$(obj).find("tr").remove();
+				$("#" + obj + " tr").not(':eq(0)').remove();
+				var html = "";
+				var rows = res["result"];
+				//for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
+					html += SetModuleList("", rows[i], i, "", 0);
+				}
+				$("#" + obj).append(html);
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+
+function SetModuleList(html1, row, count, str, level) {
+	if (row["parentId"] == 0) {
+		html1 += "<tr>";
+	} else {
+		html1 += "<tr class=\"org" + level + "\" > ";
+	}
+	html1 += "<td>" + row["name"] + "</td>";
+	html1 += "<td>";
+	html1 += "<input type=\"checkbox\" name=\"View\"/>查看";
+	html1 += "<input type=\"checkbox\" name=\"Edit\"/>编辑";
+	html1 += "<input type=\"checkbox\" name=\"Add\"/>添加";
+	html1 += "<input type=\"checkbox\" name=\"Dele\"/>删除";
+	html1 += "</td>";
+	html1 += "<td><input type=\"checkbox\" name=\"AllCheck\"/></td>";
+	html1 += "</tr>";
+	if (row["children"].length > 0) {
+		for (j = 0; j < row["children"].length; j++) {
+			html1 += SetModuleList("", row["children"][j], j, "├" + str, (level + 1));
+		}
+	}
+	return html1;
+}
+
+function GetUserList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+	data["currentPage"] = currentpage;
+	data["pageSize"] = pagesize;
+	$.axse(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
+					//$(obj).find("tr").remove();
+					$("#" + obj + " tr").not(':eq(0)').remove();
+					var html = "";
+					var rows = res["result"]["list"];
+					for (i = 0; i < rows.length; i++) {
+						html += "<tr>";
+						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
+						html += "<td>" + rows[i]["userName"] + "</td>";
+						html += "<td>" + rows[i]["name"] + "</td>";
+						html += "<td>" + rows[i]["deptId"] + "</td>";
+						html += "<td>" + rows[i]["roleName"] + "</td>";
+						html += "<td>" + new Date(rows[i]["joinTime"]).toLocaleDateString() + "</td>";
+						html += "<td>" + new Date(rows[i]["updateTime"]).toLocaleDateString() + "</td>";
+						html += "<td>" + rows[i]["status"] + "</td>";
+						html += "<td width=\"12%\">";
+
+						html += "<a href=\"050401.html?action=view&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
+						html += "<a href=\"050401.html?action=edit&id=" + rows[i]["id"] + "\" style=\"background: #ff0000;\">修改</a>";
+
+						html += "</td>";
+						html += "</tr>";
+					}
+					$("#" + obj).append(html);
+				}
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
+						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
+							GetUserList(index, pagesize, data, obj, pageobj, false, url)
+						});
+				}
+
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "登录.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
 //*********************查询部门列表结束*****************************//
 
 //*********************获取施工单位/监理单位列表********************//
@@ -180,12 +444,12 @@ function SelectUnitList(obj, unitType, projectType) {
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 		}
 	);
 }
 //下拉单选
-function SelectUnit(obj,unitType,projectType){
+function SelectUnit(obj, unitType, projectType) {
 	var data = {
 		"projectType": projectType,
 		"wonBidUnitType": unitType
@@ -197,13 +461,13 @@ function SelectUnit(obj,unitType,projectType){
 			var list = "";
 			var result = res["result"];
 			$.each(result, function(i, n) {
-				list+="<option value='"+n.id+"'>"+n.name+"</option>";
+				list += "<option value='" + n.id + "'>" + n.name + "</option>";
 			});
-			$("#"+obj).append(list);
+			$("#" + obj).append(list);
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 		}
 	);
 }
@@ -254,11 +518,11 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						html += "<td width=\"12%\">";
 
 						if (data["projectType"] == "CITY") {
-							html += "<a href=\"100市政项目添加.html?action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
-							html += "<a href=\"100市政项目添加.html?action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
+							html += "<a href=\"03060101.html?action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
+							html += "<a href=\"03060101.html?action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
 						} else if (data["projectType"] == "HOUSE") {
-							html += "<a href=\"200房建项目添加.html?action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
-							html += "<a href=\"200房建项目添加.html?action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
+							html += "<a href=\"030501.html?action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
+							html += "<a href=\"030501.html?action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
 						}
 						html += "</td>";
 						html += "</tr>";
@@ -278,7 +542,7 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);
@@ -313,11 +577,11 @@ function GetUnitList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 						html += "<td width=\"12%\">";
 
 						if (rows[i]["orgType"] == "OUT") {
-							html += "<a href=\"新增参建单位.html?action=view&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
-							html += "<a href=\"新增参建单位.html?action=edit&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #ff0000;\">修改</a>";
+							html += "<a href=\"030701.html?action=view&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
+							html += "<a href=\"030701.html?action=edit&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #ff0000;\">修改</a>";
 						} else if (rows[i]["orgType"] == "AGENT") {
-							html += "<a href=\"新增中介单位.html?action=view&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
-							html += "<a href=\"新增中介单位.html?action=edit&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #ff0000;\">修改</a>";
+							html += "<a href=\"030801.html?action=view&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
+							html += "<a href=\"030801.html?action=edit&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #ff0000;\">修改</a>";
 						}
 						html += "</td>";
 						html += "</tr>";
@@ -359,7 +623,7 @@ function meetAdd(apis, data) {
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);
@@ -381,7 +645,7 @@ function meetPut(apis, data) {
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);

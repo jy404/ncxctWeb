@@ -56,90 +56,135 @@
 				UploadProcess("uploader1");
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
-				$('.szxmTjPageRightFormBc').click(function() {
+				$('#saveBtn').click(function() {
 					SubmitData(1)
 				});
-				$('.szxmTjPageRightFormBtn').click(function() {
+				$('#submitBtn').click(function() {
 					SubmitData(2)
 				});
+				$('#updateBtn').click(function() {
+					SubmitData(3)
+				});
+				GetDirect();
+			});
 
-				function SubmitData(status) {
-					//编制可研
-					var bNo = $("bNo").val();
-					var btime = $("#btime").val();
-					var bprice = $("#bprice").val();
-					var bfile = $("#fileurl_uploader").val();
-					//专家评审
-					var zNo = $("#zNo").val();
-					var ztime = $("#ztime").val();
-					var zprice = $("#zprice").val();
-					var zfile = $("#fileurl_uploader1").val();
-					//批复
-					var pNo = $("#pNo").val();
-					var ptime = $("#ptime").val();
-					var pprice = $("#pprice").val();
-					var pfile = $("#fileurl_uploader2").val();
-					if (parseFloat(bprice) < 30000000 && (bprice != undefined || bprice != "")) {
+			function GetDirect() {
+				var data = {
+					"keyWord": "PROPOSAL_STEP_TYPE"
+				};
+				$.axse(
+					domain + '/api/wordbook/list',
+					JSON.stringify(data),
+					function(res) {
+						if (res["code"] == "0") {}
+					},
+					function() {}
+				);
+			}
+
+			function SubmitData(status) {
+				//编制可研
+				var bNo = $("#bNo").val();
+				var btime = $("#btime").val();
+				var bprice = $("#bprice").val();
+				var bfile = $("#fileurl_uploader").val();
+				//专家评审
+				var zNo = $("#zNo").val();
+				var ztime = $("#ztime").val();
+				var zprice = $("#zprice").val();
+				var zfile = $("#fileurl_uploader1").val();
+				//批复
+				var pNo = $("#pNo").val();
+				var ptime = $("#ptime").val();
+				var pprice = $("#pprice").val();
+				var pfile = $("#fileurl_uploader2").val();
+				if ($(".xmjyshkypfList").find("li:first").hasClass("xmjyshkypfListSelect")) {
+					if (bprice < 30000000) {
 						Toast.Err("错误", "金额<30000000", 'top-center', 'left');
 						$("#xmjy1").hide();
 						$("#xmjy2").show();
-						$("#bprice").val('');
+						$(".xmjyshkypfList").find("li:first").removeClass("xmjyshkypfListSelect");
+						$(".xmjyshkypfList").find("li:first").next().addClass("xmjyshkypfListSelect");
+						$("#xmjy1").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$("#xmjy2").find("input,textarea").each(function() {
+							$(this).removeAttr("disabled")
+						});
 						return false;
-					} else {
-						data = {
-							"proposalReplyList": [{
-								"amount": (bprice, zprice),
-								"dispatchTime": (btime, ztime),
-								"docNo": (bNo, zNo),
-								"fileUrl": (bfile, zfile),
-								"projectId": (projectId, projectId),
-								"projectName": (projectName, projectName),
-								"projectNo": (projectNo, projectNo),
-								"projectType": (projectType, projectType),
-								"stepType": ('REPLY', 'EXPERT_REVIEW_MEETING ')
-							}]
-						}
 					}
-					if (parseFloat(pprice) >= 30000000 && (pprice != undefined || pprice != "")) {
-						Toast.Err("错误", "金额>30000000", 'top-center', 'left');
+					data = {
+						"proposalReplyList": [{
+							"amount": bprice,
+							"dispatchTime": btime,
+							"docNo": bNo,
+							"fileUrl": bfile,
+							"projectId": projectId,
+							"projectName": projectName,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"stepType": 'REPLY'
+						}, {
+							"amount": zprice,
+							"dispatchTime": ztime,
+							"docNo": zNo,
+							"fileUrl": zfile,
+							"projectId": projectId,
+							"projectName": projectName,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"stepType": 'EXPERT_REVIEW_MEETING'
+						}]
+					}
+				} else {
+					if (pprice >= 30000000) {
+						Toast.Err("错误", "金额>=30000000", 'top-center', 'left');
 						$("#xmjy1").show();
 						$("#xmjy2").hide();
-						$("#pprice").val('');
+						$(".xmjyshkypfList").find("li:first").next().removeClass("xmjyshkypfListSelect");
+						$(".xmjyshkypfList").find("li:first").addClass("xmjyshkypfListSelect");
+						$("#xmjy2").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$("#xmjy1").find("input,textarea").each(function() {
+							$(this).removeAttr("disabled")
+						});
 						return false;
-					} else {
-						data = {
-							"proposalReplyList": [{
-								"amount": pprice,
-								"dispatchTime": ptime,
-								"docNo": pNo,
-								"fileUrl": pfile,
-								"projectId": projectId,
-								"projectName": projectName,
-								"projectNo": projectNo,
-								"projectType": projectType,
-								"stepType": 'REPLY'
-							}]
-						}
 					}
-					if (status == 1) {
-						meetAdd('/api/proposalReply', JSON.stringify(data));
-					} else if (status == 2) {
-						if (id.contains(",")) {
-							data["proposalReplyList"]["id"] = (id.split(",")[0], id.split(",")[1]);
-						} else {
-							data["proposalReplyList"]["id"] = id;
-						}
-						meetAdd('/api/proposalReply/submit', JSON.stringify(data));
-					} else {
-						if (id.contains(",")) {
-							data["proposalReplyList"]["id"] = (id.split(",")[0], id.split(",")[1]);
-						} else {
-							data["proposalReplyList"]["id"] = id;
-						}
-						meetPut("/api/proposalReply", JSON.stringify(data))
+					data = {
+						"proposalReplyList": [{
+							"amount": pprice,
+							"dispatchTime": ptime,
+							"docNo": pNo,
+							"fileUrl": pfile,
+							"projectId": projectId,
+							"projectName": projectName,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"stepType": 'REPLY'
+						}]
 					}
 				}
-			});
+				if (status == 1) {
+					meetAdd('/api/proposalReply', JSON.stringify(data));
+				} else if (status == 2) {
+					if (id.indexOf(",") != -1) {
+						data["proposalReplyList"][0]["id"] = id.split(",")[0];
+						data["proposalReplyList"][1]["id"] = id.split(",")[0];
+					} else {
+						data["proposalReplyList"]["id"] = id;
+					}
+					meetAdd('/api/proposalReply/submit', JSON.stringify(data));
+				} else {
+					if (id.indexOf(",") != -1) {
+						data["proposalReplyList"][0]["id"] = id.split(",")[0];
+						data["proposalReplyList"][1]["id"] = id.split(",")[0];
+					} else {
+						data["proposalReplyList"]["id"] = id;
+					}
+					meetPut("/api/proposalReply", JSON.stringify(data))
+				}
+			}
 
 			function SetData(projectId) {
 				$.getJSON(
@@ -153,6 +198,7 @@
 								$('#pprice').val(rows[0]["amount"]);
 								id = rows[0]["id"];
 								//附件加上
+								$("#fileurl_uploader2").val(rows[0]["fileUrl"]);
 								upload.show(rows[0]["fileUrl"], "files_uploader2")
 								$("#xmjy1").find("input,textarea").each(function() {
 									$(this).attr("disabled", "disabled");
@@ -168,7 +214,10 @@
 								$('#zprice').val(rows[1]["amount"]);
 								id = rows[0]["id"] + "," + rows[1]["id"];
 								//附件加上
+								$("#fileurl_uploader").val(rows[0]["fileUrl"]);
+								$("#fileurl_uploader1").val(rows[1]["fileUrl"]);
 								upload.show(rows[0]["fileUrl"], "files_uploader")
+								upload.show(rows[1]["fileUrl"], "files_uploader1")
 								$("#xmjy2").find("input,textarea").each(function() {
 									$(this).attr("disabled", "disabled");
 								});
@@ -209,9 +258,9 @@
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-				<div id="uploader" class="fjStyle"></div>
-			</div>
 
+			</div>
+			<div id="uploader" class="fjStyle"></div>
 			<h3 class="ydsxHead ">专家评审会</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
@@ -228,11 +277,12 @@
 
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-				<div id="uploader1" class="fjStyle"></div>
-			</div>
 
+			</div>
+			<div id="uploader1" class="fjStyle"></div>
 		</div>
 		<div class="xmjyshkypfTab" id="xmjy2">
+			<h3 class="ydsxHead ">项目建议书</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
 				<input type="text" id="pNo" />
@@ -247,13 +297,14 @@
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-				<div id="uploader2" class="fjStyle"></div>
-			</div>
 
+			</div>
+			<div id="uploader2" class="fjStyle"></div>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

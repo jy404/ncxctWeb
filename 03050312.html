@@ -31,17 +31,17 @@
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<script type="text/javascript">
-			var action, projectId, projectNo, projectType, projectName, id;
+			var action, projectId, projectNo, projectType, id, projectName;
 			$(function() {
-				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
+				projectName = unescape($.getUrlParam("projectName"));
 				if (action != "" && action != undefined) {
 					SetData(projectId)
 					if (action == "view") {
-						$("body").find("input").each(function() {
+						$("body").find("input,textarea").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
@@ -50,7 +50,7 @@
 				}
 				$('.xmjyshkypfList li').click(function() {
 					$(this).addClass('xmjyshkypfListSelect').siblings('li').removeClass('xmjyshkypfListSelect');
-					$('.xmjyshkypfTab').eq($(this).index()).show().siblings('.xmjyshkypfTab').hide()
+					$('.xmjyshkypfTab').eq($(this).index()).show().siblings('.xmjyshkypfTab').hide();
 				});
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
@@ -58,36 +58,13 @@
 				UploadProcess("uploader1");
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
-				$('.szxmTjPageRightFormBc').click(function() {
+				$('#saveBtn').click(function() {
 					SubmitData(1)
 				});
-				$('.szxmTjPageRightFormBtn').click(function() {
+				$('#submitBtn').click(function() {
 					SubmitData(2)
 				});
 			});
-
-			function SetData(projectId) {
-				$.getJSON(
-					domain + "/api/pdba/approval/" + projectId,
-					function(res) {
-						if (res["code"] == "0") {
-							$('#docNo').val(res["result"]["docNo"]);
-							$('#stime').val(res["result"]["dispatchTime"]);
-							$('#fileurl_uploader').val(res["result"]["fileUrl"]);
-							$('#price').val(res["result"]["price"]);
-							id = res["result"]["id"];
-							$('#remark').val(res["result"]["comment"]);
-							//附件加上
-							upload.show(res["result"]["fileUrl"], "files_uploader")
-						} else {
-							Toast.Err("错误", res["description"], 'top-center', 'left')
-						}
-					},
-					function() {
-						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
-					}
-				);
-			}
 
 			function SubmitData(status) {
 				//编制初步设计
@@ -100,44 +77,137 @@
 				var ztime = $("#ztime").val();
 				var zprice = $("#zprice").val();
 				var zfile = $("#fileurl_uploader1").val();
-				//概要批复
+				//概算批复
 				var gNo = $("#gNo").val();
 				var gtime = $("#gtime").val();
 				var gprice = $("#gprice").val();
 				var gfile = $("#fileurl_uploader2").val();
-				var gremark = $("#gremark").val();
-				//					var projectId="12";
-				//					var projectNo="1120";
-				//					var projectType="CITY";	
-				if (bprice > 5000000) {
+				if ($(".xmjyshkypfList").find("li:first").hasClass("xmjyshkypfListSelect")) {
+					if (bprice < 5000000) {
+						Toast.Err("错误", "金额<5000000", 'top-center', 'left');
+						$("#xmjy1").hide();
+						$("#xmjy2").show();
+						$(".xmjyshkypfList").find("li:first").removeClass("xmjyshkypfListSelect");
+						$(".xmjyshkypfList").find("li:first").next().addClass("xmjyshkypfListSelect");
+						$("#xmjy1").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$("#xmjy2").find("input,textarea").each(function() {
+							$(this).removeAttr("disabled")
+						});
+						return false;
+					}
 					data = {
 						"list": [{
-							"approvalType": ("PreliminaryDesign", "PreliminaryDesign"),
-							"dispatchTime": (btime, ztime),
-							"docNo": (bNo, zNo),
-							"fileUrl": (bfile, zfile),
-							"price": (bprice, zprice),
-							"projectId": (projectId, projectId),
-							"projectNo": (projectNo, projectNo),
-							"projectType": (projectType, projectType),
-							"status": (status, status)
+							"price": bprice,
+							"dispatchTime": btime,
+							"docNo": bNo,
+							"fileUrl": bfile,
+							"projectId": projectId,
+							"projectName": projectName,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"approvalType": 'PreliminaryDesign'
+						}, {
+							"price": zprice,
+							"dispatchTime": ztime,
+							"docNo": zNo,
+							"fileUrl": zfile,
+							"projectId": projectId,
+							"projectName": projectName,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"approvalType": 'PeerReviewed'
+						}]
+					}
+				} else {
+					if (gprice >= 5000000) {
+						Toast.Err("错误", "金额>=5000000", 'top-center', 'left');
+						$("#xmjy1").show();
+						$("#xmjy2").hide();
+						$(".xmjyshkypfList").find("li:first").next().removeClass("xmjyshkypfListSelect");
+						$(".xmjyshkypfList").find("li:first").addClass("xmjyshkypfListSelect");
+						$("#xmjy2").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$("#xmjy1").find("input,textarea").each(function() {
+							$(this).removeAttr("disabled")
+						});
+						return false;
+					}
+					data = {
+						"list": [{
+							"price": gprice,
+							"dispatchTime": gtime,
+							"docNo": gNo,
+							"fileUrl": gfile,
+							"projectId": projectId,
+							"projectName": projectName,
+							"projectNo": projectNo,
+							"projectType": projectType,
+							"approvalType": 'BudgetApproval'
 						}]
 					}
 				}
-				data = {
-					"list": [{
-						"approvalType": "BudgetApproval",
-						"dispatchTime": gtime,
-						"docNo": gNo,
-						"fileUrl": gfile,
-						"price": gprice,
-						"projectId": projectId,
-						"projectNo": projectNo,
-						"projectType": projectType,
-						"status": status
-					}]
+				if (id != undefined && id != "") {
+					if (id.indexOf(",") != -1) {
+						data["list"][0]["id"] = id.split(",")[0];
+						data["list"][1]["id"] = id.split(",")[1];
+					} else {
+						data["list"][0]["id"] = id;
+					}
+				}
+				data["list"][0]["status"] = status;
+				if (data["list"].length > 1) {
+					data["list"][1]["status"] = status;
 				}
 				meetAdd('/api/pdba/approval/save', JSON.stringify(data));
+			}
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/pdba/approval/" + projectId,
+					function(res) {
+						if (res["code"] == "0") {
+							var rows = res["result"];
+							if (rows.length == 1) { //&& parseFloat(rows[0]["amount"]) <= 5000000
+								$('#gNo').val(rows[0]["docNo"]);
+								$('#gtime').val(rows[0]["createTime"]);
+								$('#gprice').val(rows[0]["price"]);
+								id = rows[0]["id"];
+								//附件加上
+								$("#fileurl_uploader2").val(rows[0]["fileUrl"]);
+								upload.show(rows[0]["fileUrl"], "files_uploader2")
+								$("#xmjy1").find("input,textarea").each(function() {
+									$(this).attr("disabled", "disabled");
+								});
+								$("#xmjy1").hide();
+								$("#xmjy2").show();
+							} else {
+								$('#bNo').val(rows[0]["docNo"]);
+								$('#btime').val(rows[0]["createTime"]);
+								$('#bprice').val(rows[0]["price"]);
+								$('#zNo').val(rows[1]["docNo"]);
+								$('#ztime').val(rows[1]["createTime"]);
+								$('#zprice').val(rows[1]["price"]);
+								id = rows[0]["id"] + "," + rows[1]["id"];
+								//附件加上
+								$("#fileurl_uploader").val(rows[0]["fileUrl"]);
+								$("#fileurl_uploader1").val(rows[1]["fileUrl"]);
+								upload.show(rows[0]["fileUrl"], "files_uploader")
+								upload.show(rows[1]["fileUrl"], "files_uploader1")
+								$("#xmjy2").find("input,textarea").each(function() {
+									$(this).attr("disabled", "disabled");
+								});
+							}
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
 			}
 		</script>
 	</head>
@@ -150,7 +220,7 @@
 			<li>项目金额
 				< 500万</li>
 		</ul>
-		<div class="xmjyshkypfTab" style="display: block;">
+		<div class="xmjyshkypfTab" id="xmjy1" style="display: block;">
 			<h3 class="ydsxHead ">编制初步设计</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
@@ -158,7 +228,7 @@
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="btime" />
+				<input type="text" id="btime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
@@ -166,9 +236,9 @@
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-				<div id="uploader" class="fjStyle"></div>
-			</div>
 
+			</div>
+			<div id="uploader" class="fjStyle"></div>
 			<h3 class="ydsxHead ">专家评审会</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
@@ -176,7 +246,7 @@
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="ztime" />
+				<input type="text" id="ztime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
@@ -185,11 +255,11 @@
 
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-				<div id="uploader1" class="fjStyle"></div>
-			</div>
 
+			</div>
+			<div id="uploader1" class="fjStyle"></div>
 		</div>
-		<div class="xmjyshkypfTab">
+		<div class="xmjyshkypfTab" id="xmjy2">
 			<h3 class="ydsxHead ">概算批复</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
@@ -197,7 +267,7 @@
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="gtime" />
+				<input type="text" id="gtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
@@ -205,17 +275,17 @@
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-				<div id="uploader2" class="fjStyle"></div>
-			</div>
 
+			</div>
+			<div id="uploader2" class="fjStyle"></div>
 			<div class="szxmTjPageRightForm">
 				<span>备注：</span>
 				<textarea id="gremark"></textarea>
 			</div>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

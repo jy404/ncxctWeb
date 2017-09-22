@@ -68,7 +68,7 @@
 						if (res["code"] == "0") {
 							$('#docNo').val(res["result"]["docNo"]);
 							$('#dispatchTime').val(res["result"]["dispatchTime"]);
-//							$('#reamark').val(res["result"]["comment"]);
+							$('#fileurl_uploader').val(res["result"]["fileUrl"]);
 							id = res["result"]["id"];
 							//附件加上
 							upload.show(res["result"]["fileUrl"],"files_uploader")

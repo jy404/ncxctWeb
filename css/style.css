@@ -2894,6 +2894,8 @@ header .headNav span.myUrse {
 .window .windowBox ul {
 	width: 700px;
 	margin: 15px auto;
+	overflow: scroll;
+	height: 400px;
 }
 
 .window .windowBox ul li {
@@ -3811,37 +3813,27 @@ header .headNav span.myUrse {
 
 
 /****************附件样式************************/
-.fjStyle{
+
+.fjStyle {
 	margin-left: 190px;
 	margin-top: -57px;
 }
-.files div{
+
+.files div {
 	float: left;
 	margin-right: 15px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.tzgg .addBb {
+	display: block;
+	width: 110px;
+	height: 35px;
+	line-height: 35px;
+	text-align: center;
+	padding-left: 10px;
+	background: #4bb2ff url(../img/add.png) no-repeat 10px center;
+	font-size: 14px;
+	color: #FFFFFF;
+	border-radius: 5px;
+	margin: 15px 0;
+}

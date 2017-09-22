@@ -5,6 +5,9 @@
 		<meta charset="UTF-8">
 		<title>地勘</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -15,9 +18,6 @@
 		<script type="text/javascript" src="js/jquery.toast.js"></script>
 		<script type="text/javascript" src="js/JavaScript.js"></script>
 		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
-		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/jquery.fileupload.css">
-		<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
 		<script src="js/vendor/jquery.ui.widget.js"></script>
 		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
 		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
@@ -29,14 +29,13 @@
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<script type="text/javascript">
-			var action, projectId, projectNo, projectType, id, projectName;
+			var action, projectId, projectNo, projectType, id, id1, projectName;
 			$(function() {
 				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
-				projectName = unescape($.getUrlParam("projectName"));
 				if (action != "" && action != undefined) {
 					SetData(projectId)
 					if (action == "view") {
@@ -49,25 +48,38 @@
 				}
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
-				$('.szxmTjPageRightFormBc').click(function() {
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				$('#saveBtn').click(function() {
 					SubmitData(1)
 				});
-				$('.szxmTjPageRightFormBtn').click(function() {
+				$('#submitBtn').click(function() {
 					SubmitData(2)
 				});
+				$('#updateBtn').click(function() {
+					SubmitData(3)
+				});
+				GetDirection("LANDSURVEYING_UNITTYPE");
 			});
 
 			function SetData(projectId) {
 				$.getJSON(
-					domain + "/api/proposal/" + projectId,
+					domain + "/api/landSurveyingMapping/" + projectId,
 					function(res) {
 						if (res["code"] == "0") {
-							$('#artNo').val(res["result"]["docNo"]);
-							$('#arttime').val(res["result"]["dispatchTime"]);
-							$('#reamark').val(res["result"]["comment"]);
-							id = res["result"]["id"];
+							$('#docNo').val(res["result"][0]["docNo"]);
+							$('#diwei').val(res["result"][0]["unitName"]);
+							$('#ditime').val(res["result"][0]["dispatchTime"]);
+							id = res["result"][0]["id"];
+							$('#docNo1').val(res["result"][1]["docNo"]);
+							$('#diName').val(res["result"][1]["unitName"]);
+							$('#ditime1').val(res["result"][1]["dispatchTime"]);
+							id1 = res["result"][1]["id"];
 							//附件加上
-							upload.show(res["result"]["fileUrl"], "files_uploader")
+							$('#fileurl_uploader').val(res["result"][0]["fileUrl"]);
+							$('#fileurl_uploader1').val(res["result"][1]["fileUrl"]);
+							upload.show(res["result"][0]["fileUrl"], "files_uploader")
+							upload.show(res["result"][1]["fileUrl"], "files_uploader1")
 						} else {
 							Toast.Err("错误", res["description"], 'top-center', 'left')
 						}
@@ -79,23 +91,50 @@
 			}
 
 			function SubmitData(status) {
-				var dispatchTime = $('#dispatchTime').val();
+				var unitId1 = 1;
+				var unitName1 = $("#diwei").val();
+				var unitType1 = "LANDSURVEYING_UNITTYPE";
+				var unitId2 = 1;
+				var unitName2 = $("#diName").val();
+				var unitType2 = "LANDSURVEYING_WITNESS";
+				var dispatchTime = $('#ditime').val();
 				var docNo = $('#docNo').val();
 				var fileUrl = $('#fileurl_uploader').val();
-				var data = {
-					"dispatchTime": dispatchTime,
-					"docNo": docNo,
-					"fileUrl": fileUrl,
-					"estimateType": estimateType,
-					"projectId": projectId,
-					"projectNo": projectNo,
-					"projectType": projectType,
-					"status": status
+				var dispatchTime1 = $('#ditime1').val();
+				var docNo1 = $('#docNo1').val();
+				var fileUrl1 = $('#fileurl_uploader1').val();
+				data = {
+					"landSurveyingMappingList": [{
+						"dispatchTime": dispatchTime,
+						"docNo": docNo,
+						"fileUrl": fileUrl,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"unitId": unitId1,
+						"unitName": unitName1,
+						"unitType": 'LANDSURVEYING_UNITTYPE'
+					}, {
+						"dispatchTime": dispatchTime1,
+						"docNo": docNo1,
+						"fileUrl": fileUrl1,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"unitId": unitId1,
+						"unitName": unitName2,
+						"unitType": 'LANDSURVEYING_WITNESS'
+					}]
 				}
-				if (action == "edit") {
-					data["id"] = id
+				if (status == 1) {
+					meetAdd("/api/landSurveyingMapping", JSON.stringify(data));
+				} else if (status == 2) {
+					meetAdd('/api/landSurveyingMapping/submit', JSON.stringify(data));
+				} else {
+					data["landSurveyingMappingList"][0]["id"] = id;
+					data["landSurveyingMappingList"][1]["id"] = id1;
+					meetPut("/api/landSurveyingMapping", JSON.stringify(data));
 				}
-				meetAdd('/api/airDefence/save', JSON.stringify(data));
 			}
 		</script>
 	</head>
@@ -107,24 +146,39 @@
 			<input type="text" id="diwei" />
 		</div>
 		<div class="szxmTjPageRightForm">
-			<span>地勘见证单位名称：</span>
-			<input type="text" id="diName" />
-		</div>
-		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
 			<input type="text" id="docNo" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="ditime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" />
+			<input type="text" id="ditime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
+
 		</div>
-		<div id="uploader" style="margin-left: 10px;"></div>
+		<div id="uploader" class="fjStyle"></div>
+		<div class="szxmTjPageRightForm">
+			<span>地勘见证单位名称：</span>
+			<input type="text" id="diName" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo1" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ditime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader1" class="fjStyle"></div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

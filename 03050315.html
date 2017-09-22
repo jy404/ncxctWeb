@@ -99,6 +99,7 @@
 				} else if (status == 2) {
 					meetAdd('/api/eightLeagueReview/submit', JSON.stringify(data));
 				} else {
+					data["id"] = id;
 					meetPut('/api/eightLeagueReview', JSON.stringify(data));
 				}
 			}

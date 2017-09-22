@@ -103,6 +103,7 @@
 					meetAdd('/api/expectedPrice/submit', JSON.stringify(data));
 				}
 				else{
+					data["id"]=id;
 					meetPut("/api/expectedPrice", JSON.stringify(data));
 				}
 			}

@@ -30,16 +30,33 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<style>
+			.btnOk {
+				display: block;
+				width: 100px;
+				height: 30px;
+				text-align: center;
+				color: #ffffff;
+				float: left;
+				background: #4bb2ff;
+				float: left;
+				margin-left: 150px;
+				margin-top: -35px;
+				line-height: 30px;
+				border-radius: 5px;
+			}
+		</style>
+
 		<script type="text/javascript">
-		var action,orgCategory,orgType,id
+			var action, orgCategory, orgType, id
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
 				action = $.getUrlParam("action");
-				orgCategory=$.getUrlParam("orgCategory");
-				orgType=$.getUrlParam("orgType");
-				id=$.getUrlParam("id");
+				orgCategory = $.getUrlParam("orgCategory");
+				orgType = $.getUrlParam("orgType");
+				id = $.getUrlParam("id");
 				if (action != "" && action != undefined) {
 					SetData(id)
 					if (action == "view") {
@@ -50,38 +67,81 @@
 						$(".fileinput-button").hide();
 					}
 				}
-				$('.lfjqqzbbBottom').click(function() {
+				$('#saveBtn').click(function() {
 					SubmitData()
 				});
-
 			});
-			
-			function SetData(id){
-				
+
+			function SetData(id) {
+				$.getJSON(
+					domain + "/api/proorg/" + id,
+					function(res) {
+						if (res["code"] == "0") {
+							$("#address").val(res["result"]["organization"]["address"]);
+							$("#chargeProject").val(res["result"]["organization"]["chargeProject"]);
+							$("#contact").val(res["result"]["organization"]["contact"]);
+							$("#entity").val(res["result"]["organization"]["entity"]);
+							$("#fileurl_uploader").val(res["result"]["organization"]["fileUrl"]);
+							$("#foundTime").val(res["result"]["organization"]["foundTime"]);
+							$("#name").val(res["result"]["organization"]["name"]);
+							$("input[name='projectType'][value='" + res["result"]["organization"]["projectType"] + "']").attr("checked", true);
+							$("#projectEntity").val(res["result"]["organization"]["projectEntity"]);
+							id = res["result"]["organization"]["id"];
+							//附件加上
+							upload.show(res["result"]["organization"]["fileUrl"], "files_uploader");
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
 			}
 
 			function SubmitData() {
-
 				var data = {
-					"proOrgExtensions":[],
-					"projectOrg":{
-						"address":$("#address").val(),
-						"chargeProject":$("#chargeProject").val(),
-						"contact":$("#contact").val(),
-						"entity":$("#entity").val(),
-						"fileUrl":$("#fileurl_uploader").val(),
-						"foundTime":$("#foundTime").val(),
-						"name":$("#name").val(),
-						"orgCategory":$("#orgCategory").val(),
-						"orgType":orgType,
-						"projectEntity":$("#projectEntity").val(),
-						"projectType":$("input[name='projectType']:checked").val(),
-						"orgCategory":orgCategory
-						}
+					"proOrgExtensions": [],
+					"projectOrg": {
+						"address": $("#address").val(),
+						"chargeProject": $("#chargeProject").val(),
+						"contact": $("#contact").val(),
+						"entity": $("#entity").val(),
+						"fileUrl": $("#fileurl_uploader").val(),
+						"foundTime": $("#foundTime").val(),
+						"name": $("#name").val(),
+						"orgCategory": $("#orgCategory").val(),
+						"orgType": orgType,
+						"projectEntity": $("#projectEntity").val(),
+						"projectType": $("input[name='projectType']:checked").val(),
+						"orgCategory": orgCategory
+					}
 				}
 				if (action == "edit")
-					data["id"] = id;
+					data["projectOrg"]["id"] = id;
 				meetAdd('/api/proorg/save', JSON.stringify(data));
+			}
+			var count=0;
+			function CreateHTML() {
+				html = "<div class='lfjqqzbbBox1'>";
+				html += "<div class='lfjqqzbbBox1Left'>";
+				html += "<span>职位：<input type='hidden'></input></span>";
+				html += "</div>";
+				html += "<div class='lfjqqzbbBox1Left'>";
+				html += "<span>员工姓名：</span>";
+				html += "<input type='text' />";
+				html += "</div>";
+				html += "<div class='lfjqqzbbBox1Right'>";
+				html += "<span>员工联系电话：</span>";
+				html += "<input type='text' />";
+				html += "</div>";
+				html += "<div class='lfjqqzbbBox1Left'>";
+				html += "<span>职业资格证：</span>";
+				html += "<input type='text' />";
+				html += "</div>";
+				html += "<div class='lfjqqzbbBox1Left'>";
+				html += "<span>职称证书：</span>";
+				html += "<input type='text' />";
+				html += "</div>";
+				html += "</div>";
 			}
 		</script>
 	</head>
@@ -123,15 +183,13 @@
 					<span>联系方式：</span>
 					<input type="text" id="contact" />
 				</div>
-				
-			</div>
-			<div class="lfjqqzbbBox1">
-				<div class="lfjqqzbbBox1Left">
+				<div class="lfjqqzbbBox1Right">
 					<span>项目类别：</span>
 					<input type="radio" name="projectType" value="CITY" />市政
 					<input type="radio" name="projectType" value="HOUSE" />房建
 				</div>
 			</div>
+
 			<div class="lfjqqzbbBox1">
 				<div class="lfjqqzbbBox1Left">
 					<span>成立时间：</span>
@@ -148,31 +206,69 @@
 					<div id="uploader" class="fjStyle">
 					</div>
 				</div>
-			</div>	
-			
-			<hr color="#CBCBCB" width="90%" size="2px" />
-			<div class="lfjqqzbbBox1">
-				<div class="lfjqqzbbBox1Left">
-					<span>项目总工：</span>
-					<input type="text" />
-				</div>
-				<div class="lfjqqzbbBox1Right">
-					<span>项目总工电话：</span>
-					<input type="text" />
-				</div>
 			</div>
+
+			<hr style="background:#4bb2ff; width: 100%; height: 3px;" />
 			<div class="lfjqqzbbBox1">
 				<div class="lfjqqzbbBox1Left">
-					<span>质检员：</span>
-					<input type="text" />
-				</div>
-				<div class="lfjqqzbbBox1Right">
-					<span>质检员证：</span>
-					<input type="text" />
+					<span>添加员工：</span>
+					<select id="selJobType">
+						<option value="">--请选择职位类型--</option>
+						<option value="Project_Branch_Leader">项目分管领导</option>
+						<option value="Org_Lead">部门负责人</option>
+						<option value="Org_Deputy_Manager">部门副经理</option>
+						<option value="Project_Charger">项目主管</option>
+						<option value="Project_Field_Staff">项目现场人员</option>
+						<option value="Project_Builder">项目建造师</option>
+						<option value="Project_Head_Engineer">项目总工</option>
+						<option value="Construction_Worker">施工员</option>
+						<option value="Quality_Inspector">质检员</option>
+						<option value="Safety_Officer">安全员</option>
+						<option value="Materialman">材料员</option>
+						<option value="Budgeter">预算员</option>
+						<option value="Project_Director">项目总监</option>
+						<option value="Project_Agency">项目总代</option>
+						<option value="Project_Major_Supervision">项目专监</option>
+						<option value="Supervisioner">监理员</option>
+						<option value="Testify">见证员</option>
+						<option value="Road_Engine_Person">道路工程负责人</option>
+						<option value="Drain_Water_Person">排水工程负责人</option>
+						<option value="Afforest_Engine_Person">绿化工程负责人</option>
+						<option value="Traffic_Engine_Person">交通工程负责人</option>
+						<option value="Light_Engine_Person">照明工程负责人</option>
+						<option value="ELV_Engine_Person">弱电工程负责任人</option>
+						<option value="Bridge_Engine_Person">桥梁工程负责人</option>
+						<option value="Other">其他人员</option>
+					</select>
+					<a href="#" id="addPersonBtn" class="btnOk">确定</a>
 				</div>
 			</div>
 
-			<a href="#" class="lfjqqzbbBottom">保存</a>
+			<div class="lfjqqzbbBox1">
+				<div class="lfjqqzbbBox1Left">
+					<span>职位：<input type="hidden"></input></span>
+				</div>
+				<div class="lfjqqzbbBox1Left">
+					<span>员工姓名</span>
+					<input type="text" />
+				</div>
+				<div class="lfjqqzbbBox1Right">
+					<span>员工联系电话：</span>
+					<input type="text" />
+				</div>
+				<div class="lfjqqzbbBox1Left">
+					<span>职业资格证</span>
+					<input type="text" />
+				</div>
+				<div class="lfjqqzbbBox1Left">
+					<span>职称证书</span>
+					<input type="text" />
+				</div>
+			</div>
+			<script>
+			</script>
+
+			<a href="#" id="saveBtn" class="lfjqqzbbBottom">保存</a>
 		</div>
 	</body>
 

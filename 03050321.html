@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>招标邀请函、发布招标告知、招标文件</title>
- 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/jquery.fileupload.css">		
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -30,17 +31,17 @@
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<script type="text/javascript">
-		var action, projectId, projectNo, projectType, projectName,zid,fid,wid;
-		$(function(){		
+			var action, projectId, projectNo, projectType, projectName, zid, fid, wid;
+			$(function() {
 				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
-				projectName=unescape($.getUrlParam("projectName"));
-				if(action != "" && action != undefined) {
+				projectName = unescape($.getUrlParam("projectName"));
+				if (action != "" && action != undefined) {
 					SetData(projectId)
-					if(action == "view") {
+					if (action == "view") {
 						$("body").find("input").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
@@ -48,45 +49,46 @@
 						$(".fileinput-button").hide();
 					}
 				}
-		  	    upload.init("uploader", "添加附件...");
+				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				upload.init("uploader1", "添加附件...");
 				UploadProcess("uploader1");
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
-		  		 $('.szxmTjPageRightFormBc').click(function() {
+				$('#saveBtn').click(function() {
 					SubmitData(1)
 				});
-				$('.szxmTjPageRightFormBtn').click(function() {
+				$('#submitBtn').click(function() {
 					SubmitData(2)
 				});
-				
+				$('#updateBtn').click(function() {
+					SubmitData(3)
+				});
+			});
 
-		  });
-		 			function SetData(projectId) {
+			function SetData(projectId) {
 				$.getJSON(
-					domain + "/api/theTenderInvitation/"+projectId,
+					domain + "/api/theTenderInvitation/" + projectId,
 					function(res) {
-						if(res["code"] == "0") {
-					//招标邀请函
-					$("#zNo").val(res["result"][0]["docNo"]);
-					$("#ztime").val(res["result"][0]["dispatchTime"]);
-					$("#fileurl_uploader").val(res["result"][0]["fileUrl"]);
-					zid=res["result"][0]["id"];
-					upload.show(res["result"][0]["fileUrl"], "files_uploader")
-					//发布招标告知
-					$("#fNo").val(res["result"][1]["docNo"]);
-					$("#ftime").val(res["result"][1]["dispatchTime"]);
-					$("#fileurl_uploader1").val(res["result"][1]["fileUrl"]);
-					fid=res["result"][1]["id"];
-					upload.show(res["result"][1]["fileUrl"], "files_uploader")
-					//招标文件
-					$("#wNo").val(res["result"][2]["docNo"]);
-					$("#wtime").val(res["result"][2]["dispatchTime"]);
-					$("#fileurl_uploader2").val(res["result"][2]["fileUrl"]);
-					wid=res["result"][2]["id"];
-					upload.show(res["result"][2]["fileUrl"], "files_uploader")
-						
+						if (res["code"] == "0") {
+							//招标邀请函
+							$("#zNo").val(res["result"][0]["docNo"]);
+							$("#ztime").val(res["result"][0]["createTime"]);
+							$("#fileurl_uploader").val(res["result"][0]["fileUrl"]);
+							zid = res["result"][0]["id"];
+							upload.show(res["result"][0]["fileUrl"], "files_uploader")
+								//发布招标告知
+							$("#fNo").val(res["result"][1]["docNo"]);
+							$("#ftime").val(res["result"][1]["createTime"]);
+							$("#fileurl_uploader1").val(res["result"][1]["fileUrl"]);
+							fid = res["result"][1]["id"];
+							upload.show(res["result"][1]["fileUrl"], "files_uploader1")
+								//招标文件
+							$("#wNo").val(res["result"][2]["docNo"]);
+							$("#wtime").val(res["result"][2]["createTime"]);
+							$("#fileurl_uploader2").val(res["result"][2]["fileUrl"]);
+							wid = res["result"][2]["id"];
+							upload.show(res["result"][2]["fileUrl"], "files_uploader2")
 						} else {
 							Toast.Err("错误", res["description"], 'top-center', 'left')
 						}
@@ -96,104 +98,111 @@
 					}
 				);
 			}
-				function SubmitData(status){
-					//招标邀请函
-					var zNo=$("#zNo").val();
-					var ztime=$("#ztime").val();
-					var zfile=$("#fileurl_uploader").val();
-					//发布招标告知
-					var fNo=$("#fNo").val();
-					var ftime=$("#ftime").val();
-					var ffile=$("#fileurl_uploader1").val();
-					//招标文件
-					var wNo=$("#wNo").val();
-					var wtime=$("#wtime").val();
-					var wfile=$("#fileurl_uploader2").val();
-		  	 	  
-//		  	 	  var projectId="12";
-//		  	 	  var projectName="nct00012";
-//		  	 	  var projectNo="11112";
-					var data;
-				if(action=="edit"){
-				data={
-				"theTenderInvitationList":
-				[{
-					"dispatchTime":(ztime,ftime,wtime),
-					"docNo":(zNo,fNo,wNo),
-					"fileUrl":(zfile,ffile,wfile),
-					"projectId":(projectId,projectId,projectId),
-					"projectName":(projectName,projectName,projectName),
-					"projectNo":(projectNo,projectNo,projectNo),
-					"stepType":('NOTIFY','FILE','INVITATION '),
-					"id":(zid,fid,wid);
-				}]
+
+			function SubmitData(status) {
+				//招标邀请函
+				var zNo = $("#zNo").val();
+				var ztime = $("#ztime").val();
+				var zfile = $("#fileurl_uploader").val();
+				//发布招标告知
+				var fNo = $("#fNo").val();
+				var ftime = $("#ftime").val();
+				var ffile = $("#fileurl_uploader1").val();
+				//招标文件
+				var wNo = $("#wNo").val();
+				var wtime = $("#wtime").val();
+				var wfile = $("#fileurl_uploader2").val();
+				var data;
+				data = {
+					"theTenderInvitationList": [{
+						"dispatchTime": ztime,
+						"docNo": zNo,
+						"fileUrl": zfile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"stepType": 'NOTIFY'
+					}, {
+						"dispatchTime": ftime,
+						"docNo": fNo,
+						"fileUrl": ffile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"stepType": 'FILE'
+					}, {
+						"dispatchTime": wtime,
+						"docNo": wNo,
+						"fileUrl": wfile,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"stepType": 'INVITATION '
+					}]
 				}
-					meetPut('/api/theTenderInvitation',JSON.stringify(data));
-				}else{
-									data={
-				"theTenderInvitationList":
-				[{
-					"dispatchTime":(ztime,ftime,wtime),
-					"docNo":(zNo,fNo,wNo),
-					"fileUrl":(zfile,ffile,wfile),
-					"projectId":(projectId,projectId,projectId),
-					"projectName":(projectName,projectName,projectName),
-					"projectNo":(projectNo,projectNo,projectNo),
-					"stepType":('NOTIFY','FILE','INVITATION ')					
-				}]
+				if (status == 1) {
+					meetAdd('/api/theTenderInvitation', JSON.stringify(data));
+				} else if (status == 2) {
+					meetAdd('/api/theTenderInvitation/submit', JSON.stringify(data));
+				} else {
+					data["theTenderInvitationList"][0]["id"] = zid;
+					data["theTenderInvitationList"][1]["id"] = fid;
+					data["theTenderInvitationList"][2]["id"] = wid;
+					meetPut('/api/theTenderInvitation', JSON.stringify(data));
 				}
-					meetAdd('/api/theTenderInvitation/submit',JSON.stringify(data));
-				}
-				}
+			}
 		</script>
 	</head>
+
 	<body>
-				<h2 class="szTitle">招标邀请函、发布招标告知、招标文件</h2>
-				<h3 class="ydsxHead">招标邀请函</h3>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" id="zNo" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" id="ztime"  onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					
-				</div>
-				<div id="uploader" class="fjStyle"></div>
-				<h3 class="ydsxHead">发布招标告知</h3>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" id="fNo" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" id="ftime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-				
-				</div>
-				<div id="uploader1" class="fjStyle"></div>
-				<h3 class="ydsxHead">招标文件</h3>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" id="wNo" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" id="wtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					
-				</div>
-				<div id="uploader2" class="fjStyle"></div>
-				<div class="szBtn">
-					<a href="#" class="szxmTjPageRightFormBc">保存</a>
-					<a href="#" class="szxmTjPageRightFormBtn">提交</a>
-				</div>
+		<h2 class="szTitle">招标邀请函、发布招标告知、招标文件</h2>
+		<h3 class="ydsxHead">招标邀请函</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="zNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ztime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+		<h3 class="ydsxHead">发布招标告知</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="fNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ftime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader1" class="fjStyle"></div>
+		<h3 class="ydsxHead">招标文件</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="wNo" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="wtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader2" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
 	</body>
+
 </html>

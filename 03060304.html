@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>交通影响评估</title>
- 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/jquery.fileupload.css">		
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -31,7 +32,7 @@
 		<script type="text/javascript" src="js/upload.js"></script>
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
-			$(function(){
+			$(function() {
 				//判断编辑或者查看
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -47,17 +48,16 @@
 						$(".fileinput-button").hide();
 					}
 				}
-				
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
-		  	 $('.szxmTjPageRightFormBc').click(function() {
+				$('.szxmTjPageRightFormBc').click(function() {
 					SubmitData(1)
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
 					SubmitData(2)
 				});
-				
 			});
+
 			function SetData(projectId) {
 				$.getJSON(
 					domain + "/api/traenv/TRAFFIC/" + projectId,
@@ -65,10 +65,10 @@
 						if (res["code"] == "0") {
 							$('#docNo').val(res["result"]["docNo"]);
 							$('#dispatchTime').val(res["result"]["dispatchTime"]);
-//							$('#reamark').val(res["result"]["comment"]);
+							$('#fileurl_uploader').val(res["result"]["fileUrl"]);
 							id = res["result"]["id"];
 							//附件加上
-							upload.show(res["result"]["fileUrl"],"files_uploader")
+							upload.show(res["result"]["fileUrl"], "files_uploader")
 						}
 					},
 					function() {
@@ -76,52 +76,53 @@
 					}
 				);
 			}
-			
-			function SubmitData(status){
-//			 		var comments=$('#comment').val();
-			 		var dispatchTime=$('#dispatchTime').val();
-			 		var docNo=$('#docNo').val();
-			 		var fileUrl=$('#fileurl_uploader').val();
-			 		var estimateType="TRAFFIC";
-//			 			
-			 		
-			 		var data={
-//			 		"comment":comments,
-					"dispatchTime":dispatchTime,
-					"docNo":docNo,
-					"fileUrl":fileUrl,
-					"estimateType":estimateType,
-					"projectId":projectId,
-					"projectNo":projectNo,
-					"projectType":projectType,				
-					"status":status
-					}
-			 		if (action == "edit")
+
+			function SubmitData(status) {
+				//			 		var comments=$('#comment').val();
+				var dispatchTime = $('#dispatchTime').val();
+				var docNo = $('#docNo').val();
+				var fileUrl = $('#fileurl_uploader').val();
+				var estimateType = "TRAFFIC";
+				//			 			
+				var data = {
+					//			 		"comment":comments,
+					"dispatchTime": dispatchTime,
+					"docNo": docNo,
+					"fileUrl": fileUrl,
+					"estimateType": estimateType,
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectType": projectType,
+					"status": status
+				}
+				if (action == "edit")
 					data["id"] = id;
-			 		meetAdd('/api/traenv/save',JSON.stringify(data));
-			 	};
+				meetAdd('/api/traenv/save', JSON.stringify(data));
+			};
 		</script>
 	</head>
+
 	<body>
-		
-				<h2 class="szTitle">交通影响评估</h2>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" id='docNo'/>
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" id="dispatchTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					
-				</div>
-				<div id="uploader" class="fjStyle"></div>
-				<div class="szBtn">
-					<a href="#" class="szxmTjPageRightFormBc">保存</a>
-					<a href="#" class="szxmTjPageRightFormBtn">提交</a>
-				</div>
-				
+
+		<h2 class="szTitle">交通影响评估</h2>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id='docNo' />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="dispatchTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+
 	</body>
+
 </html>

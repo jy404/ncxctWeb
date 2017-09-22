@@ -29,16 +29,15 @@
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<script type="text/javascript">
-			var action, projectId, projectNo, projectType, id, projectName;
+			var action, projectId, projectNo, projectType, id, id1,id2, projectName;
 			$(function() {
 				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
-				projectName = unescape($.getUrlParam("projectName"));
 				if (action != "" && action != undefined) {
-					//SetData(projectId);
+					SetData(projectId)
 					if (action == "view") {
 						$("body").find("input").each(function() {
 							$(this).attr("disabled", "disabled");
@@ -47,35 +46,51 @@
 						$(".fileinput-button").hide();
 					}
 				}
-				/*页面传参并判断类型 end*/
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				upload.init("uploader1", "添加附件...");
 				UploadProcess("uploader1");
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
-				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1);
+				$('#saveBtn').click(function() {
+					SubmitData(1)
 				});
-				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2);
+				$('#submitBtn').click(function() {
+					SubmitData(2)
 				});
+				$('#updateBtn').click(function() {
+					SubmitData(3)
+				});
+				GetDirection("LANDSURVEYING_UNITTYPE");
 			});
 
 			function SetData(projectId) {
 				$.getJSON(
-					domain + "/api/proposal/" + projectId,
+					domain + "/api/landSurveyingMapping/" + projectId,
 					function(res) {
 						if (res["code"] == "0") {
-							/*
-							$('#docNo').val(res["result"]["docNo"]);
-							$('#arttime').val(res["result"]["dispatchTime"]);
-							//$('#reamark').val(res["result"]["comment"]);
-							$("#fileurl_uploader").val(res["result"]["fileUrl"]);
-							id = res["result"]["id"];
+							//地勘单位
+							$('#diNo').val(res["result"][0]["docNo"]);
+							$('#diwei').val(res["result"][0]["unitName"]);
+							$('#ditime').val(res["result"][0]["dispatchTime"]);
+							id = res["result"][0]["id"];
+							//地勘见证单位
+							$('#zeNo').val(res["result"][1]["docNo"]);
+							$('#zewei').val(res["result"][1]["unitName"]);
+							$('#zetime').val(res["result"][1]["dispatchTime"]);
+							id1 = res["result"][1]["id"];
+							//测绘单位
+							$('#ceNo').val(res["result"][2]["docNo"]);
+							$('#cewei').val(res["result"][2]["unitName"]);
+							$('#cetime').val(res["result"][2]["dispatchTime"]);
+							id2 = res["result"][2]["id"];
 							//附件加上
-							upload.show(res["result"]["fileUrl"], "files_uploader")
-							*/
+							$('#fileurl_uploader').val(res["result"][0]["fileUrl"]);
+							$('#fileurl_uploader1').val(res["result"][1]["fileUrl"]);
+							$('#fileurl_uploader2').val(res["result"][2]["fileUrl"]);
+							upload.show(res["result"][0]["fileUrl"], "files_uploader")
+							upload.show(res["result"][1]["fileUrl"], "files_uploader1")
+							upload.show(res["result"][2]["fileUrl"], "files_uploader2")
 						} else {
 							Toast.Err("错误", res["description"], 'top-center', 'left')
 						}
@@ -83,37 +98,74 @@
 					function() {
 						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
 					}
-				)
+				);
 			}
 
 			function SubmitData(status) {
-				var diwei = $('#diwei').val();
-				var diNo = $('#diNo').val();
-				var ditime = $('#ditime').val();
-				var difile = $('#fileurl_uploader').val();
-				var zewei = $('#zewei').val();
-				var zeNo = $('#zeNo').val();
-				var zetime = $('#zetime').val();
-				var zefile = $('#fileurl_uploader1').val();
-				var cewei = $('#cewei').val();
-				var ceNo = $('#ceNo').val();
-				var cetime = $('#cetime').val();
-				var cefile = $('#fileurl_uploader2').val();
-				//					var projectId=12;
-				//		  	 	    var projectName="nct0001";
-				//		  	 	    var projectNo="1111";
-				var data = {
-					"dispatchTime": (ditime, zetime, cetime),
-					"docNo": (diNo, zeNo, ceNo),
-					"fileUrl": (difile, zefile, cefile),
-					"projectId": (projectId, projectId, projectId),
-					"projectName": (projectName, projectName, projectName),
-					"projectNo": (projectNo, projectNo, projectNo),
-					"unitld": (123, 123, 123),
-					"unitName": (diwei, zewei, cewei),
-					"unitType": ("LANDSURVEYING", "LANDSURVEYING_WITNESS", "MAPPING")
+				//地勘单位
+				var unitId1 = 1;
+				var unitName1 = $("#diwei").val();
+				var unitType1 = "LANDSURVEYING_UNITTYPE";
+				var dispatchTime = $('#ditime').val();
+				var docNo = $('#diNo').val();
+				var fileUrl = $('#fileurl_uploader').val();
+				//地勘见证单位
+				var unitId2 = 2;
+				var unitName2 = $("#zewei").val();
+				var unitType2 = "LANDSURVEYING_WITNESS";
+				var dispatchTime1 = $('#zetime').val();
+				var docNo1 = $('#zeNo').val();
+				var fileUrl1 = $('#fileurl_uploader1').val();
+				//测绘
+				var unitId3 = 3;
+				var unitName3 = $("#cewei").val();
+				var unitType3 = "LANDSURVEYING_WITNESS";
+				var dispatchTime3 = $('#cetime').val();
+				var docNo3 = $('#ceNo').val();
+				var fileUrl3 = $('#fileurl_uploader2').val();
+				data = {
+					"landSurveyingMappingList": [{
+						"dispatchTime": dispatchTime,
+						"docNo": docNo,
+						"fileUrl": fileUrl,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"unitId": unitId1,
+						"unitName": unitName1,
+						"unitType": 'LANDSURVEYING_UNITTYPE'
+					}, {
+						"dispatchTime": dispatchTime1,
+						"docNo": docNo1,
+						"fileUrl": fileUrl1,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"unitId": unitId2,
+						"unitName": unitName2,
+						"unitType": 'LANDSURVEYING_WITNESS'
+					}, {
+						"dispatchTime": dispatchTime3,
+						"docNo": docNo3,
+						"fileUrl": fileUrl3,
+						"projectId": projectId,
+						"projectName": projectName,
+						"projectNo": projectNo,
+						"unitId": unitId3,
+						"unitName": unitName3,
+						"unitType": 'MAPPING'
+					}]
 				}
-				meetAdd('/api/proposal/submit', JSON.stringify(data));
+				if (status == 1) {
+					meetAdd("/api/landSurveyingMapping", JSON.stringify(data));
+				} else if (status == 2) {
+					meetAdd('/api/landSurveyingMapping/submit', JSON.stringify(data));
+				} else {
+					data["landSurveyingMappingList"][0]["id"] = id;
+					data["landSurveyingMappingList"][1]["id"] = id1;
+					data["landSurveyingMappingList"][2]["id"] = id2;
+					meetPut("/api/landSurveyingMapping", JSON.stringify(data));
+				}
 			}
 		</script>
 	</head>
@@ -176,8 +228,9 @@
 		</div>
 		<div id="uploader2" class="fjStyle"></div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

@@ -33,7 +33,7 @@ function getOsstoken() {
 		},
 		error: function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			alert("获取token错误");
 			return;
 		}
