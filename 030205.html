@@ -1,13 +1,122 @@
 ﻿<!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
-		<link rel="stylesheet" href="css/style.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/jquery-3.2.1.min.js" ></script>
-		<script type="text/javascript" src="js/js.js" ></script>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var Id, action, projectType, step;
+			$(function() {
+				$.ajaxSettings.async = false;
+				SelectUserList("txtUserIds");
+				action = $.getUrlParam("action");
+				projectType = $.getUrlParam("projectType");
+				step = $.getUrlParam("step");
+				Id = $.getUrlParam("id");
+				SelectProject("CITY", "projectName");
+				SelectUser("userName");
+				if(action != "" && action != undefined) {
+					SetData(Id);
+					if(action == "view") {
+						$("body").find("input,textarea").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".lfjqqzbbBottom").hide();
+						$(".fileinput-button").hide();
+					}
+				}
+				//判断编辑或者查看
+				$('.lfjqqzbbBottom').click(function() {
+					SubmitData();
+				});
+			});
+
+			function SetData(Id) {
+				$.getJSON(
+					domain + "/api/project/week/" + Id,
+					function(res) {
+						if(res["code"] == "0") {
+							projectType = res["result"]["projectType"];
+							step = res["result"]["step"];
+							$('#projectName').val(res["result"]["projectId"]);
+							$('#projectTime').val(res["result"]["projectTime"]);
+							$('#userName').val(res["result"]["userId"]);
+							$('#pushPlan').val(res["result"]["pushPlan"]);
+							$('#allPushPlan').val(res["result"]["allPushPlan"]);
+							$('#tWeekPlan').val(res["result"]["tWeekPlan"]);
+							$('#tWeekCase').val(res["result"]["tWeekCase"]);
+							$('#nWeekCase').val(res["result"]["nWeekCase"]);
+							$('#issue').val(res["result"]["issue"]);
+							$('#condition').val(res["result"]["condition"]);
+							$('#commet').val(res["result"]["commet"]);
+
+							Id = res["result"]["id"];
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData() {
+				var data = {
+					"projectType": projectType,
+					"step": step,
+					"projectId": $("#projectName").val(),
+					"projectName": $("#projectName option:selected").text(),
+					"projectTime": $("#projectTime").val(),
+					"userId": $("#userName").val(),
+					"userName": $("#userName option:selected").text(),
+					"pushPlan": $("#pushPlan").val(),
+					"allPushPlan": $("#allPushPlan").val(),
+					"tWeekPlan": $("#tWeekPlan").val(),
+					"tWeekCase": $("#tWeekCase").val(),
+					"nWeekCase": $("#nWeekCase").val(),
+					"issue": $("#issue").val(),
+					"condition": $("#condition").val(),
+					"commet": $("#commet").val()
+				}
+				if(action == "edit") {
+					data["id"] = Id;
+				}
+				meetAdd('/api/project/week/save', JSON.stringify(data), "0302.html");
+			}
+		</script>
 	</head>
-	<body>		
+
+	<body>
 		<div class="title">
 			<div class="page">
 				<b>当前位置：</b>
@@ -16,66 +125,71 @@
 				<span>> 项目报表</span>
 				<span>> 市政在建项目周报表</span>
 			</div>
-		</div>	
+		</div>
 		<div class="lfjqqzbbBigBox">
-			<h2 class="lfjqqzbbTitle">市政在建项目周报表</h2>						
+			<h2 class="lfjqqzbbTitle">市政在建项目周报表</h2>
 			<div class="lfjqqzbbBox1">
 				<div class="lfjqqzbbBox1Left">
 					<span>项目名称：</span>
-					<input type="text" />
+					<select id="projectName">
+						<option value="0">---请选择---</option>
+					</select>
 				</div>
 				<div class="lfjqqzbbBox1Right">
 					<span>时间：</span>
-					<input type="text" />
+					<input type="text" id="projectTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 				</div>
-			</div>				
+			</div>
 			<div class="lfjqqzbbBox2">
 				<div class="lfjqqzbbBox2Left">
 					<span>负责人：</span>
-					<input type="text" />
+					<select id="userName">
+						<option value="0">---请选择---</option>
+					</select>
 				</div>
-			</div>				
+			</div>
 			<div class="lfjqqzbbBoxSame">
 				<div class="lfjqqzbbBoxSameLeft">
 					<span>推进计划：</span>
-					<textarea></textarea>
+					<textarea id="pushPlan"></textarea>
 				</div>
 				<div class="lfjqqzbbBoxSameRight">
 					<span>整体推进计划：</span>
-					<textarea></textarea>
+					<textarea id="allPushPlan"></textarea>
 				</div>
-			</div>				
+			</div>
 			<div class="lfjqqzbbBoxSame">
 				<div class="lfjqqzbbBoxSameLeft">
 					<span>本周计划：</span>
-					<textarea></textarea>
+					<textarea id="tWeekPlan"></textarea>
 				</div>
 				<div class="lfjqqzbbBoxSameRight">
 					<span>本周落实情况：</span>
-					<textarea></textarea>
+					<textarea id="tWeekCase"></textarea>
 				</div>
-			</div>				
+			</div>
 			<div class="lfjqqzbbBoxSame">
 				<div class="lfjqqzbbBoxSameLeft">
 					<span>下周情况：</span>
-					<textarea></textarea>
+					<textarea id="nWeekCase"></textarea>
 				</div>
 				<div class="lfjqqzbbBoxSameRight">
 					<span>存在问题：</span>
-					<textarea></textarea>
+					<textarea id="issue"></textarea>
 				</div>
-			</div>				
+			</div>
 			<div class="lfjqqzbbBoxSame">
 				<div class="lfjqqzbbBoxSameLeft">
 					<span>基本情况：</span>
-					<textarea></textarea>
+					<textarea id="condition"></textarea>
 				</div>
 				<div class="lfjqqzbbBoxSameRight">
 					<span>备注：</span>
-					<textarea></textarea>
+					<textarea id="commet"></textarea>
 				</div>
-			</div>								
+			</div>
 			<a href="#" class="lfjqqzbbBottom">保存</a>
 		</div>
 	</body>
+
 </html>

@@ -1,12 +1,57 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>公告通知</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
+		<script type="text/javascript">
+			var currentpage = 1;
+			var pagesize = 2;
+			var data = {
+				//"projectType": projecttype
+			};
+
+			$(function() {
+				$('.tzggSerachreset').click(function() {
+					$(".tzggSerachTypeSelect").val("");
+				});
+				$('.noticeUl li').click(function(){
+					$("#noticeType")[0].innerHTML = $(this)[0].innerHTML;
+					$("#noticeTypeValue").val($(this)[0].title);
+				});
+				$('.tzggSerachBtn1').click(function() {
+					currentpage = 1;
+					pagesize = 2;
+					data = {
+						"noticeType": $("#noticeTypeValue").val(),
+						"startTime": $("#startTime").val(),
+						"endTime": $("#endTime").val(),
+						"title": $("#title").val()
+					};
+					GetnoticeTmpList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/noticeTmp/list");
+				});
+				GetnoticeTmpList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/noticeTmp/list");
+			})
+		</script>
 	</head>
+
 	<body>
 		<div class="title">
 			<div class="page">
@@ -23,83 +68,44 @@
 				<div class="tzggSerachType">
 					<span>公告类型</span>
 					<div class="tzggSerachTypeSelect">
-						<h2>通报</h2>
-						<ul>
-							<li>通报</li>
-							<li>决定</li>
-							<li>通知</li>
+						<h2 id="noticeType">通知</h2>
+						<input id="noticeTypeValue" value="inform" style="display: none;"/>
+						<ul class="noticeUl">
+							<li title="inform">通知</li>
+							<li title="decision">决定</li>
 						</ul>
 					</div>
 				</div>
 				<div class="tzggSerachDate">
 					<span>发布时间</span>
 					<b>从</b>
-					<input type="text" />
+					<input type="text" id="startTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 					<b>到</b>
-					<input type="text" />
+					<input type="text" id="endTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 				</div>
 				<div class="tzggSerachTitle">
 					<span>消息标题</span>
-					<input type="text" class="tzggSerachTypeSelect"  />
-				</div>				
+					<input type="text" id="title" class="tzggSerachTypeSelect" />
+				</div>
 				<div class="tzggSerachBtn">
 					<a href="#" class="tzggSerachBtn1">搜索</a>
 					<a href="#" class="tzggSerachreset">清空</a>
 				</div>
 			</div>
-			<table class="tzggTable" cellpadding="0" cellspacing="0">
+			<table class="tzggTable" cellpadding="0" cellspacing="0" id="projectList">
 				<tr>
 					<th width="10%">序号</th>
 					<th width="15%">公告类型</th>
-					<th width="62%">项目名称</th>
-					<th width="13%">发布类型</th>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td>通报</td>
-					<td><a href="020201.html" target="bodyRight">抚生路标志牌采购招标公告</a></td>
-					<td>2017-07-21</td>
-				</tr>
-				<tr>
-					<td>2</td>
-					<td>决定</td>
-					<td><a href="020201.html" target="bodyRight">南昌县2017年安置房沉降观测单位必选公告</a></td>
-					<td>2017-07-21</td>
-				</tr>
-				<tr>
-					<td>3</td>
-					<td>通告</td>
-					<td><a href="020201.html" target="bodyRight">抚生路标志牌采购招标公告</a></td>
-					<td>2017-07-21</td>
-				</tr>
-				<tr>
-					<td>4</td>
-					<td>决定</td>
-					<td><a href="#">南昌县2017年安置房沉降观测单位必选公告</a></td>
-					<td>2017-07-21</td>
-				</tr>
-				<tr>
-					<td>5</td>
-					<td>通告</td>
-					<td><a href="#">抚生路标志牌采购招标公告</a></td>
-					<td>2017-07-21</td>
+					<th width="52%">标题</th>
+					<th width="10%">标题</th>
+					<th width="13%">发布时间</th>
 				</tr>
 			</table>
-			<div class="fy">
-				<a href="#">首页</a>
-				<a href="#"><</a>
-				<a href="#">1</a>
-				<a href="#">2</a>
-				<a href="#">3</a>
-				.
-				.
-				.
-				<a href="#">8</a>
-				<a href="#">9</a>
-				<a href="#">10</a>
-				<a href="#">></a>
-				<a href="#">尾页</a>
+			<!--<div class="fy">这里是分页</div>-->
+			<div class="page_div fy" id="fj_page">
+
 			</div>
-		</div>		
+		</div>
 	</body>
+
 </html>

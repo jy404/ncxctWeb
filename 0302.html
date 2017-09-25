@@ -1,12 +1,94 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>项目报表</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
+
+		<style>
+			.window .windowBox a {
+				display: block;
+				width: 100px;
+				height: 60px;
+				padding: 50px 30px;
+				float: left;
+				font-size: 14px;
+				color: #111111;
+				background: #f2f2f2;
+				margin-left: 18px;
+				margin-top: 60px;
+				margin-bottom: -45px;
+				line-height: 20px;
+			}
+		</style>
+		<script type="text/javascript">
+			var currentpage = 1;
+			var pagesize = 2;
+			var data = {};
+			$(function() {
+				$('.addBb').click(function() {
+					$('.window').show();
+				});
+				$('.window .windowBox').click(function() {
+					$('.window').hide();
+				});
+				$('.xmbbSerachreset').click(function() {
+					$(this).parent().parent().find(".xmbbSerachTypeSelect").val("");
+				});
+				$('.xmbbSerachBtn1').click(function() {
+					currentpage = 1;
+					pagesize = 2;
+					var sort = $(this).attr("name");
+					data = {
+						"projectType": (sort == 1 || sort == 2) ? "HOUSE" : "CITY",
+						"step": (sort == 1 || sort == 3) ? "prophase" : "construction",
+						"projectName": $("#projectName" + sort).val(),
+						"projectTime": $("#projectTime" + sort).val(),
+						"userName": $("#userName" + sort).val()
+					};
+					GetProjectWeekList(currentpage, pagesize, data, sort, "projectList" + sort, $("#fj_page" + sort), true, "/api/project/week/list");
+				});
+				data = {
+					"projectType": "HOUSE",
+					"step": "prophase"
+				}
+				GetProjectWeekList(currentpage, pagesize, data, 2, "projectList2", $("#fj_page2"), true, "/api/project/week/list");
+				data = {
+					"projectType": "HOUSE",
+					"step": "construction"
+				}
+				GetProjectWeekList(currentpage, pagesize, data, 3, "projectList3", $("#fj_page3"), true, "/api/project/week/list");
+				data = {
+					"projectType": "CITY",
+					"step": "prophase"
+				}
+				GetProjectWeekList(currentpage, pagesize, data, 4, "projectList4", $("#fj_page4"), true, "/api/project/week/list");
+				data = {
+					"projectType": "CITY",
+					"step": "construction"
+				}
+				GetProjectWeekList(currentpage, pagesize, data, 5, "projectList5", $("#fj_page5"), true, "/api/project/week/list");
+			})
+		</script>
 	</head>
+
 	<body>
 		<div class="title">
 			<div class="page">
@@ -26,23 +108,35 @@
 				<li>市政在建项目周报表</li>
 			</ul>
 			<div class="xmbbTab" style="display: block;">
-				<a href="030201.html" class="addBb">新增报表</a>
+				<a class="addBb">新增报表</a>
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle">
-						<span>项目名称</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
-					<div class="xmbbSerachTitle">
-						<span>时间</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
+						<span>项目类型</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachTitle">
-						<span>负责人</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<span>项目名称</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachTitle">
-						<span>编号</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
+						<span>工程名称</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>变更类型</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>表单类型</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>费用标准</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>审批状态</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachBtn">
 						<a href="#" class="xmbbSerachBtn1">搜索</a>
@@ -52,195 +146,104 @@
 				<div class="xmbbTable">
 					<table cellpadding="0" cellspacing="0" class="xmbbTable1">
 						<tr>
-							<td colspan="6"></td>
-							<td colspan="4">联系单(实施前)</td>
-							<td colspan="4">联系单(实施后)</td>
-							<td colspan="2"></td>
+							<td width="6%">序号</td>
+							<td width="8">项目类型</td>
+							<td width="11%">项目名称</td>
+							<td width="11%">工程名称</td>
+							<td width="10%">变更类型</td>
+							<td width="10%">表单类型</td>
+							<td width="8%">费用标准(万元)</td>
+							<td width="8%">估算金额(万元)</td>
+							<td width="8%">审批金额(万元)</td>
+							<td width="10%">审批状态</td>
+							<td width="10%">操作</td>
 						</tr>
 						<tr>
-							<td>序号</td>
-							<td>时间</td>
-							<td>工程名称</td>
-							<td>申请单位</td>
-							<td>编号</td>
-							<td>内容</td>
-							<td style="border-left: 1px solid #ccc; border-bottom: 1px solid #ccc;">造价审核人</td>
-							<td style="border-bottom: 1px solid #ccc;">技术审核人</td>
-							<td style="border-bottom: 1px solid #ccc;">申报金额(元)</td>
-							<td style="border-bottom: 1px solid #ccc;">审核后金额(元)</td>
-							<td style="border-left: 1px solid #ccc; border-bottom: 1px solid #ccc;">造价审核人</td>
-							<td style="border-bottom: 1px solid #ccc;">技术审核人</td>
-							<td style="border-bottom: 1px solid #ccc;">申报金额(元)</td>
-							<td style="border-right: 1px solid #ccc; border-bottom: 1px solid #ccc;">审核后金额(元)</td>
-							<td>备注</td>
-							<td>操作</td>
+							<td>1</td>
+							<td>市政</td>
+							<td>南昌县棚户区改造</td>
+							<td>南昌县棚户区改造</td>
+							<td>设计变更</td>
+							<td>确认单</td>
+							<td>
+								<5</td>
+									<td>2</td>
+									<td>2</td>
+									<td>通过</td>
+									<td>
+										<a style="background: #4bb2ff;" href="#">查看</a>
+									</td>
 						</tr>
 						<tr>
-							<td width="50px">1</td>
-							<td width="100px">2017-01-01</td>
-							<td width="150px">南昌县棚户区改造</td>
-							<td width="100px">南昌县城投</td>
-							<td width="100px">00005</td>
-							<td width="150px">内容内容内容内容内容</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="300px">备注备注备注备注备注备注备注备注备注备注</td>
-							<td width="150px">
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
+							<td>1</td>
+							<td>房建</td>
+							<td>南昌县棚户区改造</td>
+							<td>南昌县棚户区改造</td>
+							<td>设计变更</td>
+							<td>确认单</td>
+							<td>
+								<5</td>
+									<td>2</td>
+									<td>2</td>
+									<td>通过</td>
+									<td>
+										<a style="background: #4bb2ff;" href="#">查看</a>
+									</td>
 						</tr>
 						<tr>
-							<td width="50px">1</td>
-							<td width="100px">2017-01-01</td>
-							<td width="150px">南昌县棚户区改造</td>
-							<td width="100px">南昌县城投</td>
-							<td width="100px">00005</td>
-							<td width="150px">内容内容内容内容内容</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="300px">备注备注备注备注备注备注备注备注备注备注</td>
-							<td width="150px">
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>
-						<tr>
-							<td width="50px">1</td>
-							<td width="100px">2017-01-01</td>
-							<td width="150px">南昌县棚户区改造</td>
-							<td width="100px">南昌县城投</td>
-							<td width="100px">00005</td>
-							<td width="150px">内容内容内容内容内容</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="300px">备注备注备注备注备注备注备注备注备注备注</td>
-							<td width="150px">
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>
-						<tr>
-							<td width="50px">1</td>
-							<td width="100px">2017-01-01</td>
-							<td width="150px">南昌县棚户区改造</td>
-							<td width="100px">南昌县城投</td>
-							<td width="100px">00005</td>
-							<td width="150px">内容内容内容内容内容</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="300px">备注备注备注备注备注备注备注备注备注备注</td>
-							<td width="150px">
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>
-						<tr>
-							<td width="50px">1</td>
-							<td width="100px">2017-01-01</td>
-							<td width="150px">南昌县棚户区改造</td>
-							<td width="100px">南昌县城投</td>
-							<td width="100px">00005</td>
-							<td width="150px">内容内容内容内容内容</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="300px">备注备注备注备注备注备注备注备注备注备注</td>
-							<td width="150px">
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>
-						<tr>
-							<td width="50px">1</td>
-							<td width="100px">2017-01-01</td>
-							<td width="150px">南昌县棚户区改造</td>
-							<td width="100px">南昌县城投</td>
-							<td width="100px">00005</td>
-							<td width="150px">内容内容内容内容内容</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">江龙飞</td>
-							<td width="100px">20000000</td>
-							<td width="100px">20000000</td>
-							<td width="300px">备注备注备注备注备注备注备注备注备注备注</td>
-							<td width="150px">
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
+							<td>1</td>
+							<td>市政</td>
+							<td>南昌县棚户区改造</td>
+							<td>南昌县棚户区改造</td>
+							<td>工程签证</td>
+							<td>联系单</td>
+							<td>
+								<5</td>
+									<td>2</td>
+									<td>2</td>
+									<td>通过</td>
+									<td>
+										<a style="background: #4bb2ff;" href="#">查看</a>
+									</td>
 						</tr>
 					</table>
-						<div class="fy">
-							<a href="#">首页</a>
-							<a href="#"><</a>
-							<a href="#">1</a>
-							<a href="#">2</a>
-							<a href="#">3</a>
-							.
-							.
-							.
-							<a href="#">8</a>
-							<a href="#">9</a>
-							<a href="#">10</a>
-							<a href="#">></a>
-							<a href="#">尾页</a>
-						</div>
+					<div class="fy">
+						<a href="#">首页</a>
+						<a href="#">
+							<</a>
+								<a href="#">1</a>
+								<a href="#">2</a>
+								<a href="#">3</a> . . .
+								<a href="#">8</a>
+								<a href="#">9</a>
+								<a href="#">10</a>
+								<a href="#">></a>
+								<a href="#">尾页</a>
+					</div>
 				</div>
 			</div>
 			<div class="xmbbTab">
-				<a href="030202.html" class="addBb">新增报表</a>
+				<a href="030202.html?projectType=HOUSE&step=prophase" class="addBb">新增报表</a>
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle">
 						<span>项目名称</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<input type="text" id="projectName2" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
+						<input type="text" id="projectTime2" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>负责人</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<input type="text" id="userName2" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachBtn">
-						<a href="#" class="xmbbSerachBtn1">搜索</a>
+						<a href="#" name="2" class="xmbbSerachBtn1">搜索</a>
 						<a href="#" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
 				<div class="xmbbTable">
-					<table cellpadding="0" cellspacing="0">
+					<table cellpadding="0" cellspacing="0" id="projectList2">
 						<tr>
 							<td width="50px">序号</td>
 							<td width="100px">时间</td>
@@ -255,149 +258,35 @@
 							<td width="100px">存在问题建议</td>
 							<td width="150px">操作</td>
 						</tr>
-						<tr>
-							<td>1</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户改造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>1</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户改造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>1</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户改造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>1</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>1</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚区改造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>1</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚区改造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						
 					</table>
-						<div class="fy">
-							<a href="#">首页</a>
-							<a href="#"><</a>
-							<a href="#">1</a>
-							<a href="#">2</a>
-							<a href="#">3</a>
-							.
-							.
-							.
-							<a href="#">8</a>
-							<a href="#">9</a>
-							<a href="#">10</a>
-							<a href="#">></a>
-							<a href="#">尾页</a>
-						</div>
+					<!--<div class="fy">这里是分页</div>-->
+					<div class="page_div fy" id="fj_page2">
+
+					</div>
 				</div>
 			</div>
 			<div class="xmbbTab">
-				<a href="030203.html" class="addBb">新增报表</a>
+				<a href="030203.html?projectType=HOUSE&step=construction" class="addBb">新增报表</a>
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle">
 						<span>项目名称</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<input type="text" id="projectName3" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
+						<input type="text" id="projectTime3" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>负责人</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<input type="text" id="userName3" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachBtn">
-						<a href="#" class="xmbbSerachBtn1">搜索</a>
+						<a href="#" name="3" class="xmbbSerachBtn1">搜索</a>
 						<a href="#" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
 				<div class="xmbbTable">
-					<table cellpadding="0" cellspacing="0">
+					<table cellpadding="0" cellspacing="0" id="projectList3">
 						<tr>
 							<td width="50px">序号</td>
 							<td width="100px">时间</td>
@@ -412,149 +301,35 @@
 							<td width="100px">存在问题建议</td>
 							<td width="150px">操作</td>
 						</tr>
-						<tr>
-							<td>2</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>2</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>2</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>2</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>2</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>2</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						
 					</table>
-						<div class="fy">
-							<a href="#">首页</a>
-							<a href="#"><</a>
-							<a href="#">1</a>
-							<a href="#">2</a>
-							<a href="#">3</a>
-							.
-							.
-							.
-							<a href="#">8</a>
-							<a href="#">9</a>
-							<a href="#">10</a>
-							<a href="#">></a>
-							<a href="#">尾页</a>
-						</div>
+					<!--<div class="fy">这里是分页</div>-->
+					<div class="page_div fy" id="fj_page3">
+
+					</div>
 				</div>
 			</div>
 			<div class="xmbbTab">
-				<a href="030204.html" class="addBb">新增报表</a>
+				<a href="030204.html?projectType=CITY&step=prophase" class="addBb">新增报表</a>
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle">
 						<span>项目名称</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<input type="text" id="projectName4" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
+						<input type="text" id="projectTime4" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>负责人</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<input type="text" id="userName4" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachBtn">
-						<a href="#" class="xmbbSerachBtn1">搜索</a>
+						<a href="#" name="4" class="xmbbSerachBtn1">搜索</a>
 						<a href="#" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
 				<div class="xmbbTable">
-					<table cellpadding="0" cellspacing="0">
+					<table cellpadding="0" cellspacing="0" id="projectList4">
 						<tr>
 							<td width="50px">序号</td>
 							<td width="100px">时间</td>
@@ -569,149 +344,35 @@
 							<td width="100px">存在问题建议</td>
 							<td width="150px">操作</td>
 						</tr>
-						<tr>
-							<td>3</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>3</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>3</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>3</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>3</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>3</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						
 					</table>
-						<div class="fy">
-							<a href="#">首页</a>
-							<a href="#"><</a>
-							<a href="#">1</a>
-							<a href="#">2</a>
-							<a href="#">3</a>
-							.
-							.
-							.
-							<a href="#">8</a>
-							<a href="#">9</a>
-							<a href="#">10</a>
-							<a href="#">></a>
-							<a href="#">尾页</a>
-						</div>
+					<!--<div class="fy">这里是分页</div>-->
+					<div class="page_div fy" id="fj_page4">
+
+					</div>
 				</div>
 			</div>
 			<div class="xmbbTab">
-				<a href="030205.html" class="addBb">新增报表</a>
+				<a href="030205.html?projectType=CITY&step=construction" class="addBb">新增报表</a>
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle">
 						<span>项目名称</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<input type="text" id="projectName5" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
+						<input type="text" id="projectTime5" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>负责人</span>
-						<input type="text" class="xmbbSerachTypeSelect"  />
-					</div>	
+						<input type="text" id="userName5" class="xmbbSerachTypeSelect" />
+					</div>
 					<div class="xmbbSerachBtn">
-						<a href="#" class="xmbbSerachBtn1">搜索</a>
+						<a href="#" name="5" class="xmbbSerachBtn1">搜索</a>
 						<a href="#" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
 				<div class="xmbbTable">
-					<table cellpadding="0" cellspacing="0">
+					<table cellpadding="0" cellspacing="0" id="projectList5">
 						<tr>
 							<td width="50px">序号</td>
 							<td width="100px">时间</td>
@@ -726,127 +387,26 @@
 							<td width="100px">存在问题建议</td>
 							<td width="150px">操作</td>
 						</tr>
-						<tr>
-							<td>4</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户改造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>4</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户改造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>4</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户改造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>4</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>4</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						<tr>
-							<td>4</td>
-							<td>2017-01-04</td>
-							<td>南昌县棚户区改造</td>
-							<td>江龙飞</td>
-							<td>南昌县棚户区</td>
-							<td>南昌县棚户区造</td>
-							<td>拆迁</td>
-							<td>拆完</td>
-							<td>未完成</td>
-							<td>拆完</td>
-							<td>有钉子户</td>
-							<td>
-								<a style="background: #4bb2ff;" href="#">查看</a>
-								<a style="background: #ff0000;" href="#">修改</a>
-							</td>
-						</tr>	
-						
 					</table>
-						<div class="fy">
-							<a href="#">首页</a>
-							<a href="#"><</a>
-							<a href="#">1</a>
-							<a href="#">2</a>
-							<a href="#">3</a>
-							.
-							.
-							.
-							<a href="#">8</a>
-							<a href="#">9</a>
-							<a href="#">10</a>
-							<a href="#">></a>
-							<a href="#">尾页</a>
-						</div>
+					<!--<div class="fy">这里是分页</div>-->
+					<div class="page_div fy" id="fj_page5">
+
+					</div>
 				</div>
 			</div>
-		</div>		
+		</div>
+		<div class="window">
+			<div class="windowBox">
+				<a href="03020001.html">设计变更联系单（单项设计变更费用＜5万元）</a>
+				<a href="03020002.html">设计变更联系单（单项设计变更费用≥5万元）</a>
+				<a href="03020003.html">设计变更确认单（单项设计变更费用＜5万元）</a>
+				<a href="03020004.html">设计变更确认单（单项设计变更费用≥5万元）</a>
+				<a href="03020005.html">工程签证联系单（单项签证变更费用＜5万元）</a>
+				<a href="03020006.html">工程签证联系单 （单项签证变更费用≥5万元）</a>
+				<a href="03020007.html">工程签证确认单 （单项签证变更费用＜5万元）</a>
+				<a href="03020008.html">工程签证确认单（单项签证变更费用≥5万元）</a>
+			</div>
+		</div>
 	</body>
+
 </html>

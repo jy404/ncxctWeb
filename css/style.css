@@ -194,6 +194,23 @@ header .headNav span.logout {
 
 header .headNav span.myUrse {
 	background: url(../img/myUrse.png) no-repeat left center;
+	position: relative;
+}
+header .headNav span.myUrse b{
+	display: block;
+	width: 20px;
+	height: 20px;
+	background: red;
+	position: absolute;
+	left: -12px;
+	bottom: 2px;
+	border-radius: 15px;
+	text-align: center;
+	line-height: 20px;
+	color: #ffffff;
+	font-size: 12px;
+	text-decoration: none;
+	z-index: 11111;
 }
 
 .title {
@@ -1499,7 +1516,6 @@ header .headNav span.myUrse {
 
 .xmbb .xmbbTab .xmbbTable .xmbbTable1 {
 	width: 100%;
-	min-width: 1900px;
 }
 
 .xmbb .xmbbTab .xmbbTable table tr {
@@ -1686,7 +1702,6 @@ header .headNav span.myUrse {
 .gcqzsj .gcqzsjContent,
 .gcqzsj .gcqzsjBottom {
 	width: 900px;
-	border-bottom: 5px solid #DFDFDF;
 	overflow: hidden;
 	color: #111111;
 	font-size: 14px;
@@ -1712,7 +1727,7 @@ header .headNav span.myUrse {
 .gcqzsjLong span {
 	display: block;
 	float: left;
-	width: 110px;
+	width: 125px;
 	height: 35px;
 	line-height: 35px;
 	text-align: right;
@@ -1763,10 +1778,10 @@ header .headNav span.myUrse {
 }
 
 .gcqzsj .cwbbTxBtn div {
-	width: 300px;
 	height: 35px;
 	overflow: hidden;
-	margin: 0 auto;
+	margin: 0 0 0 265px;
+	
 }
 
 .gcqzsj .cwbbTxBtn a {
@@ -1778,6 +1793,7 @@ header .headNav span.myUrse {
 	line-height: 35px;
 	font-size: 14px;
 	color: #ffffff;
+	margin-left: 15px;
 }
 
 
@@ -2895,9 +2911,8 @@ header .headNav span.myUrse {
 	width: 700px;
 	margin: 15px auto;
 	overflow: scroll;
-	height: 400px;
+    height: 400px;
 }
-
 .window .windowBox ul li {
 	width: 32%;
 	font-size: 14px;
@@ -3813,17 +3828,14 @@ header .headNav span.myUrse {
 
 
 /****************附件样式************************/
-
-.fjStyle {
+.fjStyle{
 	margin-left: 190px;
 	margin-top: -57px;
 }
-
-.files div {
+.files div{
 	float: left;
 	margin-right: 15px;
 }
-
 .tzgg .addBb {
 	display: block;
 	width: 110px;
@@ -3837,3 +3849,58 @@ header .headNav span.myUrse {
 	border-radius: 5px;
 	margin: 15px 0;
 }
+.spjl{
+	border: 2px solid #4bb2ff; 
+	width: 754px; 
+	padding: 8px 0; 
+	margin-bottom: 10px;
+	float: left;
+	margin-left: 5px;
+}
+.spjl h2{
+	font-size: 20px; 
+	color: #4bb2ff; 
+	padding-bottom: 15px; 
+	margin-left: 15px;
+}
+.spjlBox{
+	width: 600px; 
+	float: left; 
+	margin: 8px 0 0 24px;
+	line-height: 20px;
+}
+.spjlBox i{
+	font-size: 14px;
+	color: #C6C6C6;
+	font-style: normal;
+	margin-left:15px;
+	float: right;
+	margin-top: 3px;
+}
+.gcqzsjLong input[type='radio']{
+	margin-right: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -26,8 +26,6 @@
 		<script src="js/jquery.fileupload.js"></script>
 		<script src="js/jquery.fileupload-process.js"></script>
 		<script src="js/jquery.fileupload-image.js"></script>
-		<script src="js/jquery.fileupload-audio.js"></script>
-		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<style>
@@ -48,14 +46,14 @@
 		</style>
 
 		<script type="text/javascript">
-			var action, orgCategory, orgType, id
+			var action, orgCategory, orgType, id, personCount = 0;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
 				action = $.getUrlParam("action");
 				orgCategory = $.getUrlParam("orgCategory");
-				orgType = $.getUrlParam("orgType");
+				orgType = "OUT"; //$.getUrlParam("orgType");
 				id = $.getUrlParam("id");
 				if (action != "" && action != undefined) {
 					SetData(id)
@@ -69,6 +67,15 @@
 				}
 				$('#saveBtn').click(function() {
 					SubmitData()
+				});
+				$("#addPersonBtn").click(function() {
+					var selectJobType = $("#selJobType").val();
+					var selectJobTypeName = $("#selJobType").find("option:selected").text();
+					if (selectJobType != undefined && selectJobType != "") {
+						CreateHTML(selectJobType, selectJobTypeName);
+					} else {
+						Toast.Warning("错误", "请选择职位类型~", 'top-center', 'left');
+					}
 				});
 			});
 
@@ -98,8 +105,22 @@
 			}
 
 			function SubmitData() {
+				var proOrgExtensions = [];
+				if (personCount > 0) {
+					for (i = 0; i <= personCount - 1; i++) {
+						var personinfo = {
+							"idCardUrl": $("#fileurl_uploader_idCardUrl_" + i).val(),
+							"jobTitleType": $("#jobType_" + i).val(),
+							"proQuaCertificateUrl": $("#fileurl_uploader_proQuaCertificateUrl_" + i).val(),
+							"staffName": $("#staffName_" + i).val(),
+							"staffTel": $("#staffTel_" + i).val(),
+							"titleCertificateUrl": $("#fileurl_uploader_titleCertificateUrl_" + i).val()
+						};
+						proOrgExtensions.push(personinfo);
+					}
+				}
 				var data = {
-					"proOrgExtensions": [],
+					"proOrgExtensions": proOrgExtensions,
 					"projectOrg": {
 						"address": $("#address").val(),
 						"chargeProject": $("#chargeProject").val(),
@@ -119,29 +140,45 @@
 					data["projectOrg"]["id"] = id;
 				meetAdd('/api/proorg/save', JSON.stringify(data));
 			}
-			var count=0;
-			function CreateHTML() {
-				html = "<div class='lfjqqzbbBox1'>";
+
+			function CreateHTML(jobTitleType, selectJobTypeName) {
+				html = "<hr style='background:#4bb2ff; width: 100%; height: 3px;' />";
+				html += "<div class='lfjqqzbbBox1'>";
 				html += "<div class='lfjqqzbbBox1Left'>";
-				html += "<span>职位：<input type='hidden'></input></span>";
-				html += "</div>";
-				html += "<div class='lfjqqzbbBox1Left'>";
-				html += "<span>员工姓名：</span>";
-				html += "<input type='text' />";
+				html += "<span>职位：<input type='hidden' id='jobType_" + personCount + "' value='" + jobTitleType + "'></input></span>" + selectJobTypeName;
 				html += "</div>";
 				html += "<div class='lfjqqzbbBox1Right'>";
-				html += "<span>员工联系电话：</span>";
-				html += "<input type='text' />";
+				html += "<span>员工姓名：</span>";
+				html += "<input type='text' id='staffName_" + personCount + "' />";
 				html += "</div>";
 				html += "<div class='lfjqqzbbBox1Left'>";
+				html += "<span>员工联系电话：</span>";
+				html += "<input type='text' id='staffTel_" + personCount + "' />";
+				html += "</div>";
+				html += "<div class='lfjqqzbbBox1Right'>";
+				html += "<span>身份证附件：</span>";
+				html += "<div id='uploader_idCardUrl_" + personCount + "' class='fjStyle'>";
+				html += "</div>";
+				html += "</div>";
+				html += "<div class='lfjqqzbbBox1Right'>";
 				html += "<span>职业资格证：</span>";
-				html += "<input type='text' />";
+				html += "<div id='uploader_proQuaCertificateUrl_" + personCount + "' class='fjStyle'>";
+				html += "</div>";
 				html += "</div>";
 				html += "<div class='lfjqqzbbBox1Left'>";
 				html += "<span>职称证书：</span>";
-				html += "<input type='text' />";
+				html += "<div id='uploader_titleCertificateUrl_" + personCount + "' class='fjStyle'>";
 				html += "</div>";
 				html += "</div>";
+				html += "</div>";
+				$("#div_personinfo").append(html);
+				upload.init("uploader_proQuaCertificateUrl_" + personCount, "添加附件...");
+				UploadProcess("uploader_proQuaCertificateUrl_" + personCount);
+				upload.init("uploader_titleCertificateUrl_" + personCount, "添加附件...");
+				UploadProcess("uploader_titleCertificateUrl_" + personCount);
+				upload.init("uploader_idCardUrl_" + personCount, "添加附件...");
+				UploadProcess("uploader_idCardUrl_" + personCount);
+				personCount++;
 			}
 		</script>
 	</head>
@@ -243,30 +280,7 @@
 					<a href="#" id="addPersonBtn" class="btnOk">确定</a>
 				</div>
 			</div>
-
-			<div class="lfjqqzbbBox1">
-				<div class="lfjqqzbbBox1Left">
-					<span>职位：<input type="hidden"></input></span>
-				</div>
-				<div class="lfjqqzbbBox1Left">
-					<span>员工姓名</span>
-					<input type="text" />
-				</div>
-				<div class="lfjqqzbbBox1Right">
-					<span>员工联系电话：</span>
-					<input type="text" />
-				</div>
-				<div class="lfjqqzbbBox1Left">
-					<span>职业资格证</span>
-					<input type="text" />
-				</div>
-				<div class="lfjqqzbbBox1Left">
-					<span>职称证书</span>
-					<input type="text" />
-				</div>
-			</div>
-			<script>
-			</script>
+			<div id="div_personinfo"></div>
 
 			<a href="#" id="saveBtn" class="lfjqqzbbBottom">保存</a>
 		</div>

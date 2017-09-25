@@ -10,7 +10,7 @@ $(function() {
 function getOsstoken() {
 
 	$.ajax({
-		url: 'http://139.196.72.104:8082/api/oss/token?time=' + new Date().getMilliseconds().toString(),
+		url: domain + '/api/oss/token?time=' + new Date().getMilliseconds().toString(),
 		type: "GET",
 		data: {},
 		processData: false,

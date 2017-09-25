@@ -2,10 +2,25 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>文档管理内页</title>
+		<title>文档管理</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<style>
+			.addBtn{
+				    display: block;
+				    width: 110px;
+				    height: 35px;
+				    line-height: 35px;
+				    text-align: center;
+				    padding-left: 15px;
+				    background: #fe7c54 url(img/add.png) no-repeat 15px center;
+				    font-size: 14px;
+				    color: #FFFFFF;
+				    border-radius: 5px;
+				    margin: 15px 0;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="title">
@@ -13,106 +28,141 @@
 				<b>当前位置：</b>
 				<span>> 首页</span>
 				<span>> 文档管理</span>
-				<span>> 管理制度</span>
 			</div>
 		</div>
-		<div class="fjxm">
-			<h2 class="fjxmTitle">管理制度</h2>
-			<a href="0402.html" target="bodyRight" class="addBb">添加新制度</a>
-			<div class="fjxmSerach">			
-				<div class="fjxmSerachList">
-					<div class="fjxmSerachTitle">
-						<span>项目名称</span>
-						<input type="text" class="fjxmSerachTypeSelect"  />
+		<div class="xxtz">
+			<h2 class="xxtzTitle">文档管理</h2>
+			<ul class="xxtzTabList">
+				<li class="xxtzTabSelect">文件夹</li>
+				<li>文件</li>
+			</ul>
+			<div class="xxtzTab" style="display: block;">
+				<a href="#" class="addBtn" style="margin-left: 25px;">新增文件夹</a>
+				<table cellpadding="0" cellspacing="0" class="wdxx">
+					<ul class="lwdgg">
+						<li>
+							<a href="0401.html">
+								<img src="img/wdgl.png" />
+								<span>A管理制度</span>	
+							</a>
+						</li>
+						<li>
+							<a href="0401.html">
+								<img src="img/wdgl.png" />
+								<span>A管理制度</span>	
+							</a>						
+						</li>
+						<li>
+							<a href="0401.html">
+								<img src="img/wdgl.png" />
+								<span>A管理制度</span>	
+							</a>								
+						</li>
+						<li>
+							<a href="0401.html">
+								<img src="img/wdgl.png" />
+								<span>A管理制度</span>	
+							</a>								
+						</li>
+					</ul>
+				</table>
+			</div>
+			
+			<div class="xxtzTab">
+				<div class="fjxm">						
+					<a href="0402.html" class="addBtn">新增文件</a>
+					<div class="fjxmSerach" style="margin-top: 15px;">
+						<div class="fjxmSerachList">
+							<div class="fjxmSerachTitle">
+								<span>上传人</span>
+								<input type="text" class="fjxmSerachTypeSelect"  />
+							</div>
+							<div class="fjxmSerachTitle">
+								<span>上传时间</span>
+								<input type="text" class="fjxmSerachTypeSelect"  />
+							</div>
+							<div class="fjxmSerachTitle">
+								<span>标题</span>
+								<input type="text" class="fjxmSerachTypeSelect"  />
+							</div>	
+						</div>											
+						<div class="fjxmSerachBtn">
+							<a href="#" class="fjxmSerachBtn1">搜索</a>
+							<a href="#" class="fjxmSerachreset">清空</a>
+						</div>
 					</div>
-					<div class="fjxmSerachTitle">
-						<span>上传人</span>
-						<input type="text" class="fjxmSerachTypeSelect"  />
+					<div class="fjxmTable">
+						<table cellpadding="0" cellspacing="0">
+							<tr>
+								<td width="10%">序号</td>
+								<td width="20%">上传人</td>
+								<td width="20%">上传时间</td>
+								<td width="30%">标题</td>
+								<td width="20%">操作</td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>江龙飞</td>
+								<td>2017-02-03</td>
+								<td>销售部人员奖赏制度</td>
+								<td>
+									<a style="background: #33cc00 ;">预览</a>
+									<a style="background: #4bb2ff ;">下载</a>
+									<a style="background: #ff0000;">修改</a>
+								</td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>江龙飞</td>
+								<td>2017-02-03</td>
+								<td>销售部人员奖赏制度</td>
+								<td>
+									<a style="background: #33cc00 ;">预览</a>
+									<a style="background: #4bb2ff ;">下载</a>
+									<a style="background: #ff0000;">修改</a>
+								</td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>江龙飞</td>
+								<td>2017-02-03</td>
+								<td>销售部人员奖赏制度</td>
+								<td>
+									<a style="background: #33cc00 ;">预览</a>
+									<a style="background: #4bb2ff ;">下载</a>
+									<a style="background: #ff0000;">修改</a>
+								</td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>江龙飞</td>
+								<td>2017-02-03</td>
+								<td>销售部人员奖赏制度</td>
+								<td>
+									<a style="background: #33cc00 ;">预览</a>
+									<a style="background: #4bb2ff ;">下载</a>
+									<a style="background: #ff0000;">修改</a>
+								</td>
+							</tr>
+						</table>				
 					</div>
-					<div class="fjxmSerachTitle">
-						<span>上传时间</span>
-						<input type="text" class="fjxmSerachTypeSelect"  />
+					<div class="fy">
+						<a href="#">首页</a>
+						<a href="#"><</a>
+						<a href="#">1</a>
+						<a href="#">2</a>
+						<a href="#">3</a>
+						.
+						.
+						.
+						<a href="#">8</a>
+						<a href="#">9</a>
+						<a href="#">10</a>
+						<a href="#">></a>
+						<a href="#">尾页</a>
 					</div>
-					<div class="fjxmSerachTitle">
-						<span>标题</span>
-						<input type="text" class="fjxmSerachTypeSelect"  />
-					</div>	
-				</div>											
-				<div class="fjxmSerachBtn">
-					<a href="#" class="fjxmSerachBtn1">搜索</a>
-					<a href="#" class="fjxmSerachreset">清空</a>
 				</div>
 			</div>
-			<div class="fjxmTable">
-				<table cellpadding="0" cellspacing="0">
-					<tr>
-						<td width="10%">序号</td>
-						<td width="20%">上传人</td>
-						<td width="20%">上传时间</td>
-						<td width="30%">标题</td>
-						<td width="20%">操作</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>江龙飞</td>
-						<td>2017-02-03</td>
-						<td>销售部人员奖赏制度</td>
-						<td>
-							<a style="background: #33cc00 ;">预览</a>
-							<a style="background: #4bb2ff ;">下载</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>江龙飞</td>
-						<td>2017-02-03</td>
-						<td>销售部人员奖赏制度</td>
-						<td>
-							<a style="background: #33cc00 ;">预览</a>
-							<a style="background: #4bb2ff ;">下载</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>江龙飞</td>
-						<td>2017-02-03</td>
-						<td>销售部人员奖赏制度</td>
-						<td>
-							<a style="background: #33cc00 ;">预览</a>
-							<a style="background: #4bb2ff ;">下载</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>江龙飞</td>
-						<td>2017-02-03</td>
-						<td>销售部人员奖赏制度</td>
-						<td>
-							<a style="background: #33cc00 ;">预览</a>
-							<a style="background: #4bb2ff ;">下载</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
-				</table>				
-			</div>
-			<div class="fy">
-				<a href="#">首页</a>
-				<a href="#"><</a>
-				<a href="#">1</a>
-				<a href="#">2</a>
-				<a href="#">3</a>
-				.
-				.
-				.
-				<a href="#">8</a>
-				<a href="#">9</a>
-				<a href="#">10</a>
-				<a href="#">></a>
-				<a href="#">尾页</a>
-			</div>
-		</div>			
+		</div>		
 	</body>
 </html>

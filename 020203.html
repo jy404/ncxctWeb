@@ -8,6 +8,7 @@
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/jquery.fileupload.css">
+			<link type="text/css" rel="stylesheet" href="css/commen.css" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -26,29 +27,284 @@
 		<script src="js/jquery.fileupload.js"></script>
 		<script src="js/jquery.fileupload-process.js"></script>
 		<script src="js/jquery.fileupload-image.js"></script>
-		<script src="js/jquery.fileupload-audio.js"></script>
-		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
-		
+		<script type="text/javascript" src="js/editor/kindeditor-min.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript" src="js/core.js"></script>
+		<script type="text/javascript" src="js/client.js"></script>
+		<script src="js/messageboxnotitle.js" type="text/javascript"></script>
+		<script type="text/javascript" src="js/drag_v1.0.js"></script>
+		<script type="text/javascript">
+			var Id, file=[], action;
+			$(function() {
+				$.ajaxSettings.async = false;
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				//upload.init("uploader2", "添加附件...");
+				//UploadProcess("uploader2");
+				SelectUserList("txtUserIds");
+				action = $.getUrlParam("action");
+				Id = $.getUrlParam("id");
+				//action = "edit";
+				//Id = 1;
+				if (action != "" && action != undefined) {
+					SetData(Id)
+				}
+				//判断编辑或者查看
+				$('.szxmTjPageLeftFormBtn1').click(function() {
+					SubmitData(1)
+				});
+				$('.szxmTjPageRightFormBtn1').click(function() {
+					SubmitData(2)
+				});
+				$('.tzggSerachTypeSelect h2').click(function() {
+					$('.tzggSerachTypeSelect ul').toggle();
+				});
+				$(' .tzggSerachTypeSelect ul li').click(function() {
+					$('.tzggSerachTypeSelect ul').hide();
+				});
+				$('.noticeUl li').click(function() {
+					$("#noticeType")[0].innerHTML = $(this)[0].innerHTML;
+					$("#noticeTypeValue").val($(this)[0].title);
+				});
+				//初始化编辑器
+				var editorMini = KindEditor.create('.editor-mini', {
+					width: '60%',
+					height: '250px',
+					resizeType: 1,
+					items: [
+						'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+						'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+						'insertunorderedlist'
+					],
+					afterBlur: function() {
+						//编辑器失去焦点时直接同步，可以取到值
+						this.sync();
+					}
+				});
+			});
+
+			function SetData(Id) {
+				$.getJSON(
+					domain + "/api/noticeTmp/" + Id,
+					function(res) {
+						if (res["code"] == "0") {
+							$('#title').val(res["result"]["title"]);
+							$('#noticeType').val(res["result"]["noticeType"]);
+							$('#content').val(res["result"]["content"]);
+							file = res["result"]["attachments"];
+							var fileurl = "";
+							for (var filecnt = 0; filecnt < file.length; filecnt++) {
+								fileurl += file[filecnt]["url"] + ";";
+							}
+							//fileurl = fileurl.substring(0, fileurl.length - 1);
+							upload.show(fileurl, "files_uploader1");
+							var unitIds = res["result"]["user"];
+							SetUserList(unitIds, "txtUserIds");
+							Id = res["result"]["id"];
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var title = $('#title').val();
+				var noticeType = $('#noticeTypeValue').val();
+				var content = $('#content').val();
+				//$("#files_uploader1 span")[0].innerHTML;
+				/*
+				var unitIds = [];
+				var UnitList = $("#txtUserIds").attr("data-id");
+				if (UnitList != "" || UnitList != undefined) {
+					var constructionUnitList = UnitList.split("-");
+					unitIds = constructionUnitList.map(function(data) {
+						return +data;
+					});
+				} else {
+					Toast.Err("错误", "请选择接收人员~", 'top-center', 'left')
+				}
+				*/
+				var userIds = [];
+				var id_span = $("#RegionJobBusinessTag").find("span");
+				if (id_span.length == 0) {
+					Toast.Err('错误', '请选择接收人员~', 'top-center', 'left');
+					return false;
+				}
+				$.each(id_span, function() {
+					var userid = $(this).attr("id").split("_")[0];
+					userIds.push(parseInt(userid));
+				});
+				var data = {
+					"title": title,
+					"noticeType": noticeType,
+					"content": content,
+					"attachments": [],
+					"user": {
+						"userIds": userIds
+					}
+				}
+				if ($("#files_uploader1 span").length > 0) {
+					var fileurls = $('#fileurl_uploader1').val().split(';');
+					for (var cnt = 0; cnt < $("#files_uploader1 span").length; cnt++) {
+						if (cnt < file.length) {
+							data["attachments"][cnt] = {
+								id: file[cnt]["id"],
+								name: $("#files_uploader1 span")[cnt].innerHTML,
+								url: fileurls[cnt]
+							};
+						} else {
+							data["attachments"][cnt] = {
+								name: $("#files_uploader1 span")[cnt].innerHTML,
+								url: fileurls[cnt]
+							};
+						}
+					}
+				}
+				if (action == "edit") {
+					data["id"] = Id;
+				}
+				if (status == 2)
+					meetAdd('/api/notice/send', JSON.stringify(data), "0202.html");
+				else
+					meetAdd('/api/notice/save', JSON.stringify(data));
+			}
+		</script>
+		<style type="text/css">
+			.szxmTjPageLeftFormBtn1 {
+				display: block;
+				float: left;
+				width: 150px;
+				height: 35px;
+				background: #4bb2ff;
+				border-radius: 5px;
+				color: #ffffff;
+				text-align: center;
+				line-height: 35px;
+				font-size: 14px;
+				margin: 30px 0 20px 200px;
+			}
+			
+			.szxmTjPageRightFormBtn1 {
+				float: left;
+				margin-left: 40px;
+			}
+			
+			.tzggSerachTypeSelect {
+				float: left;
+				width: 380px;
+				height: 35px;
+				line-height: 35px;
+				border: 1px solid #cbcbcb;
+				position: relative;
+				background: url(img/tzggBg.png) no-repeat 97% center;
+				cursor: pointer;
+				margin-left: 5px;
+			}
+			
+			.tzggSerachTypeSelect h2 {
+				margin: 0px;
+				width: 100%;
+				height: 35px;
+				line-height: 35px;
+				color: #666666;
+				font-size: 14px;
+				padding-left: 10px;
+				font-weight: normal;
+			}
+			
+			.tzggSerachTypeSelect ul {
+				width: 380px;
+				position: absolute;
+				z-index: 11;
+				background: #ffffff;
+				left: -1px;
+				top: 34px;
+				display: none;
+			}
+			
+			.tzggSerachTypeSelect ul li {
+				width: 100%;
+				height: 30px;
+				line-height: 30px;
+				color: #666666;
+				border: 1px solid #cbcbcb;
+				font-size: 14px;
+				padding-left: 10%;
+				border-top: none;
+			}
+			
+			span.ke-outline {
+				width: 24px !important;
+				height: 19px !important;
+			}
+			
+			.ke-statusbar {
+				width: 100% !important;
+				height: 15px !important;
+			}
+			
+			.ke-statusbar-center-icon {
+				width: 100% !important;
+			}
+		</style>
 	</head>
 
 	<body>
 		<h2 class="szTitle">发布公告</h2>
 		<div class="szxmTjPageRightForm">
 			<span>标题：</span>
-			<input type="text" id="projectName" />
+			<input type="text" id="title" />
 		</div>
-		<div class="szxmTjPageRightForm">
+		<div class="szxmTjPageRightForm" style="overflow: initial;">
 			<span>公告类型：</span>
-			<input type="text" id="projectName" />
+			<div class="tzggSerachTypeSelect">
+				<h2 id="noticeType">通知</h2>
+				<input id="noticeTypeValue" value="inform" style="display: none;" />
+				<ul class="noticeUl">
+					<li title="inform">通知</li>
+					<li title="decision">决定</li>
+				</ul>
+			</div>
+		</div>
+		<div class="szxmTjPageRightForm" style="margin-top: 80px;">
+			<span>附件：</span>
+		</div>
+		<div id="uploader1" class="fjStyle">
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+			<span>附件2：</span>
+		</div>
+		<div id="uploader2" class="fjStyle">
+		</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>接收人员：</span>
+			<!--<div id="txtUserIds"></div>-->
+			<div id="RegionJobBusinessTag" style="display:none"></div>
+			<input id="ApplicationDirection" readonly type="text" onkeypress="javascript:return false;" onclick="selectJobBusinessTag()" />
+			<script type="text/javascript">
+				function selectJobBusinessTag() {
+					window.m = new MessageBox(null, "");
+					m.CloseButtonValue = "";
+					m.Title = "";
+					m.InnerDivHeight = 350;
+					m.InnerDivWidth = 683;
+					m.ShowIframeDialog("data.html");
+				}
+			</script>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>编辑公告：</span>
-			<textarea style="height: 200px;"></textarea>
+			<textarea id="content" class="editor-mini"></textarea>
 		</div>
-		<a href="#" class="szxmTjPageRightFormBtn1">提交</a>
-
+		<a href="#" class="szxmTjPageLeftFormBtn1">保存</a>
+		<a href="#" class="szxmTjPageRightFormBtn1">发布</a>
 		</div>
 	</body>
 

@@ -7,6 +7,7 @@
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link type="text/css" rel="stylesheet" href="css/commen.css" />
+		
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -19,8 +20,24 @@
 		<script type="text/javascript" src="js/client.js"></script>
 		<script src="js/messageboxnotitle.js" type="text/javascript"></script>
 		<script type="text/javascript" src="js/drag_v1.0.js"></script>
-
+		<link rel="stylesheet" href="js/editor/themes/default/default.css" />
+		<script type="text/javascript" src="js/editor/kindeditor-min.js"></script>
+		<style>
+			span.ke-outline {
+				width: 24px !important;
+				height: 19px !important;
+			}
+			
+			.ke-statusbar {
+				width: 100% !important;
+				height: 15px !important;
+			}
+			.ke-statusbar-center-icon{
+				width: 100% !important;
+			}
+		</style>
 		<script type="text/javascript">
+			var id = 0;
 			var currentpage = 1;
 			var pagesize = 3;
 			var read = false;
@@ -28,8 +45,86 @@
 				GetMessage(1, pagesize, false, "unread", $("#unread_page"), true, "/api/message/list");
 				GetMessage(1, pagesize, true, "hasread", $("#hasread_page"), true, "/api/message/list");
 				GetMessage(1, pagesize, 2, "hassend", $("#hassend_page"), true, "/api/sended/message/list");
-				GetMessage(1, pagesize, 1, "nosend", null, true, "/api/sended/message/list");
+				GetMessage(1, 999, 1, "nosend", null, true, "/api/sended/message/list");
+				$("#saveBtn").click(function() {
+					SubmitData(1);
+				});
+				$("#sendBtn").click(function() {
+					SubmitData(2);
+				});
+				//初始化编辑器
+				var editorMini = KindEditor.create('.editor-mini', {
+					width: '60%',
+					height: '250px',
+					resizeType: 1,
+					items: [
+						'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+						'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+						'insertunorderedlist'
+					],
+					afterBlur: function() {
+						//编辑器失去焦点时直接同步，可以取到值
+						this.sync();
+					}
+				});
 			})
+
+			function SetMsgContent(msgId) {
+				$.getJSON(
+					domain + '/api/messagetmp/' + msgId,
+					function(res) {
+						if (res["code"] == 0) {
+							var html = "";
+							$("#title").val(res["result"]["title"]);
+							$("#content").val(res["result"]["content"]);
+							/*
+							$.each(res["result"]["user"]["userIds"], function(i, userid) {
+								var html = "<span ty='r' id='" + userid + "_ed'><a href='#'>" + res["result"]["user"]["names"][i] + "</a><input type='button' onclick='del(" + userid + ") name='selectedCity' id='" + userid + "_ch' class='city_det'></span>"
+								$("#RegionJobBusinessTag").append(html);
+							});
+							*/
+							id = res["result"]["id"];
+						} else
+							Toast.Err('错误', res["description"], 'top-center', 'left');
+					},
+					function(xhr, text) {
+						if (xhr.status == "401")
+							top.location.href = "login.html";
+						Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var title = $("#title").val();
+				var content = $("#content").val();
+				var userIds = [];
+				var id_span = $("#RegionJobBusinessTag").find("span");
+				if (id_span.length == 0) {
+					Toast.Err('错误', '请选择接收人员~', 'top-center', 'left');
+					return false;
+				}
+				$.each(id_span, function() {
+					var userid = $(this).attr("id").split("_")[0];
+					userIds.push(parseInt(userid));
+				});
+				var data = {
+					"content": content,
+					"title": title,
+					"user": {
+						"userIds": userIds
+					}
+				};
+				var api_url = "";
+				if (status == 1)
+					api_url = "/api/message/save";
+				else {
+					api_url = "/api/message/send";
+					if (id != 0)
+						data["id"] = id;
+				}
+				meetAdd(api_url, JSON.stringify(data));
+			}
 		</script>
 	</head>
 
@@ -99,18 +194,21 @@
 						</tr>
 
 					</table>
+					<div class="page_div fy" id="nosend_page">
+
+					</div>
 				</div>
 				<div class="xzxx">
 					<h2>消息内容</h2>
 					<div>
 						<h3>消息标题</h3>
-						<input type="text" />
+						<input type="text" id="title" />
 					</div>
 					<div>
 						<h3>接收人员</h3>
 						<div class="topnav">
 							<div id="RegionJobBusinessTag" style="display:none"></div>
-							<input id="ApplicationDirection" readonly type="text" onkeypress="javascript:return false;" onclick="selectJobBusinessTag()"/>
+							<input id="ApplicationDirection" readonly type="text" onkeypress="javascript:return false;" onclick="selectJobBusinessTag()" />
 							<script type="text/javascript">
 								function selectJobBusinessTag() {
 									window.m = new MessageBox(null, "");
@@ -127,10 +225,10 @@
 
 					<div>
 						<h3>消息详情</h3>
-						<textarea></textarea>
+						<textarea id="content" ></textarea>
 					</div>
-					<a href="#">保存为草稿</a>
-					<a href="#">保存并发送</a>
+					<a href="#" id="saveBtn">保存为草稿</a>
+					<a href="#" id="sendBtn">保存并发送</a>
 				</div>
 			</div>
 		</div>

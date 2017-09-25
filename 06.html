@@ -1,12 +1,100 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>我的账户</title>
-		<link rel="stylesheet" href="css/style.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/jquery-3.2.1.min.js" ></script>
-		<script type="text/javascript" src="js/js.js" ></script>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var action, id, status = 1,
+				password;
+			$(function() {
+				$.ajaxSettings.async = false;
+
+				GetDept1("userDept");
+				GetRole1("userRole");
+				SetData()
+				$('.lwdzhBtn').click(function() {
+					SubmitData()
+				});
+			});
+
+			function SetData() {
+				$.getJSON(
+					domain + "/api/config",
+					function(res) {
+						if(res["code"] == "0") {
+							$('#userName').val(res["result"]["user"]["userName"]);
+							$('#name').val(res["result"]["user"]["name"]);
+							$('#userTel').val(res["result"]["user"]["name"]);
+							$('#userDept').val(res["result"]["user"]["deptId"]);
+							$('#userRole').val(res["result"]["user"]["roleId"]);
+
+							id = res["result"]["user"]["id"];
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData() {
+				var oldPwd = $("#OldPassword").val();
+				var newPwd = $("#NewPassword").val();
+				var againNewPwd = $("#NewPassword1").val();
+				if(oldPwd == "" && newPwd != "") {
+					Toast.Err("错误", "请输入旧密码~", 'top-center', 'left')
+					return;
+				} else if(newPwd != againNewPwd) {
+					Toast.Err("错误", "两遍密码不同~", 'top-center', 'left')
+					return;
+				}
+
+				var data = {
+					//"id": id,
+					//"userName": $("#userName").val(),
+					//"userTel": $("#userTel").val(),
+					//"deptId": $("#userDept").val(),
+					//"roleId": $("#userRole").val(),
+					"oldPwd": oldPwd,
+					"newPwd": newPwd,
+					"againNewPwd": againNewPwd
+				}
+				meetAdd('/api/user/pwd', JSON.stringify(data), "");
+			}
+		</script>
 	</head>
+
 	<body>
 		<div class="title">
 			<div class="page">
@@ -19,20 +107,22 @@
 			<h2 class="lwdzhHead">个人基本信息</h2>
 			<div class="lwdzhTop">
 				<div class="lwdzhTopBox">
-					<span>姓名：</span>
-					<input type="text" />
+					<span>工号：</span>
+					<input type="text" id="userName" readonly="true" />
 				</div>
 				<div class="lwdzhTopBox">
-					<span>电话：</span>
-					<input type="text" />
+					<span>姓名：</span>
+					<input type="text" id="name" readonly="true" />
 				</div>
 				<div class="lwdzhTopBox">
 					<span>所属部门：</span>
-					<input type="text" />
+					<input type="text" id="userDept"  readonly="true"/>
+					<!--<select id="userDept"></select>-->
 				</div>
 				<div class="lwdzhTopBox">
 					<span>职务：</span>
-					<input type="text" />
+					<input type="text" id="userRole"  readonly="true"/>
+					<!--<select id="userRole"></select>-->
 				</div>
 			</div>
 			<div class="lwdzhMin">
@@ -42,18 +132,19 @@
 				</div>
 				<div class="lwdzhMinBox">
 					<span>原密码：</span>
-					<input type="text" />
+					<input type="password" id="OldPassword" />
 				</div>
 				<div class="lwdzhMinBox">
 					<span>新密码：</span>
-					<input type="text" />
+					<input type="password" id="NewPassword" />
 				</div>
 				<div class="lwdzhMinBox">
 					<span>重复新密码：</span>
-					<input type="text" />
+					<input type="password" id="NewPassword1" />
 				</div>
 			</div>
 			<a href="#" class="lwdzhBtn">确定</a>
 		</div>
 	</body>
+
 </html>

@@ -34,7 +34,7 @@
 					UserLogin(JSON.stringify(data));
 				});
 				$("#refcode").click(function() {
-					$("#codeimg").attr("src", "http://139.196.72.104:8082/api/validateCode?rnd=" + Math.random());
+					$("#codeimg").attr("src", domain+"/api/validateCode?rnd=" + Math.random());
 				});
 				document.onkeydown = function(e) {
 					var ev = document.all ? window.event : e;
@@ -57,7 +57,7 @@
 			<span class="wjmm">忘记密码 ？</span>
 			<div class="yz">
 				<input type="text" id="txtCode" />
-				<img id="codeimg" src="http://139.196.72.104:8082/api/validateCode" />
+				<img id="codeimg" src="http://test.ncxct.com:8082/api/validateCode" />
 				<a href="javascript:void(0)" id="refcode">看不清，换一张</a>
 			</div>
 			<a href="javascript:void(0)" class="loginBtn">登&nbsp;&nbsp;&nbsp;录</a>

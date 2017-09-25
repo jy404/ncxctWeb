@@ -1,12 +1,79 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>详情页</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript">
+			var Id;
+			$(function() {
+				$.ajaxSettings.async = false;
+				Id = $.getUrlParam("id");
+				SetData(Id);
+			});
+
+			function SetData(Id) {
+				$.getJSON(
+					domain + "/api/noticeTmp/" + Id,
+					function(res) {
+						if(res["code"] == "0") {
+							var userName = res["result"]["userName"];
+							var publishTime = res["result"]["publishTime"];
+							$("#titlespan")[0].innerHTML = "> " + res["result"]["title"];
+							$("#title")[0].innerHTML = res["result"]["title"];
+							$("#subtitle")[0].innerHTML = "发布人：" + userName + "&nbsp;&nbsp;" + "发布时间：" + publishTime;
+							$('#content')[0].innerHTML = res["result"]["content"];
+
+							var file = res["result"]["attachments"];
+							var html = "";
+							for(var cnt = 0; cnt < file.length; cnt++) {
+								var filename = file[cnt]["name"];
+								var fileurl = file[cnt]["url"];
+								html += "<div class=\"xqTextFj\"><a href=\"" + fileurl + "\" > 附件一： " + filename + " </a></div > ";
+							}
+							$(".xq").append(html);
+
+							Id = res["result"]["id"];
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+		</script>
 	</head>
+
 	<body>
 		<div class="title">
 			<div class="page">
@@ -14,30 +81,20 @@
 				<span>> 首页</span>
 				<span>> 消息中心</span>
 				<span>> 消息通知</span>
-				<span>> 标题名称</span>
+				<span id="titlespan">> 标题名称</span>
 			</div>
 		</div>
 		<div class="xq">
 			<div class="xqTop">
-				<h2>南昌县2014年度安置房沉降观测单位比选公告</h2>
-				<span>发布人：江龙飞 &nbsp;&nbsp; 来源：江龙飞撰写  &nbsp;&nbsp; 时间：2017-03-17  &nbsp;&nbsp;  点击数：11</span>
+				<h2 id="title"></h2>
+				<span id="subtitle"></span>
 			</div>
-			<div class="xqText">
-				根据项目推进要求，我司现面向社会公开招标选取2014年度安置房沉降观测单位。<br/>
-			　　   一、招标范围<br/>
-			　　   雄溪安置房、定岗安置房、八一南江安置房、320国道改造安置房、银三角良种场安置房、富山清湖安置房。<br/>
-				总建筑面积约49万㎡。最终结算面积以实际完成观测总建筑面积为准，建筑物层高均为11-18层，均为框架结构。<br/>
-			　　   二、服务内容<br/>
-			　　   1、按照规范要求监理建筑物变形监测网<br/>
-			　　   2、按照规范要求的高层建筑物基础澄江观测<br/>
-			　　   3、观测周期须严格执行规范要求<br/>
-			　　   三、报价说明<br/>
-			　　   1、本次投标报价采取在业主控制价范围内，各投标单位根据自身情况自主报价，各投标单位总报价中单价超过业主最高限价则视为无效报价。
-				有效报价为：单价≤0.95元/平方米。<br/>
-			　　   2、投标报价应包括全部内、外业测量工作包干的综合价，包含但不限于交通、食宿、进出场费用等。<br/>
+			<div class="xqText" id="content">
+
 			</div>
-			<div class="xqTextFj">附件一：授权委托书.doc</div>
-			<div class="xqTextFj">附件二：2014年度安置房沉降观测报价单.doc</div>
-		</div>		
+			<!--<div class="xqTextFj">附件一：授权委托书.doc</div>
+			<div class="xqTextFj">附件二：2014年度安置房沉降观测报价单.doc</div>-->
+		</div>
 	</body>
+
 </html>

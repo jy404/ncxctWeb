@@ -1,22 +1,31 @@
 ﻿<!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>首页</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script src="https://cdn.bootcss.com/socket.io/2.0.3/socket.io.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/socket.js"></script>
 	</head>
+
 	<body>
 		<header>
 			<img src="img/logoMin.png" />
 			<div class="headNav">
 				<span class="logout">注销</span>
-				<span class="myUrse"><a href="06.html" target="bodyRight"><li>我的账户</li></a></span>
+				<span class="myUrse">
+					<a href="06.html" target="bodyRight">
+						<li>我的账户</li>
+						<b>2</b>
+					</a>
+				</span>
 				<span><b>admin</b>,超级管理员</span>
-			</div>				
+			</div>
 		</header>
-		<div class="content">			
+		<div class="content">
 			<div class="leftNav">
 				<h4 class="column">系统栏目</h4>
 				<div class="index">
@@ -25,21 +34,41 @@
 				<div class="information">
 					<h2><span>消息中心</span></h2>
 					<ul>
-						<a href="0201.html" target="bodyRight"><li>- 消息通知</li></a>
-						<a href="0202.html" target="bodyRight"><li>- 公告通知</li></a>
+						<a href="0201.html" target="bodyRight">
+							<li>- 消息通知</li>
+						</a>
+						<a href="0202.html" target="bodyRight">
+							<li>- 公告通知</li>
+						</a>
 					</ul>
 				</div>
 				<div class="integrated">
 					<h2><span>项目综合管理</span></h2>
 					<ul>
-						<a href="0301.html" target="bodyRight"><li>- 财务报表</li></a>
-						<a href="0302.html" target="bodyRight"><li class="leftNavSelect">- 项目报表</li></a>
-						<a href="0303.html" target="bodyRight"><li>- 项目进度</li></a>
-						<a href="0304.html" target="bodyRight"><li>- 项目查询</li></a>
-						<a href="0305.html" target="bodyRight"><li>- 房建项目管理</li></a>
-						<a href="0306.html" target="bodyRight" class="szxmgl"><li>- 市政项目管理</li></a>
-						<a href="0307.html" target="bodyRight"><li>- 项目参建单位</li></a>
-						<a href="0308.html" target="bodyRight"><li>- 项目中介单位</li></a>
+						<a href="0301.html" target="bodyRight">
+							<li>- 财务报表</li>
+						</a>
+						<a href="0302.html" target="bodyRight">
+							<li class="leftNavSelect">- 项目报表</li>
+						</a>
+						<a href="0303.html" target="bodyRight">
+							<li>- 项目进度</li>
+						</a>
+						<a href="0304.html" target="bodyRight">
+							<li>- 项目查询</li>
+						</a>
+						<a href="0305.html" target="bodyRight">
+							<li>- 房建项目管理</li>
+						</a>
+						<a href="0306.html" target="bodyRight" class="szxmgl">
+							<li>- 市政项目管理</li>
+						</a>
+						<a href="0307.html" target="bodyRight">
+							<li>- 项目参建单位</li>
+						</a>
+						<a href="0308.html" target="bodyRight">
+							<li>- 项目中介单位</li>
+						</a>
 					</ul>
 				</div>
 				<div class="doc">
@@ -48,20 +77,29 @@
 				<div class="system">
 					<h2><span>系统管理</span></h2>
 					<ul>
-						<a href="0501.html" target="bodyRight"><li>- 单位介绍</li></a>
-						<a href="0502.html" target="bodyRight"><li>- 组织架构</li></a>
-						<a href="0503.html" target="bodyRight"><li>- 岗位管理</li></a>
-						<a href="0504.html" target="bodyRight"><li>- 用户管理</li></a>
+						<a href="0501.html" target="bodyRight">
+							<li>- 单位介绍</li>
+						</a>
+						<a href="0502.html" target="bodyRight">
+							<li>- 组织架构</li>
+						</a>
+						<a href="0503.html" target="bodyRight">
+							<li>- 岗位管理</li>
+						</a>
+						<a href="0504.html" target="bodyRight">
+							<li>- 用户管理</li>
+						</a>
 					</ul>
 				</div>
 				<div class="my">
 					<h2><a href="06.html" target="bodyRight"><li>我的账户</li></a></h2>
 				</div>
-			</div>		
+			</div>
 			<div class="bodyRight">
 				<div class="leftNavHide"></div>
-				<iframe style="vertical-align:bottom" src="01.html" name="bodyRight" width="100%" height="100%" frameborder="0"></iframe>				
-			</div>			
-		</div>	
+				<iframe style="vertical-align:bottom" src="01.html" name="bodyRight" width="100%" height="100%" frameborder="0"></iframe>
+			</div>
+		</div>
 	</body>
+
 </html>
