@@ -1,19 +1,18 @@
 var socket;
-var longconnectUrl = "http://test.ncxct.com:7878";
+var longconnectUrl = "http://test.ncxct.com:8083";
 var tokenUrl = "http://test.ncxct.com:8082";
 
 function startSocket(url) {
 	socket = io.connect(url);
 	socket.on('connect', function() {
-
 	});
 
 	socket.on('active_push', function(data) {
-
+		
 	});
 
 	socket.on('disconnect', function() {
-		Toast.Err('错误', '连接已断开,无法接收最新推送消息~', 'top-center', 'left');
+		alert("连接已断开,无法接收最新推送消息~")
 	});
 }
 
@@ -30,7 +29,7 @@ function getToken() {
 		})
 }
 
-//getToken();
+getToken();
 
 function post(url, param, datat, callback) {
 	$.ajax({

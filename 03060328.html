@@ -33,6 +33,16 @@
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id, cid, qid, sid;
 			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
+				upload.init("uploader3", "添加附件...");
+				UploadProcess("uploader3");
+				upload.init("uploader4", "添加附件...");
+				UploadProcess("uploader4");
 				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -46,19 +56,9 @@
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-						$(".fileinput-button").hide();
 					}
 				}
-				upload.init("uploader", "添加附件...");
-				UploadProcess("uploader");
-				upload.init("uploader1", "添加附件...");
-				UploadProcess("uploader1");
-				upload.init("uploader2", "添加附件...");
-				UploadProcess("uploader2");
-				upload.init("uploader3", "添加附件...");
-				UploadProcess("uploader3");
-				upload.init("uploader4", "添加附件...");
-				UploadProcess("uploader4");
+				
 				$('.szxmTjPageRightFormBc').click(function() {
 					SubmitData(1)
 				});

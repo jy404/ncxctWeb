@@ -64,28 +64,40 @@ textarea {
 	margin: 25px auto 20px auto;
 	padding-top: 25px;
 }
-
-.loginBox input[type=text] {
-	display: block;
-	width: 300px;
+.loginBox .urseNameBox,.loginBox .passwordBox{
+	width: 340px;
 	height: 36px;
 	border: 1px solid #d2d2d2;
 	margin: 0 auto 15px auto;
-	padding-left: 40px;
 	border-radius: 5px;
 	outline: none;
 	line-height: 36px;
 	font-size: 14px;
 	color: #333333;
 	font-family: "微软雅黑";
+	background: #ffffff;	
 }
-
-.loginBox input[type=text].urse {
-	background: #fff url(../img/urse.png) no-repeat 10px center;
+.loginBox .urseNameBox span{
+	display: block;
+	width: 40px;
+	height: 38px;
+	background: url(../img/urse.png) no-repeat center;
+	float: left;
 }
-
-.loginBox input[type=text].password {
-	background: #fff url(../img/password.png) no-repeat 10px center;
+.loginBox .passwordBox span{
+	display: block;
+	width: 40px;
+	height: 38px;
+	background: url(../img/password.png) no-repeat center;
+	float: left;
+}
+.loginBox input[type=text],.loginBox input[type=password] {
+	width: 260px;
+	height: 36px;
+	line-height: 36px;
+	font-family: "微软雅黑";
+	border: none;
+	outline: none;
 }
 
 .loginBox .yz {
@@ -96,6 +108,7 @@ textarea {
 
 .loginBox .yz input[type=text] {
 	width: 80px;
+	padding-left: 40px;
 	float: left;
 	background: #fff url(../img/yzm.png) no-repeat 10px center;
 }
@@ -935,8 +948,10 @@ header .headNav span.myUrse b{
 .xxtz .xxtzTab .draftList {
 	width: 39%;
 	float: left;
-	border-left: 1px solid #c7c7c7;
-	border-right: 1px solid #c7c7c7;
+	border: 1px solid #c7c7c7;
+	min-height: 380px;
+	border-top: none;
+	border-radius:0 0 3px 3px;
 }
 
 .xxtz .xxtzTab .draftList h2 {
@@ -993,9 +1008,9 @@ header .headNav span.myUrse b{
 
 .xxtz .xxtzTab .xzxx div h3 {
 	width: 85px;
-	height: 40px;
+	height: 50px;
 	float: left;
-	line-height: 40px;
+	line-height: 30px;
 	font-size: 16px;
 	color: #333333;
 	font-weight: normal;
@@ -1048,11 +1063,11 @@ header .headNav span.myUrse b{
 }
 
 .xxtz .xxtzTab .xzxx div textarea {
-	width: 80%;
+	width: 79%;
 	height: 200px;
 	resize: none;
 	outline: none;
-	padding: 8px;
+	padding: 9px;
 	margin-bottom: 25px;
 	float: left;
 	border: 1px solid #c7c7c7;
@@ -3009,7 +3024,7 @@ header .headNav span.myUrse b{
 	float: left;
 	width: 65%;
 	margin-right: 0px;
-	height: 25px;
+	height: 30px;
 	font-size: 14px;
 	font-family: 微软雅黑;
 	color: rgb(51, 51, 51);
@@ -3020,6 +3035,7 @@ header .headNav span.myUrse b{
 	border-color: rgb(203, 203, 203);
 	border-image: initial;
 	background: white;
+	line-height: 30px;
 }
 
 .lwdzhBigBox .lwdzhMin {
@@ -3034,21 +3050,19 @@ header .headNav span.myUrse b{
 
 .lwdzhBigBox .lwdzhMin .lwdzhMinTop .lwdzhMInTopH2 {
 	float: left;
-	width: 11%;
+	width: 100%;
 	font-size: 24px;
 	font-weight: normal;
 	color: #4bb2ff;
-	padding-top: 30px;
-	padding-bottom: 10px;
 }
 
 .lwdzhBigBox .lwdzhMin .lwdzhMinTop .lwdzhMInTopSpan {
-	width: 30%;
+	width: 100%;
 	float: left;
 	font-size: 14px;
 	font-family: "微软雅黑";
 	font-weight: normal;
-	padding-top: 42px;
+	padding-top: 10px;
 	padding-bottom: 10px;
 	color: #333333;
 }
@@ -3072,11 +3086,11 @@ header .headNav span.myUrse b{
 	margin-right: 2%;
 }
 
-.lwdzhBigBox .lwdzhMin .lwdzhMinBox input[type=text] {
+.lwdzhBigBox .lwdzhMin .lwdzhMinBox input[type=password] {
 	float: left;
 	width: 65%;
 	margin-right: 0px;
-	height: 25px;
+	height: 30px;
 	font-size: 14px;
 	font-family: 微软雅黑;
 	color: rgb(51, 51, 51);
@@ -3087,6 +3101,7 @@ header .headNav span.myUrse b{
 	border-color: rgb(203, 203, 203);
 	border-image: initial;
 	background: white;
+	line-height: 30px;
 }
 
 .lwdzhBtn {

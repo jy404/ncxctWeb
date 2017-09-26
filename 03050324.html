@@ -34,6 +34,10 @@
 			var action, projectId, projectNo, projectType, projectName, id;
 			$.ajaxSettings.async = false;
 			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
 				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -48,13 +52,9 @@
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-						$(".fileinput-button").hide();
 					}
 				}
-				upload.init("uploader", "添加附件...");
-				UploadProcess("uploader");
-				upload.init("uploader1", "添加附件...");
-				UploadProcess("uploader1");
+				
 				$('.szxmTjPageRightFormBc').click(function() {
 					SubmitData(1)
 				});

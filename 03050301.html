@@ -26,8 +26,6 @@
 		<script src="js/jquery.fileupload.js"></script>
 		<script src="js/jquery.fileupload-process.js"></script>
 		<script src="js/jquery.fileupload-image.js"></script>
-		<script src="js/jquery.fileupload-audio.js"></script>
-		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<script type="text/javascript">
@@ -47,7 +45,6 @@
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-						$(".fileinput-button").hide();
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
@@ -66,12 +63,11 @@
 							$('#artNo').val(res["result"]["docNo"]);
 							$('#arttime').val(res["result"]["dispatchTime"]);
 							$('#reamark').val(res["result"]["comment"]);
+							$('#fileurl_uploader').val(res["result"]["fileUrl"]);
 							id = res["result"]["id"];
 							//附件加上
 							upload.show(res["result"]["fileUrl"],"files_uploader")
-						} else {
-							Toast.Err("错误", res["description"], 'top-center', 'left')
-						}
+						} 
 					},
 					function() {
 						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
@@ -113,7 +109,7 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="arttime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" readonly="readonly" />
+			<input type="text" id="arttime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>

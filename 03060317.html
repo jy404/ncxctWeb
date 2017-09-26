@@ -26,13 +26,17 @@
 		<script src="js/jquery.fileupload.js"></script>
 		<script src="js/jquery.fileupload-process.js"></script>
 		<script src="js/jquery.fileupload-image.js"></script>
-		<script src="js/jquery.fileupload-audio.js"></script>
-		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id, projectName;
 			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -45,19 +49,13 @@
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-						$(".fileinput-button").hide();
 					}
 				}
 				$('.xmjyshkypfList li').click(function() {
 					$(this).addClass('xmjyshkypfListSelect').siblings('li').removeClass('xmjyshkypfListSelect');
 					$('.xmjyshkypfTab').eq($(this).index()).show().siblings('.xmjyshkypfTab').hide();
 				});
-				upload.init("uploader", "添加附件...");
-				UploadProcess("uploader");
-				upload.init("uploader1", "添加附件...");
-				UploadProcess("uploader1");
-				upload.init("uploader2", "添加附件...");
-				UploadProcess("uploader2");
+				
 				$('#saveBtn').click(function() {
 					SubmitData(1)
 				});

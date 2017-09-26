@@ -33,6 +33,10 @@
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, cid, fid;
 			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
 				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -49,10 +53,7 @@
 						$(".fileinput-button").hide();
 					}
 				}
-				upload.init("uploader", "添加附件...");
-				UploadProcess("uploader");
-				upload.init("uploader1", "添加附件...");
-				UploadProcess("uploader1");
+				
 				$('#saveBtn').click(function() {
 					SubmitData(1)
 				});

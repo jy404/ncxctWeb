@@ -33,6 +33,8 @@
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
 				//判断编辑或者查看
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -45,11 +47,9 @@
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-						$(".fileinput-button").hide();
 					}
 				}
-				upload.init("uploader", "添加附件...");
-				UploadProcess("uploader");
+				
 				$('.szxmTjPageRightFormBc').click(function() {
 					SubmitData(1)
 				});

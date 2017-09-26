@@ -33,6 +33,12 @@
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, yongid, diid, zeid;
 			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
+				upload.init("uploader2", "添加附件...");
+				UploadProcess("uploader2");
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -44,15 +50,9 @@
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-						$(".fileinput-button").hide();
 					}
 				}
-				upload.init("uploader", "添加附件...");
-				UploadProcess("uploader");
-				upload.init("uploader1", "添加附件...");
-				UploadProcess("uploader1");
-				upload.init("uploader2", "添加附件...");
-				UploadProcess("uploader2");
+				
 				$('.szxmTjPageRightFormBc').click(function() {
 					SubmitData(1)
 				});

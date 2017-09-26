@@ -33,6 +33,10 @@
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id, zid, bid;
 			$(function() {
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
+				upload.init("uploader1", "添加附件...");
+				UploadProcess("uploader1");
 				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -46,17 +50,13 @@
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-						$(".fileinput-button").hide();
 					}
 				}
 				$('.xmjyshkypfList li').click(function() {
 					$(this).addClass('xmjyshkypfListSelect').siblings('li').removeClass('xmjyshkypfListSelect');
 					$('.xmjyshkypfTab').eq($(this).index()).show().siblings('.xmjyshkypfTab').hide();
 				});
-				upload.init("uploader", "添加附件...");
-				UploadProcess("uploader");
-				upload.init("uploader1", "添加附件...");
-				UploadProcess("uploader1");
+				
 				$('#saveBtn').click(function() {
 					SubmitData(1)
 				});
