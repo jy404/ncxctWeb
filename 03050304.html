@@ -6,7 +6,7 @@
 		<title>规划方案报批</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
-		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
@@ -26,8 +26,6 @@
 		<script src="js/jquery.fileupload.js"></script>
 		<script src="js/jquery.fileupload-process.js"></script>
 		<script src="js/jquery.fileupload-image.js"></script>
-		<script src="js/jquery.fileupload-audio.js"></script>
-		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<script type="text/javascript">
@@ -45,6 +43,9 @@
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = unescape($.getUrlParam("projectName"));
+				//SelectUnit("cwei", "A0004", projectType);
+				//SelectUnit("zwei", "A0005", projectType);
+				//SelectUnit("gwei", "A0005", projectType);
 				if (action != "" && action != undefined) {
 					SetData(projectId)
 					if (action == "view") {
@@ -54,7 +55,6 @@
 						$(".szBtn").hide();
 					}
 				}
-				
 				$('.szxmTjPageRightFormBc').click(function() {
 					SubmitData(1)
 				});
@@ -147,6 +147,9 @@
 		<div class="szxmTjPageRightForm">
 			<span>单位名称：</span>
 			<input type="text" id="cwei" />
+			<!--<select id="cwei">
+				<option>---请选择---</option>
+			</select>-->
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
@@ -165,6 +168,9 @@
 		<div class="szxmTjPageRightForm">
 			<span>单位名称：</span>
 			<input type="text" id="zwei" />
+			<!--<select id="zwei">
+				<option>---请选择---</option>
+			</select>-->
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
@@ -183,6 +189,9 @@
 		<div class="szxmTjPageRightForm">
 			<span>单位名称：</span>
 			<input type="text" id="gwei" />
+			<!--<select id="gwei">
+				<option>---请选择---</option>
+			</select>-->
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>

@@ -1,4 +1,4 @@
-var policyBase64, accessid, signature, host, dir, fileName, type;
+var policyBase64, accessid, signature, host, cdnUrl, dir, fileName, type;
 var hasToken = false;
 var maxFileSize = 10 * 1024 * 1024; //10m大小
 
@@ -22,6 +22,7 @@ function getOsstoken() {
 				accessid = data.result.accessid;
 				signature = data.result.signature;
 				host = data.result.host;
+				cdnUrl = data.result.cdnUrl;
 				dir = data.result.dir;
 				hasToken = true;
 			} else {
@@ -44,8 +45,8 @@ function UploadProcess(obj) {
 	var options = {
 		url: host,
 		autoUpload: false,
-		acceptFileTypes: /(\.|\/)(gif|jpe?g|png|xls|txt|xlsx|docx|pdf)$/i,
-		maxFileSize: 999000,
+		acceptFileTypes: /(\.|\/)(gif|jpe?g|png|xls|ppt|txt|xlsx|docx|pdf|doc)$/i,
+		maxFileSize: 5120,
 		// Enable image resizing, except for Android and Opera,
 		// which actually support image resizing, but fail to
 		// send Blob objects via XHR requests:
@@ -140,7 +141,7 @@ function UploadProcess(obj) {
 		}).on('fileuploaddone', function(e, data) {
 			$.each(data.files, function(index, file) {
 					var fileurl = $("#fileurl_" + obj).val();
-					fileurl += host + "/" + file.Filename + ";";
+					fileurl += "http://" + cdnUrl + "/" + file.Filename + ";";
 					$("#fileurl_" + obj).val(fileurl);
 				})
 				/*

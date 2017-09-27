@@ -85,10 +85,15 @@ $(function(){
 	});
 	
 	
-	
+	$('.leftNav li').removeClass('leftNavSelect');
 	$('.leftNav li').click(function(){
 		$('.leftNav li').removeClass('leftNavSelect');
 		$(this).addClass('leftNavSelect');
+	});
+	$('.leftNavSz ul li').removeClass('leftNavSzSelect');
+	$('.leftNavSz ul li').click(function(){
+		$('.leftNavSz ul li').removeClass('leftNavSzSelect');
+		$(this).addClass('leftNavSzSelect');
 	})
 	
 	

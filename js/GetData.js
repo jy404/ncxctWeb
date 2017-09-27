@@ -41,10 +41,14 @@ function UserLogin(data) {
 			if (res["code"] == 0)
 				window.location = "index.html";
 			else
-				Toast.Err('错误', res["description"], 'top-center', 'left');
+				Toast.Err('错误', res["description"], 'mid-center', 'left');
+			$("#codeimg").attr("src", domain + "/api/validateCode?rnd=" + Math.random());
+			$("#txtCode").val('');
 		},
 		function(xhr, text) {
-			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+			Toast.Err('错误', '请求数据失败~', 'mid-center', 'left');
+			$("#codeimg").attr("src", domain + "/api/validateCode?rnd=" + Math.random());
+			$("#txtCode").val('');
 		}
 	);
 }
@@ -588,7 +592,7 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["projectNo"] + "</td>";
 						html += "<td>" + rows[i]["name"] + "</td>";
-						html += "<td>项目地址没有</td>";
+						html += "<td>" + rows[i]["address"] + "</td>";
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + rows[i]["totalAmount"] + "</td>";
 						html += "<td>" + new Date(rows[i]["startTime"]).toLocaleDateString() + "</td>";
@@ -1004,6 +1008,127 @@ function SelectProject(projectType, obj) {
 		function(xhr, text) {
 			if (xhr.status == "401")
 				top.location.href = "login.html";
+		}
+	);
+}
+//===============================文档管理===================================
+function GetDocmanageList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+	data["currentPage"] = currentpage;
+	data["pageSize"] = pagesize;
+	$.axse(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
+					$("#" + obj + " tr").not(':eq(0)').remove();
+					var html = "";
+					var rows = res["result"]["list"];
+					for (i = 0; i < rows.length; i++) {
+						if (rows[i]["folder"].toString() == "true") {
+							html += "<li>";
+							html += "<a href=\"0401.html?id=" + rows[i]["id"] + "\">";
+							html += "<img src=\"img/wdgl.png\" />";
+							html += "<span>" + rows[i]["title"] + "</span>";
+							html += "</a></li>";
+						}
+					}
+					$("#" + obj).append(html);
+				}
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
+						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
+							GetDocmanageList(index, pagesize, data, obj, pageobj, false, url)
+						});
+				}
+
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+
+function GetDocmanageList1(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+	data["currentPage"] = currentpage;
+	data["pageSize"] = pagesize;
+	$.axse(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
+					$("#" + obj + " tr").not(':eq(0)').remove();
+					var html = "";
+					var rows = res["result"]["list"];
+					for (i = 0; i < rows.length; i++) {
+						var filenum = 1;
+						if (rows[i]["folder"].toString() == "false") {
+							html += "<tr>";
+							html += "<td>" + ((currentpage - 1) * pagesize + (filenum++)) + "</td>";
+							html += "<td>" + rows[i]["userName"] + "</td>";
+							html += "<td>" + new Date(rows[i]["uploadTime"]).toLocaleDateString() + "</td>";
+							html += "<td>" + rows[i]["title"] + "</td>";
+							html += "<td width=\"12%\">";
+							//html += "<a style=\"background: #33cc00 ;\">预览</a>";
+							var fileurl = ";";
+							if (rows[i]["fileUrl"] != null && rows[i]["fileUrl"].toString().length > 0)
+								fileurl = rows[i]["fileUrl"].toString();
+							html += "<a target=\"_blank\" href=\"" + fileurl.substring(0, fileurl.length - 1) + "\" style=\"background: #4bb2ff ;\">下载</a>";
+							html += "<a href=\"0402.html?action=edit&id=" + rows[i]["id"] + "&parentId=" + rows[i]["parentId"] + "\" style=\"background: #ff0000 ;\">修改</a>";
+							html += "</td>";
+							html += "</tr>";
+						}
+					}
+					$("#" + obj).append(html);
+				}
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
+						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
+							GetDocmanageList1(index, pagesize, data, obj, pageobj, true, url)
+						});
+				}
+
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+
+function GetDocmanagePath(obj, url, Id) {
+	$.getJSON(
+		domain + url + Id,
+		function(res) {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
+					$("#" + obj + " tr").not(':eq(0)').remove();
+					var html = "";
+					var rows = res["result"];
+					html += "<span id=\"" + obj + rows["id"].toString() + "\">> <a href=\"0401.html?id=" + rows["id"] + "\">" + rows["title"] + "</a></span>";
+					$("#" + obj).before(html);
+					if (rows["parentId"].toString() != "0") {
+						GetDocmanagePath(obj + rows["id"].toString(), url, rows["parentId"]);
+					}
+				}
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);
 }

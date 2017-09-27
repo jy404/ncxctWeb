@@ -65,6 +65,7 @@
 				$('#updateBtn').click(function() {
 					SubmitData(3)
 				});
+				GetDirection("PROPOSAL_STEP_TYPE")
 			});
 
 			function SubmitData(status) {
@@ -146,7 +147,7 @@
 							"projectName": projectName,
 							"projectNo": projectNo,
 							"projectType": projectType,
-							"stepType": 'REPLY'
+							"stepType": 'PROPOSAL'
 						}]
 					}
 				}
@@ -286,7 +287,7 @@
 			</div>
 			<div id="uploader2" class="fjStyle"></div>
 		</div>
-		<div class="szBtn">
+		<div class="szBtn1">
 			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
 			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
 			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>

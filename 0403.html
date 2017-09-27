@@ -1,31 +1,94 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
-		<title>文件</title>
-		<link rel="stylesheet" href="css/style.css" rel="stylesheet" />
-		<script type="text/javascript" src="js/jquery-3.2.1.min.js" ></script>
-		<script type="text/javascript" src="js/js.js" ></script>
+		<title>文档管理</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<link type="text/css" rel="stylesheet" href="css/commen.css" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript" src="js/editor/kindeditor-min.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript" src="js/core.js"></script>
+		<script type="text/javascript" src="js/client.js"></script>
+		<script src="js/messageboxnotitle.js" type="text/javascript"></script>
+		<script type="text/javascript" src="js/drag_v1.0.js"></script>
+		<script type="text/javascript">
+			var Id = 0,
+				url = "04.html";
+			$(function() {
+				$.ajaxSettings.async = false;
+				Id = $.getUrlParam("id");
+
+				$(".lxzbmBtnRight").click(function() {
+					//window.location.href = url;
+				});
+				$(".lxzbmBtnLeft").click(function() {
+					SubmitData();
+				});
+			});
+
+			function SubmitData() {
+				var folderName = $('#folderName').val();
+				if(Id == null) Id = 0;
+				var data = {
+					"parentId": Id,
+					"title": folderName,
+					"folderName": folderName,
+					"fileUrl": "",
+					"folder": true
+				}
+				if(Id == 0)
+					meetAdd('/api/docmanage/save', JSON.stringify(data), "04.html");
+				else
+					meetAdd('/api/docmanage/save', JSON.stringify(data), "0401.html?id=" + Id);
+			}
+		</script>
 	</head>
-	<body>		
+
+	<body>
 		<div class="title">
 			<div class="page">
 				<b>当前位置：</b>
 				<span>> 首页</span>
 				<span>> 文档管理</span>
-				<span>> 新增文件加</span>
+				<span>> 新增文件夹</span>
 			</div>
 		</div>
 		<div class="lxzbmBigBox">
 			<h2 class="lxzbmTop">新增文件</h2>
 			<div class="lxzbmMinBox">
 				<span>文件名：</span>
-				<input type="text" />
+				<input type="text" id="folderName" />
 			</div>
 			<div class="lxzbmMinBox">
 				<a href="#" class="lxzbmBtnLeft">提交</a>
-				<a href="#" class="lxzbmBtnRight">取消</a>
+				<a href="#" onclick="javascript:history.back(-1);" class="lxzbmBtnRight">取消</a>
 			</div>
 		</div>
-	</body>	
-</html>	
+	</body>
+
+</html>

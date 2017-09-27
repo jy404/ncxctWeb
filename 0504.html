@@ -20,22 +20,26 @@
 		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
 		<script type="text/javascript">
 			var currentpage = 1;
-			var pagesize = 2;
+			var pagesize = 10;
 			var data = {};
 
 			$(function() {
 				$('.lyhglSerachreset').click(function() {
 					$(".fjxmSerachTypeSelect").val("");
+					currentpage = 1;
+					pagesize = 10;
+					data = {};
+					GetUserList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/user/list");
 				});
 				$('.lyhglSerachBtn1').click(function() {
 					currentpage = 1;
-					pagesize = 2;
+					pagesize = 10;
 					data = {
 						"userName": $("#userName").val(),
 						"name": $("#name").val(),
 						"deptId": $("#deptId").val()
 					};
-				GetUserList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/user/list");
+					GetUserList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/user/list");
 				});
 				GetUserList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/user/list");
 			})

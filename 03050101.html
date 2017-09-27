@@ -36,9 +36,9 @@
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
-				if(action != "" && action != undefined) {
+				if (action != "" && action != undefined) {
 					SetData(projectId)
-					if(action == "view") {
+					if (action == "view") {
 						$("body").find("input,textarea").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
@@ -55,7 +55,7 @@
 				$.getJSON(
 					domain + "/api/project/" + projectId,
 					function(res) {
-						if(res["code"] == "0") {
+						if (res["code"] == "0") {
 							$('#projectName').val(res["result"]["name"]);
 							$('#projectNo').val(res["result"]["projectNo"]);
 							$('#projectOrg').val(res["result"]["orgId"]);
@@ -67,12 +67,9 @@
 							$('#address').val(res["result"]["address"]);
 							$('#totalAmount').val(res["result"]["totalAmount"]);
 							$('#comment').val(res["result"]["comment"]);
-
 							id = res["result"]["id"];
 							//附件加上
 							//upload.show(res["result"]["files"], "files_uploader")
-						} else {
-							Toast.Err("错误", res["description"], 'top-center', 'left')
 						}
 					},
 					function() {
@@ -101,11 +98,11 @@
 					"address": $("#address").val(),
 					"totalAmount": $("#totalAmount").val(),
 					"comment": $("#comment").val(),
-					"latitude": "123",
-					"longitude": "234",
+					"latitude": $("#latitude").val(),
+					"longitude": $("#longitude").val(),
 					"status": "1"
 				}
-				if(action == "edit")
+				if (action == "edit")
 					data["id"] = id;
 				meetAdd('/api/project/save', JSON.stringify(data), "0305.html");
 			}
@@ -128,7 +125,7 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预计开工时间：</span>
-			<input type="text" id="startTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="startTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 		</div>
 		<!--<div class="szxmTjPageRightForm">
 					<span>预计竣工时间：</span>
@@ -153,6 +150,14 @@
 		<div class="szxmTjPageRightForm">
 			<span>项目地址：</span>
 			<input type="text" id="address" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>经度：</span>
+			<input type="text" id="longitude" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>纬度：</span>
+			<input type="text" id="latitude" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>总金额：</span>

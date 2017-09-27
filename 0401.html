@@ -1,33 +1,93 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>文档管理</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
 		<style>
-			.addBtn{
-				    display: block;
-				    width: 110px;
-				    height: 35px;
-				    line-height: 35px;
-				    text-align: center;
-				    padding-left: 15px;
-				    background: #fe7c54 url(img/add.png) no-repeat 15px center;
-				    font-size: 14px;
-				    color: #FFFFFF;
-				    border-radius: 5px;
-				    margin: 15px 0;
+			.addBtn {
+				display: block;
+				width: 110px;
+				height: 35px;
+				line-height: 35px;
+				text-align: center;
+				padding-left: 15px;
+				background: #fe7c54 url(img/add.png) no-repeat 15px center;
+				font-size: 14px;
+				color: #FFFFFF;
+				border-radius: 5px;
+				margin: 15px 0;
 			}
 		</style>
+		<script type="text/javascript">
+			var currentpage1 = 1,
+				pagesize1 = 10;
+			var currentpage2 = 1,
+				pagesize2 = 10;
+			var data = {
+				//"parentId": 0
+			};
+
+			$(function() {
+				Id = $.getUrlParam("id");
+				data = {
+					"parentId": Id
+				}
+				$("#addBtn1").click(function() {
+					location.href = "0403.html?id=" + Id;
+				});
+				$("#addBtn2").click(function() {
+					location.href = "0402.html?parentId=" + Id;
+				});
+				$('.fjxmSerachreset').click(function() {
+					$(".fjxmSerachTypeSelect").val("");
+					var currentpage = 1;
+					var pagesize = 10;
+					var data1 = {
+						"parentId": Id,
+					};
+					GetDocmanageList1(currentpage, pagesize, data1, "projectList1", $("#fj_page"), true, "/api/docmanage/list");
+				});
+				$('.fjxmSerachBtn1').click(function() {
+					var currentpage = 1;
+					var pagesize = 10;
+					var data1 = {
+						"parentId": Id,
+						"userName": $("#userName").val(),
+						"startUploadTime": $("#startUploadTime").val(),
+						"title": $("#title").val()
+					};
+					GetDocmanageList1(currentpage, pagesize, data1, "projectList1", $("#fj_page"), true, "/api/docmanage/list");
+				});
+				GetDocmanagePath("filepath", "/api/docmanage/docs/", Id);
+				GetDocmanageList(currentpage1, pagesize1, data, "projectList", $("#fj_page"), false, "/api/docmanage/list");
+				GetDocmanageList1(currentpage2, pagesize2, data, "projectList1", $("#fj_page"), true, "/api/docmanage/list");
+			})
+		</script>
 	</head>
+
 	<body>
 		<div class="title">
 			<div class="page">
 				<b>当前位置：</b>
 				<span>> 首页</span>
-				<span>> 文档管理</span>
+				<span>> <a href="04.html">文档管理</a></span>
+				<div id="filepath" style="display: none;"></div>
 			</div>
 		</div>
 		<div class="xxtz">
@@ -37,62 +97,38 @@
 				<li>文件</li>
 			</ul>
 			<div class="xxtzTab" style="display: block;">
-				<a href="#" class="addBtn" style="margin-left: 25px;">新增文件夹</a>
+				<a href="#" id="addBtn1" class="addBtn" style="margin-left: 25px;">新增文件夹</a>
 				<table cellpadding="0" cellspacing="0" class="wdxx">
-					<ul class="lwdgg">
-						<li>
-							<a href="0401.html">
-								<img src="img/wdgl.png" />
-								<span>A管理制度</span>	
-							</a>
-						</li>
-						<li>
-							<a href="0401.html">
-								<img src="img/wdgl.png" />
-								<span>A管理制度</span>	
-							</a>						
-						</li>
-						<li>
-							<a href="0401.html">
-								<img src="img/wdgl.png" />
-								<span>A管理制度</span>	
-							</a>								
-						</li>
-						<li>
-							<a href="0401.html">
-								<img src="img/wdgl.png" />
-								<span>A管理制度</span>	
-							</a>								
-						</li>
+					<ul class="lwdgg" id="projectList">
 					</ul>
 				</table>
 			</div>
-			
+
 			<div class="xxtzTab">
-				<div class="fjxm">						
-					<a href="0402.html" class="addBtn">新增文件</a>
+				<div class="fjxm">
+					<a href="#" id="addBtn2" class="addBtn">新增文件</a>
 					<div class="fjxmSerach" style="margin-top: 15px;">
 						<div class="fjxmSerachList">
 							<div class="fjxmSerachTitle">
 								<span>上传人</span>
-								<input type="text" class="fjxmSerachTypeSelect"  />
+								<input type="text" id="userName" class="fjxmSerachTypeSelect" />
 							</div>
 							<div class="fjxmSerachTitle">
 								<span>上传时间</span>
-								<input type="text" class="fjxmSerachTypeSelect"  />
+								<input type="text" readonly="readonly" id="startUploadTime" class="fjxmSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 							</div>
 							<div class="fjxmSerachTitle">
 								<span>标题</span>
-								<input type="text" class="fjxmSerachTypeSelect"  />
-							</div>	
-						</div>											
+								<input type="text" id="title" class="fjxmSerachTypeSelect" />
+							</div>
+						</div>
 						<div class="fjxmSerachBtn">
 							<a href="#" class="fjxmSerachBtn1">搜索</a>
 							<a href="#" class="fjxmSerachreset">清空</a>
 						</div>
 					</div>
 					<div class="fjxmTable">
-						<table cellpadding="0" cellspacing="0">
+						<table cellpadding="0" cellspacing="0" id="projectList1">
 							<tr>
 								<td width="10%">序号</td>
 								<td width="20%">上传人</td>
@@ -100,69 +136,15 @@
 								<td width="30%">标题</td>
 								<td width="20%">操作</td>
 							</tr>
-							<tr>
-								<td>1</td>
-								<td>江龙飞</td>
-								<td>2017-02-03</td>
-								<td>销售部人员奖赏制度</td>
-								<td>
-									<a style="background: #33cc00 ;">预览</a>
-									<a style="background: #4bb2ff ;">下载</a>
-									<a style="background: #ff0000;">修改</a>
-								</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>江龙飞</td>
-								<td>2017-02-03</td>
-								<td>销售部人员奖赏制度</td>
-								<td>
-									<a style="background: #33cc00 ;">预览</a>
-									<a style="background: #4bb2ff ;">下载</a>
-									<a style="background: #ff0000;">修改</a>
-								</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>江龙飞</td>
-								<td>2017-02-03</td>
-								<td>销售部人员奖赏制度</td>
-								<td>
-									<a style="background: #33cc00 ;">预览</a>
-									<a style="background: #4bb2ff ;">下载</a>
-									<a style="background: #ff0000;">修改</a>
-								</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>江龙飞</td>
-								<td>2017-02-03</td>
-								<td>销售部人员奖赏制度</td>
-								<td>
-									<a style="background: #33cc00 ;">预览</a>
-									<a style="background: #4bb2ff ;">下载</a>
-									<a style="background: #ff0000;">修改</a>
-								</td>
-							</tr>
-						</table>				
+						</table>
 					</div>
-					<div class="fy">
-						<a href="#">首页</a>
-						<a href="#"><</a>
-						<a href="#">1</a>
-						<a href="#">2</a>
-						<a href="#">3</a>
-						.
-						.
-						.
-						<a href="#">8</a>
-						<a href="#">9</a>
-						<a href="#">10</a>
-						<a href="#">></a>
-						<a href="#">尾页</a>
+					<!--<div class="fy">这里是分页</div>-->
+					<div class="page_div fy" id="fj_page">
+
 					</div>
 				</div>
 			</div>
-		</div>		
+		</div>
 	</body>
+
 </html>

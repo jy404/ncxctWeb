@@ -14,17 +14,40 @@
 		<script type="text/javascript" src="js/paging.js"></script>
 		<script type="text/javascript" src="js/PluginFun.js"></script>
 		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
 
 		<script type="text/javascript">
 			var currentpage = 1;
-			var pagesize = 2;
+			var pagesize = 10;
 			var projecttype = "HOUSE";
 			var data = {
 				"projectType": projecttype
 			};
-			
 			$(function() {
 				GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				$("#searchBtn").click(function() {
+					var projectName = $("#txtProjectName").val();
+					var startTime = $("#txtstartTime").val();
+					var projectNo = $("#txtProjectNo").val();
+					if (projectName != undefined && projectName != "")
+						data["name"] = projectName;
+					if (startTime != undefined && startTime != "")
+						data["startTime"] = startTime;
+					if (projectNo != undefined && projectNo != "")
+						data["projectNo"] = projectNo;
+					GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				})
+				$("#resetBtn").click(function() {
+					$("#txtProjectName").val('');
+					$("#txtStartTime").val('');
+					$("#txtProjectNo").val('');
+					$("#txtOrgName").val('');
+					$("#txtPersonName").val('');
+					data = {
+						"projectType": projecttype
+					};
+					GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				})
 			})
 		</script>
 	</head>
@@ -40,7 +63,7 @@
 		</div>
 		<div class="fjxm">
 			<h2 class="fjxmTitle">房建项目</h2>
-			<a href="030501.html" target="bodyRight" class="addBb">添加新项目</a>
+			<a href="03050101.html" target="bodyRight" class="addBb">添加新项目</a>
 			<div class="fjxmSerach">
 				<div class="fjxmSerachList">
 					<div class="fjxmSerachTitle">
@@ -48,12 +71,12 @@
 						<input type="text" id="txtProjectName" class="fjxmSerachTypeSelect" />
 					</div>
 					<div class="fjxmSerachTitle">
-						<span>时间</span>
-						<input type="text" id="txtStartTime" class="fjxmSerachTypeSelect" />
+						<span>开始时间</span>
+						<input type="text" id="txtStartTime" class="fjxmSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 					</div>
 					<div class="fjxmSerachTitle">
-						<span>项目进度</span>
-						<input type="text" id="txtStatus" class="fjxmSerachTypeSelect" />
+						<span>项目编号</span>
+						<input type="text" id="txtProjectNo" class="fjxmSerachTypeSelect" />
 					</div>
 					<div class="fjxmSerachTitle">
 						<span>责任部门</span>
@@ -61,12 +84,12 @@
 					</div>
 					<div class="fjxmSerachTitle">
 						<span>责任人</span>
-						<input type="text" id="txtOrgName" class="fjxmSerachTypeSelect" />
+						<input type="text" id="txtPersonName" class="fjxmSerachTypeSelect" />
 					</div>
 				</div>
 				<div class="fjxmSerachBtn">
-					<a href="#" class="fjxmSerachBtn1">搜索</a>
-					<a href="#" class="fjxmSerachreset">清空</a>
+					<a id="searchBtn" href="#" class="fjxmSerachBtn1">搜索</a>
+					<a id="resetBtn" href="#" class="fjxmSerachreset">清空</a>
 				</div>
 			</div>
 			<div class="fjxmTable">
@@ -75,11 +98,11 @@
 						<td width="5%">序号</td>
 						<td width="10%">项目编号</td>
 						<td width="10%">项目名称</td>
-						<td width="10%">项目地址</td>											
+						<td width="10%">项目地址</td>
 						<td width="9%">责任人</td>
 						<td width="9%">总金额</td>
 						<td width="10%">开工时间</td>
-						<td width="9%">结束时间</td>		
+						<td width="9%">结束时间</td>
 						<td width="5%">项目状态</td>
 						<td width="12%">操作</td>
 					</tr>

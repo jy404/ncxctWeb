@@ -1,12 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>文档管理</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
+		<style>
+			.addBtn {
+				display: block;
+				width: 110px;
+				height: 35px;
+				line-height: 35px;
+				text-align: center;
+				padding-left: 15px;
+				background: #fe7c54 url(img/add.png) no-repeat 15px center;
+				font-size: 14px;
+				color: #FFFFFF;
+				border-radius: 5px;
+				margin: 15px 0;
+			}
+		</style>
+		<script type="text/javascript">
+			var currentpage = 1;
+			var pagesize = 2;
+			var data = {
+				"parentId": 0
+			};
+
+			$(function() {
+				GetDocmanageList(currentpage, pagesize, data, "projectList", $("#fj_page"), false, "/api/docmanage/list");
+			})
+		</script>
 	</head>
+
 	<body>
 		<div class="title">
 			<div class="page">
@@ -18,34 +58,11 @@
 		<div class="xxtz">
 			<h2 class="xxtzTitle" style="border-bottom: 2px solid #fe7c54;">文档管理</h2>
 			<div class="xxtzTab" style="display: block;">
-					<ul class="lwdgg">
-						<li>
-							<a href="0401.html">
-								<img src="img/wdgl.png" />
-								<span>A管理制度</span>	
-							</a>
-						</li>
-						<li>
-							<a href="0401.html">
-								<img src="img/wdgl.png" />
-								<span>B管理制度</span>	
-							</a>						
-						</li>
-						<li>
-							<a href="0401.html">
-								<img src="img/wdgl.png" />
-								<span>C管理制度</span>	
-							</a>								
-						</li>
-						<li>
-							<a href="0401.html">
-								<img src="img/wdgl.png" />
-								<span>D管理制度</span>	
-							</a>								
-						</li>
-					</ul>
+				<a href="0403.html" class="addBtn" style="margin-left: 25px;">新增文件夹</a>
+				<ul class="lwdgg" id="projectList">
+				</ul>
 			</div>
-		</div>		
+		</div>
 	</body>
-</html>
 
+</html>

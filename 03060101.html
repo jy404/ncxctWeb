@@ -15,6 +15,7 @@
 				var projectNo = $.getUrlParam("projectNo");
 				var projectType = $.getUrlParam("projectType");
 				var projectName = $.getUrlParam("projectName");
+				$("iframe").attr("src", $("iframe").attr("src") + "?action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random())
 				$.each($("a"), function() {
 					curUrl = $(this).attr("href");
 					$(this).attr("href", curUrl + "?action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random());

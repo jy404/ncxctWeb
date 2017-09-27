@@ -1,12 +1,54 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>项目查询</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
+		<script type="text/javascript">
+			var currentpage = 1;
+			var pagesize = 10;
+			var projecttype = "HOUSE";
+			var data = {
+				//"projectType": projecttype
+			};
+
+			$(function() {
+				$('.xmcxSerachreset').click(function() {
+					$(".xmcxSerachTypeSelect").val("");
+				});
+				$('.xmcxSerachBtn1').click(function() {
+					currentpage = 1;
+					pagesize = 10;
+					data = {
+						"name": $("#name").val(),
+						//"orgName": $("#orgName").val(),
+						"projectType": $("#projectType option:selected").val(),
+						//"status": $("#status").val(),
+						"startTime": $("#startTime").val()
+						//"endTime": $("#endTime").val()
+					};
+					GetProjectList1(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				});
+				GetProjectList1(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+			})
+		</script>
 	</head>
+
 	<body>
 		<div class="title">
 			<div class="page">
@@ -21,27 +63,31 @@
 			<div class="xmcxSerach">
 				<div class="xmcxSerachTitle">
 					<span>项目名称</span>
-					<input type="text" class="xmcxSerachTypeSelect"  />
-				</div>	
+					<input type="text" id="name" class="xmcxSerachTypeSelect" />
+				</div>
 				<div class="xmcxSerachTitle">
 					<span>项目负责人</span>
-					<input type="text" class="xmcxSerachTypeSelect"  />
+					<input type="text" id="orgName" class="xmcxSerachTypeSelect" />
 				</div>
 				<div class="xmcxSerachTitle">
 					<span>项目类型</span>
-					<input type="text" class="xmcxSerachTypeSelect"  />
+					<!--<input type="text" id="projectType" class="xmcxSerachTypeSelect" />-->
+					<select id="projectType">
+						<option value="HOUSE">房建项目</option>
+						<option value="CITY">市政项目</option>
+					</select>
 				</div>
 				<div class="xmcxSerachTitle">
 					<span>项目状态</span>
-					<input type="text" class="xmcxSerachTypeSelect"  />
+					<input type="text" id="status" class="xmcxSerachTypeSelect" />
 				</div>
 				<div class="xmcxSerachTitle">
 					<span>开始时间</span>
-					<input type="text" class="xmcxSerachTypeSelect"  />
+					<input type="text" id="startTime" class="xmcxSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 				</div>
 				<div class="xmcxSerachTitle">
 					<span>结束时间</span>
-					<input type="text" class="xmcxSerachTypeSelect"  />
+					<input type="text" id="endTime" class="xmcxSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 				</div>
 				<div class="xmcxSerachBtn">
 					<a href="#" class="xmcxSerachBtn1">搜索</a>
@@ -49,113 +95,27 @@
 				</div>
 			</div>
 			<div class="xmcxTable">
-				<table cellpadding="0" cellspacing="0">
+				<table cellpadding="0" cellspacing="0" id="projectList">
 					<tr>
 						<td width="5%">序号</td>
 						<td width="8%">项目编号</td>
 						<td width="15%">项目名称</td>
 						<td width="15%">项目负责人</td>
-						<td width="8%">项目类型</td>	
+						<td width="8%">项目类型</td>
 						<td width="8%">项目状态</td>
-						<td width="8%">开始时间</td>	
+						<td width="8%">开始时间</td>
 						<td width="8%">计划结束时间</td>
-						<td width="8%">结束时间</td>	
+						<td width="8%">结束时间</td>
 						<td width="14%">操作</td>
 					</tr>
-					<tr>
-						<td>1</td>
-						<td>0020170213</td>
-						<td>南昌县棚户区改造</td>
-						<td>江龙飞江龙飞，江龙飞</td>
-						<td>市政工程</td>	
-						<td>进行中</td>
-						<td>2017-01-02</td>	
-						<td>2019-03-09</td>
-						<td>2019-03-09</td>	
-						<td>
-							<a style="background: #4bb2ff ;">查看</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>0020170213</td>
-						<td>南昌县棚户区改造</td>
-						<td>江龙飞江龙飞，江龙飞</td>
-						<td>市政工程</td>	
-						<td>进行中</td>
-						<td>2017-01-02</td>	
-						<td>2019-03-09</td>
-						<td>2019-03-09</td>	
-						<td>
-							<a style="background: #4bb2ff ;">查看</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>0020170213</td>
-						<td>南昌县棚户区改造</td>
-						<td>江龙飞江龙飞，江龙飞</td>
-						<td>市政工程</td>	
-						<td>进行中</td>
-						<td>2017-01-02</td>	
-						<td>2019-03-09</td>
-						<td>2019-03-09</td>	
-						<td>
-							<a style="background: #4bb2ff ;">查看</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>0020170213</td>
-						<td>南昌县棚户区改造</td>
-						<td>江龙飞江龙飞，江龙飞</td>
-						<td>市政工程</td>	
-						<td>进行中</td>
-						<td>2017-01-02</td>	
-						<td>2019-03-09</td>
-						<td>2019-03-09</td>	
-						<td>
-							<a style="background: #4bb2ff ;">查看</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>0020170213</td>
-						<td>南昌县棚户区改造</td>
-						<td>江龙飞江龙飞，江龙飞</td>
-						<td>市政工程</td>	
-						<td>进行中</td>
-						<td>2017-01-02</td>	
-						<td>2019-03-09</td>
-						<td>2019-03-09</td>	
-						<td>
-							<a style="background: #4bb2ff ;">查看</a>
-							<a style="background: #ff0000;">修改</a>
-						</td>
-					</tr>
 				</table>
-				
+
 			</div>
 			<!--<div class="fy">这里是分页</div>-->
-			<div class="fy">
-				<a href="#">首页</a>
-				<a href="#"><</a>
-				<a href="#">1</a>
-				<a href="#">2</a>
-				<a href="#">3</a>
-				.
-				.
-				.
-				<a href="#">8</a>
-				<a href="#">9</a>
-				<a href="#">10</a>
-				<a href="#">></a>
-				<a href="#">尾页</a>
+			<div class="page_div fy" id="fj_page">
+
 			</div>
-		</div>			
+		</div>
 	</body>
+
 </html>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>市政项目管理</title>
@@ -16,19 +17,42 @@
 
 		<script type="text/javascript">
 			var currentpage = 1;
-			var pagesize = 2;
+			var pagesize = 10;
 			var projecttype = "CITY";
 			var data = {
 				"projectType": projecttype
 			};
-			
 			$(function() {
 				GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				$("#searchBtn").click(function() {
+					var projectName = $("#txtProjectName").val();
+					var startTime = $("#txtstartTime").val();
+					var projectNo = $("#txtProjectNo").val();
+					if (projectName != undefined && projectName != "")
+						data["name"] = projectName;
+					if (startTime != undefined && startTime != "")
+						data["startTime"] = startTime;
+					if (projectNo != undefined && projectNo != "")
+						data["projectNo"] = projectNo;
+					GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				})
+				$("#resetBtn").click(function() {
+					$("#txtProjectName").val('');
+					$("#txtStartTime").val('');
+					$("#txtProjectNo").val('');
+					$("#txtOrgName").val('');
+					$("#txtPersonName").val('');
+					data = {
+						"projectType": projecttype
+					};
+					GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				})
 			})
 		</script>
 	</head>
+
 	<body>
-	
+
 		<div class="title">
 			<div class="page">
 				<b>当前位置：</b>
@@ -40,36 +64,32 @@
 		<div class="szxm">
 			<h2 class="szxmTitle">市政项目</h2>
 			<a href="030601.html" target="bodyRight" class="addBb">添加新项目</a>
-			<div class="szxmSerach">			
+			<div class="szxmSerach">
 				<div class="szxmSerachList">
 					<div class="szxmSerachTitle">
 						<span>项目名称</span>
-						<input type="text" id="txtProjectName" class="szxmSerachTypeSelect"  />
+						<input type="text" id="txtProjectName" class="szxmSerachTypeSelect" />
 					</div>
 					<div class="szxmSerachTitle">
 						<span>时间</span>
-						<input type="text" id="txtStartTime" class="szxmSerachTypeSelect"  />
+						<input type="text" id="txtStartTime" class="szxmSerachTypeSelect" />
 					</div>
 					<div class="szxmSerachTitle">
-						<span>项目进度</span>
-						<input type="text" id="txtStatus" class="szxmSerachTypeSelect"  />
+						<span>项目编号</span>
+						<input type="text" id="txtProjectNo" class="szxmSerachTypeSelect" />
 					</div>
 					<div class="szxmSerachTitle">
 						<span>责任部门</span>
-						<input type="text" id="txtOrgName" class="szxmSerachTypeSelect"  />
+						<input type="text" id="txtOrgName" class="szxmSerachTypeSelect" />
 					</div>
 					<div class="szxmSerachTitle">
 						<span>责任人</span>
-						<input type="text" id="txtOrgName" class="szxmSerachTypeSelect"  />
+						<input type="text" id="txtPersonName" class="szxmSerachTypeSelect" />
 					</div>
-					<div class="szxmSerachTitle">
-						<span>完成百分比</span>
-						<input type="text" class="szxmSerachTypeSelect"  />
-					</div>	
-				</div>											
+				</div>
 				<div class="szxmSerachBtn">
-					<a href="#" class="szxmSerachBtn1">搜索</a>
-					<a href="#" class="szxmSerachreset">清空</a>
+					<a id="searchBtn" href="#" class="szxmSerachBtn1">搜索</a>
+					<a id="resetBtn" href="#" class="szxmSerachreset">清空</a>
 				</div>
 			</div>
 			<div class="szxmTable">
@@ -78,20 +98,21 @@
 						<td width="5%">序号</td>
 						<td width="10%">项目编号</td>
 						<td width="10%">项目名称</td>
-						<td width="10%">项目地址</td>											
+						<td width="10%">项目地址</td>
 						<td width="9%">责任人</td>
 						<td width="9%">总金额</td>
 						<td width="10%">开工时间</td>
-						<td width="9%">结束时间</td>		
+						<td width="9%">结束时间</td>
 						<td width="5%">项目状态</td>
 						<td width="12%">操作</td>
 					</tr>
-					
-				</table>				
+
+				</table>
 			</div>
 			<div class="page_div fy" id="fj_page">
 
 			</div>
-		</div>			
+		</div>
 	</body>
+
 </html>
