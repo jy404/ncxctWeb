@@ -31,6 +31,9 @@
 			$(function() {
 				$('.tzggSerachreset').click(function() {
 					$(".tzggSerachTypeSelect").val("");
+					$("#startTime1").val(""),
+					$("#endTime1").val(""),
+					$("#title1").val("")
 					currentpage = 1;
 					pagesize = 10;
 					data = {};
@@ -61,9 +64,9 @@
 					pagesize = 10;
 					data = {
 						"noticeType": $("#noticeTypeValue2").val(),
-						"startTime": $("#startTime2").val(),
-						"endTime": $("#endTime2").val(),
-						"title": $("#title2").val()
+						"startTime": $("#startTime1").val(),
+						"endTime": $("#endTime1").val(),
+						"title": $("#title1").val()
 					};
 					GetnoticeTmpList(currentpage, pagesize, data, "projectList2", $("#fj_page2"), true, "/api/notice/list");
 				});
@@ -71,6 +74,7 @@
 				GetnoticeTmpList(currentpage, pagesize, data, "projectList2", $("#fj_page2"), true, "/api/notice/list");
 			})
 		</script>
+
 	</head>
 
 	<body>

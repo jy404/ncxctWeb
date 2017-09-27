@@ -33,34 +33,42 @@
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
 		<script type="text/javascript">
-			var Id;
+			var Id, api, msgtype;
 			$(function() {
 				$.ajaxSettings.async = false;
 				Id = $.getUrlParam("id");
-				SetData(Id);
+				msgtype = $.getUrlParam("msgtype");
+				if (msgtype == "msg")
+					api = "/api/message/";
+				else
+					api = "/api/noticeTmp/";
+				SetData(Id, api);
 			});
 
-			function SetData(Id) {
+			function SetData(Id, api) {
 				$.getJSON(
-					domain + "/api/noticeTmp/" + Id,
+					domain + api + Id,
 					function(res) {
-						if(res["code"] == "0") {
-							var userName = res["result"]["userName"];
-							var publishTime = res["result"]["publishTime"];
-							$("#titlespan")[0].innerHTML = "> " + res["result"]["title"];
-							$("#title")[0].innerHTML = res["result"]["title"];
-							$("#subtitle")[0].innerHTML = "发布人：" + userName + "&nbsp;&nbsp;" + "发布时间：" + publishTime;
-							$('#content')[0].innerHTML = res["result"]["content"];
-
-							var file = res["result"]["attachments"];
-							var html = "";
-							for(var cnt = 0; cnt < file.length; cnt++) {
-								var filename = file[cnt]["name"];
-								var fileurl = file[cnt]["url"];
-								html += "<div class=\"xqTextFj\"><a href=\"" + fileurl + "\" > 附件一： " + filename + " </a></div > ";
+						if (res["code"] == "0") {
+							if (msgtype != "msg") {
+								var userName = res["result"]["userName"];
+								var publishTime = res["result"]["publishTime"];
+								$("#titlespan")[0].innerHTML = "> " + res["result"]["title"];
+								$("#title")[0].innerHTML = res["result"]["title"];
+								$("#subtitle")[0].innerHTML = "发布人：" + userName + "&nbsp;&nbsp;" + "发布时间：" + publishTime;
+								$('#content')[0].innerHTML = res["result"]["content"];
+								var file = res["result"]["attachments"];
+								var html = "";
+								for (var cnt = 0; cnt < file.length; cnt++) {
+									var filename = file[cnt]["name"];
+									var fileurl = file[cnt]["url"];
+									html += "<div class=\"xqTextFj\"><a href=\"" + fileurl + "\" > 附件一： " + filename + " </a></div > ";
+								}
+							} else {
+								$("#title")[0].innerHTML = res["result"]["title"];
+								$('#content')[0].innerHTML = res["result"]["content"];
 							}
 							$(".xq").append(html);
-
 							Id = res["result"]["id"];
 						} else {
 							Toast.Err("错误", res["description"], 'top-center', 'left')

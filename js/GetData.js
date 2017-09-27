@@ -1,6 +1,6 @@
 //===========================全局通用变量==========================//
 //var domain = "http://139.196.72.104:8082";
-var domain = "http://test.ncxct.com:8082";
+var domain = "http://test.ncxct.com";
 
 //===========================公共方法=============================//
 (function($) {
@@ -77,7 +77,7 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						if (data["status"] != 1)
-							html += "<td><a href='详情页.html?id=" + rows[i]["id"] + "' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+							html += "<td><a href='020201.html?id=" + rows[i]["id"] + "&msgtype=msg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 						else
 							html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
 						html += "<td>" + new Date(rows[i]["createTime"]).toLocaleDateString() + "</td>";
