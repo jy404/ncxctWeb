@@ -31,13 +31,21 @@
 				$('.xmcxSerachreset').click(function() {
 					$(".xmcxSerachTypeSelect").val("");
 				});
+				$("#noticeType").click(function(){
+					$(".noticeUl").show();
+				});
+				$('#noticeUl li').click(function() {
+					$("#noticeType")[0].innerHTML = $(this)[0].innerHTML;
+					$("#projectType").val($(this)[0].title);
+					$(".noticeUl").hide();
+				});
 				$('.xmcxSerachBtn1').click(function() {
 					currentpage = 1;
 					pagesize = 10;
 					data = {
 						"name": $("#name").val(),
 						//"orgName": $("#orgName").val(),
-						"projectType": $("#projectType option:selected").val(),
+						"projectType": $("#projectType").val(),
 						//"status": $("#status").val(),
 						"startTime": $("#startTime").val()
 						//"endTime": $("#endTime").val()
@@ -47,6 +55,47 @@
 				GetProjectList1(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
 			})
 		</script>
+		<style type="text/css">
+			.tzggSerachTypeSelect {
+				float: left;
+				width: 66%;
+				height: 30px;
+				border: 1px solid #cbcbcb;
+				position: relative;
+				background: url(img/tzggBg.png) no-repeat 97% center;
+				cursor: pointer;
+			}
+			
+			.tzggSerachTypeSelect h2 {
+				width: 100%;
+				height: 30px;
+				color: #666666;
+				font-size: 14px;
+				padding-left: 10px;
+				font-weight: normal;
+			}
+			
+			.tzggSerachTypeSelect ul {
+				width: 100%;
+				position: absolute;
+				z-index: 11;
+				background: #f1f1f1;
+				left: -1px;
+				top: 31px;
+				display: none;
+			}
+			
+			.tzggSerachTypeSelect ul li {
+				width: 90%;
+				height: 25px;
+				line-height: 25px;
+				color: #666666;
+				border: 1px solid #cbcbcb;
+				font-size: 14px;
+				padding-left: 10%;
+				border-top: none;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -71,11 +120,14 @@
 				</div>
 				<div class="xmcxSerachTitle">
 					<span>项目类型</span>
-					<!--<input type="text" id="projectType" class="xmcxSerachTypeSelect" />-->
-					<select id="projectType">
-						<option value="HOUSE">房建项目</option>
-						<option value="CITY">市政项目</option>
-					</select>
+					<div class="tzggSerachTypeSelect">
+						<h2 id="noticeType">房建项目</h2>
+						<input id="projectType" value="inform" style="display: none;" />
+						<ul id="noticeUl" class="noticeUl">
+							<li title="HOUSE">房建项目</li>
+							<li title="CITY">市政项目</li>
+						</ul>
+					</div>
 				</div>
 				<div class="xmcxSerachTitle">
 					<span>项目状态</span>

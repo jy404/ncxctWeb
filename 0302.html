@@ -34,7 +34,7 @@
 		</style>
 		<script type="text/javascript">
 			var currentpage = 1;
-			var pagesize = 2;
+			var pagesize = 10;
 			var data = {};
 			$(function() {
 				$('.addBb').click(function() {
@@ -48,7 +48,7 @@
 				});
 				$('.xmbbSerachBtn1').click(function() {
 					currentpage = 1;
-					pagesize = 2;
+					pagesize = 10;
 					var sort = $(this).attr("name");
 					data = {
 						"projectType": (sort == 1 || sort == 2) ? "HOUSE" : "CITY",
@@ -225,7 +225,7 @@
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" id="projectTime2" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+						<input type="text" id="projectTime2" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>负责人</span>
@@ -268,7 +268,7 @@
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" id="projectTime3" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+						<input type="text" id="projectTime3" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>负责人</span>
@@ -311,7 +311,7 @@
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" id="projectTime4" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+						<input type="text" id="projectTime4" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>负责人</span>

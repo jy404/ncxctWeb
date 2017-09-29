@@ -51,7 +51,7 @@
 					function(res) {
 						if (res["code"] == "0") {
 							if (msgtype != "msg") {
-								var userName = res["result"]["userName"];
+								var userName = res["result"]["userName"] == "" ? "未知" : res["result"]["userName"];
 								var publishTime = res["result"]["publishTime"];
 								$("#titlespan")[0].innerHTML = "> " + res["result"]["title"];
 								$("#title")[0].innerHTML = res["result"]["title"];
@@ -65,8 +65,17 @@
 									html += "<div class=\"xqTextFj\"><a href=\"" + fileurl + "\" > 附件一： " + filename + " </a></div > ";
 								}
 							} else {
+								var userName = res["result"]["publishUserName"] == "" ? "未知" : res["result"]["publishUserName"];
+								var publishTime = res["result"]["publishTime"];
 								$("#title")[0].innerHTML = res["result"]["title"];
 								$('#content')[0].innerHTML = res["result"]["content"];
+								$("#subtitle")[0].innerHTML = "发布人：" + userName + "&nbsp;&nbsp;" + "发布时间：" + res["result"]["publishTime"];
+								if (res["result"]["hasRead"] == false) {
+									$.getJSON(
+										domain + "/api/message/set/read/" + res["result"]["id"],
+										function(res) {}
+									);
+								}
 							}
 							$(".xq").append(html);
 							Id = res["result"]["id"];

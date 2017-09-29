@@ -68,6 +68,7 @@
 							//							$('#reamark').val(res["result"]["comment"]);
 							id = res["result"]["id"];
 							//附件加上
+							$('#fileurl_uploader').val(res["result"]["fileUrl"]);
 							upload.show(res["result"]["fileUrl"], "files_uploader")
 						}
 					},

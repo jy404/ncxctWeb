@@ -41,7 +41,7 @@
 				projectType = $.getUrlParam("projectType");
 				step = $.getUrlParam("step");
 				Id = $.getUrlParam("id");
-				SelectProject("HOUSE", "projectName");
+				SelectProject(projectType, "projectName");
 				SelectUser("userName");
 				if(action != "" && action != undefined) {
 					SetData(Id);

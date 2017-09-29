@@ -28,6 +28,7 @@
 		<script src="js/jquery.fileupload-image.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript" src="js/unitData.js"></script>
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id, cid, zid, gid;
 			$(function() {
@@ -37,15 +38,15 @@
 				UploadProcess("uploader1");
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
+				SelectOrgByTypeAndCategory("orgType","orgCategory","cwei")
+				SelectOrgByTypeAndCategory("orgType1","orgCategory1","zwei")
+				SelectOrgByTypeAndCategory("orgType2","orgCategory2","gwei")
 				/*页面传参并判断类型 start*/
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = unescape($.getUrlParam("projectName"));
-				//SelectUnit("cwei", "A0004", projectType);
-				//SelectUnit("zwei", "A0005", projectType);
-				//SelectUnit("gwei", "A0005", projectType);
 				if (action != "" && action != undefined) {
 					SetData(projectId)
 					if (action == "view") {
@@ -55,10 +56,13 @@
 						$(".szBtn").hide();
 					}
 				}
-				$('.szxmTjPageRightFormBc').click(function() {
+				$('#saveBtn').click(function() {
 					SubmitData(1)
 				});
-				$('.szxmTjPageRightFormBtn').click(function() {
+				$('#updateBtn').click(function() {
+					SubmitData(3)
+				});
+				$('#submitBtn').click(function() {
 					SubmitData(2)
 				});
 			});
@@ -68,19 +72,25 @@
 					domain + "/api/programmeApproval/" + projectId,
 					function(res) {
 						if (res["code"] == "0") {
+							cid = res["result"][0]["id"];
 							$("#cwei").val(res["result"][0]["unitName"]);
 							$("#cNo").val(res["result"][0]["docNo"]);
 							$("#ctime").val(res["result"][0]["createTime"]);
+							$('#fileurl_uploader').val(res["result"][0]["fileUrl"]);
 							upload.show(res["result"][0]["fileUrl"], "files_uploader")
 								//城建局专家会
+							zid = res["result"][1]["id"];
 							$("#zwei").val(res["result"][1]["unitName"]);
 							$("#zNo").val(res["result"][1]["docNo"]);
 							$("#ztime").val(res["result"][1]["createTime"]);
+							$('#fileurl_uploader1').val(res["result"][1]["fileUrl"]);
 							upload.show(res["result"][1]["fileUrl"], "files_uploader1")
 								//规委会办公会
+							gid = res["result"][2]["id"];
 							$("#gwei").val(res["result"][2]["unitName"]);
 							$("#gNo").val(res["result"][2]["docNo"]);
 							$("#gtime").val(res["result"][2]["createTime"]);
+							$('#fileurl_uploader2').val(res["result"][2]["fileUrl"]);
 							upload.show(res["result"][2]["fileUrl"], "files_uploader2")
 						}
 					},
@@ -136,8 +146,19 @@
 						"unitName": gwei
 					}]
 				}
-				meetAdd('/api/programmeApproval', JSON.stringify(data));
+				if (status == 1)
+					meetAdd('/api/programmeApproval', JSON.stringify(data));
+				else if (status == 3) {
+					data["programmeApprovalList"][0]["id"] = cid;
+					data["programmeApprovalList"][1]["id"] = zid;
+					data["programmeApprovalList"][2]["id"] = gid;
+					meetPut('/api/programmeApproval', JSON.stringify(data));
+				} else {
+					meetAdd('/api/programmeApproval/submit', JSON.stringify(data));
+				}
 			}
+
+			
 		</script>
 	</head>
 
@@ -146,10 +167,18 @@
 		<h3 class="ydsxHead">城建局技术会</h3>
 		<div class="szxmTjPageRightForm">
 			<span>单位名称：</span>
-			<input type="text" id="cwei" />
-			<!--<select id="cwei">
-				<option>---请选择---</option>
-			</select>-->
+			<!--<input type="text" id="cwei" />-->
+			<select id="orgType">
+				<option value="" selected="selected">请选择单位类型</option>
+				<option value="OUT">项目参建单位</option>
+				<option value="AGENT">项目中介单位</option>
+			</select>
+			<select id="orgCategory">
+				<option value="" selected="selected">请选择单位类别</option>
+			</select>
+			<select id="cwei">
+				<option value="" selected="selected">请选择单位名称</option>
+			</select>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
@@ -167,10 +196,21 @@
 		<h3 class="ydsxHead">城建局专家会</h3>
 		<div class="szxmTjPageRightForm">
 			<span>单位名称：</span>
-			<input type="text" id="zwei" />
-			<!--<select id="zwei">
+			<!--<input type="text" id="zwei" />
+			<select id="zwei">
 				<option>---请选择---</option>
 			</select>-->
+			<select id="orgType1">
+				<option value="" selected="selected">请选择单位类型</option>
+				<option value="OUT">项目参建单位</option>
+				<option value="AGENT">项目中介单位</option>
+			</select>
+			<select id="orgCategory1">
+				<option value="" selected="selected">请选择单位类别</option>
+			</select>
+			<select id="zwei">
+				<option value="" selected="selected">请选择单位名称</option>
+			</select>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
@@ -188,10 +228,21 @@
 		<h3 class="ydsxHead">规委会办公会</h3>
 		<div class="szxmTjPageRightForm">
 			<span>单位名称：</span>
-			<input type="text" id="gwei" />
-			<!--<select id="gwei">
+			<!--<input type="text" id="gwei" />
+			<select id="gwei">
 				<option>---请选择---</option>
 			</select>-->
+			<select id="orgType2">
+				<option value="" selected="selected">请选择单位类型</option>
+				<option value="OUT">项目参建单位</option>
+				<option value="AGENT">项目中介单位</option>
+			</select>
+			<select id="orgCategory2">
+				<option value="" selected="selected">请选择单位类别</option>
+			</select>
+			<select id="gwei">
+				<option value="" selected="selected">请选择单位名称</option>
+			</select>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
@@ -207,8 +258,9 @@
 		</div>
 		<div id="uploader2" class="fjStyle"></div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

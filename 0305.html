@@ -26,14 +26,16 @@
 			$(function() {
 				GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
 				$("#searchBtn").click(function() {
+					currentpage = 1;
+					pagesize = 10;
 					var projectName = $("#txtProjectName").val();
 					var startTime = $("#txtstartTime").val();
 					var projectNo = $("#txtProjectNo").val();
-					if (projectName != undefined && projectName != "")
+					if(projectName != undefined && projectName != "")
 						data["name"] = projectName;
-					if (startTime != undefined && startTime != "")
+					if(startTime != undefined && startTime != "")
 						data["startTime"] = startTime;
-					if (projectNo != undefined && projectNo != "")
+					if(projectNo != undefined && projectNo != "")
 						data["projectNo"] = projectNo;
 					GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
 				})

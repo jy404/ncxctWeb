@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript"></script>
+		<script src="js/bootstrap.min.js" type="text/javascript"></script>
+		<title>JQUERY</title>
+		<script type="text/javascript">
+			var option = [{
+				'id': '1',
+				'areaname': '北京',
+				'children': [{
+					'id': '1.1',
+					'areaname': '东城区',
+					'children': [{
+						'id': '1.1.1',
+						'areaname': '东城区1',
+						'children': [{
+							'id': '1.1.1.1',
+							'areaname': '东城区2'
+						}]
+					}]
+				}]
+			}, {
+				'id': '2',
+				'areaname': '天津',
+				'children': [{
+					'id': '2.1',
+					'areaname': '河东区',
+					'children': [{
+						'id': '2.1.1',
+						'areaname': '河东区1'
+					}]
+				}]
+			}, {
+				'id': '3',
+				'areaname': '河北',
+				'children': [{
+					'id': '3.1',
+					'areaname': '宁河县',
+					'children': [{
+						'id': '3.1.1',
+						'areaname': '宁河县1'
+					}]
+				}]
+			}, {
+				'id': '4',
+				'areaname': '山西',
+				'children': [{
+					'id': '4.1',
+					'areaname': '太原市',
+					'children': [{
+						'id': '4.1.1',
+						'areaname': '太原市1'
+					}]
+				}]
+			}, {
+				'id': '5',
+				'areaname': '辽宁',
+				'children': [{
+					'id': '5.1',
+					'areaname': '沈阳市',
+					'children': [{
+						'id': '5.1.1',
+						'areaname': '沈阳市1'
+					}]
+				}]
+			}, {
+				'id': '6',
+				'areaname': '辽陆',
+				'children': [{
+					'id': '6.1',
+					'areaname': '辽陆1',
+					'children': [{
+						'id': '6.1.1',
+						'areaname': '辽陆11'
+					}]
+				}, {
+					'id': '6.2',
+					'areaname': '辽陆2',
+					'children': [{
+						'id': '6.2.1',
+						'areaname': '辽陆22'
+					}]
+				}]
+			}, ];
+			$(document).ready(function() {
+				clickSelect(option);
+				//给定json文档，以children为键写子层次的下拉类容,name取名si[],clss取名s[],给定json文件自动生成多下拉菜单
+				//____________________________________________________________________________________________________
+				function clickSelect(c) { //|
+					select1 = $('select[name="s1\[\]"]'); //|
+					$.each(c, function(k, v) { //|
+						select1.append('<option value=' + v.id + '>' + v.areaname); //|
+					}); //|
+					kkk(c); //|
+					select1.parent().on('change', 'select[class="s\[\]"]', function() { //|
+						kkk(c, $(this)); //|
+					}); //|
+				}; //|
+				function kkk(c, s = select1) { //|
+					$(s).nextAll().remove(); //|
+					var id = s.val(); //|
+					var name = s.prop('name');
+					var start = name.indexOf('s') + 1;
+					var stop = name.indexOf('['); //|
+					var nameid = parseInt(name.substring(start, stop)); //|
+					var rankid = id.split('.'); //|
+					$.each(rankid, function(K1, v1) { //|
+						if (K1 == 0) kareak = c; //|
+						$.each(kareak, function(k, v) { //|
+							if (v.id.split('.')[v.id.split('.').length - 1] == v1) { //|
+								kareak = v.children; //|
+								if (rankid.length - 1 == K1) { //|
+									var a = v; //|
+									for (var ilv = 0; ilv <= 1000; ilv++) { //|
+										if (a.children) {
+											var a = a.children[0];
+										} //|
+										else break; //|
+									}; //|
+									for (var i = nameid + 1; i <= ilv + nameid; i++) { //|
+										var m = "\$('select[name=\"s" + i + "\[\]\"]')"; //|
+										eval('select' + (i - 1)).after('<select class="s[]" name="s' + i + '[]">'); //|
+										eval('select' + i + '=' + m); //|
+									}; //|
+									for (var j = nameid + 1; j <= ilv + nameid; j++) { //|
+										var s1 = 'select' + (j - 1);
+										var s2 = 'select' + j; //|
+										lll(c, eval(s1), eval(s2)); //|
+									}; //|
+								}; //|
+							}; //|
+						}); //|
+					}); //|
+				}; //|
+				function lll(c, a = select1, b = select2) { //|
+					b.empty(); //|
+					var id = a.val(); //|
+					var rankid = id.split('.'); //|
+					var rank = id.split('.').length - 1; //|
+					$.each(rankid, function(k1, v1) { //|
+						if (k1 == 0) lareal = c; //|
+						$.each(lareal, function(k, v) { //|
+							if (v.id.split('.')[v.id.split('.').length - 1] == v1) { //|
+								lareal = v.children; //|
+								if (rankid.length - 1 == k1) { //|
+									$.each(lareal, function(k, v) { //|
+										b.append('<option value=' + v.id + '>' + v.areaname); //|
+									}); //|
+								}; //|
+								return false; //|
+							}; //|
+						}); //|
+					}); //|
+				} //|
+				//__________________________________________________________________________________________________//|
+			});
+		</script>
+	</head>
+
+	<body>
+		<div><select class="s[]" name="s1[]"></select></div>
+	</body>
+
+</html>

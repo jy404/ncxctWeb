@@ -112,7 +112,7 @@
 				}
 				if(action == "edit")
 					data["id"] = id;
-				meetAdd('/api/saveUser', JSON.stringify(data), "用户管理.html");
+				meetAdd('/api/saveUser', JSON.stringify(data), "0504.html");
 			}
 		</script>
 	</head>
@@ -159,13 +159,13 @@
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>出生日期：</span>
-					<input type="text" id="birthTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+					<input type="text" id="birthTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 				</div>
 			</div>
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
-					<span>入职时间：</span>
-					<input type="text" id="joinTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+					<span>入职日期：</span>
+					<input type="text" id="joinTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>手机号：</span>

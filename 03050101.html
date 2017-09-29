@@ -36,6 +36,7 @@
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
+				SelectDept("projectOrg")
 				if (action != "" && action != undefined) {
 					SetData(projectId)
 					if (action == "view") {
@@ -79,32 +80,34 @@
 			}
 
 			function SubmitData() {
-				var data = {
-					"name": $("#projectName").val(),
-					"projectType": "HOUSE",
-					"projectTypeName": "房建项目",
-					"userId": "1",
-					"projectNo": $("#projectNo").val(),
-					"orgId": $("#projectOrg").val(),
-					"startTime": $("#startTime").val(),
-					"prophaseUserId": "1",
-					"prophaseUserName": $("#prophaseUserName").val(),
-					"landUserId": "1",
-					"landUserName": $("#landUserName").val(),
-					"contUserId": "1",
-					"contUserName": $("#contUserName").val(),
-					"compUserId": 1,
-					"compUserName": $("#compUserName").val(),
-					"address": $("#address").val(),
-					"totalAmount": $("#totalAmount").val(),
-					"comment": $("#comment").val(),
-					"latitude": $("#latitude").val(),
-					"longitude": $("#longitude").val(),
-					"status": "1"
+				if (confirm("请认真检查内容是否正确，一旦提交，将不能修改，请谨慎提交!")) {
+					var data = {
+						"name": $("#projectName").val(),
+						"projectType": "HOUSE",
+						"projectTypeName": "房建项目",
+						"userId": "1",
+						"projectNo": $("#projectNo").val(),
+						"orgId": $("#projectOrg").val(),
+						"startTime": $("#startTime").val(),
+						"prophaseUserId": "1",
+						"prophaseUserName": $("#prophaseUserName").val(),
+						"landUserId": "1",
+						"landUserName": $("#landUserName").val(),
+						"contUserId": "1",
+						"contUserName": $("#contUserName").val(),
+						"compUserId": 1,
+						"compUserName": $("#compUserName").val(),
+						"address": $("#address").val(),
+						"totalAmount": $("#totalAmount").val(),
+						"comment": $("#comment").val(),
+						"latitude": $("#latitude").val(),
+						"longitude": $("#longitude").val(),
+						"status": "1"
+					}
+					if (action == "edit")
+						data["id"] = id;
+					meetAdd('/api/project/save', JSON.stringify(data), "0305.html");
 				}
-				if (action == "edit")
-					data["id"] = id;
-				meetAdd('/api/project/save', JSON.stringify(data), "0305.html");
 			}
 		</script>
 	</head>
@@ -121,7 +124,10 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>负责部门：</span>
-			<input type="text" id="projectOrg" />
+			<!--<input type="text" id="projectOrg" />-->
+			<select id="projectOrg">
+				<option value="">请选择部门</option>
+			</select>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预计开工时间：</span>

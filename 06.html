@@ -55,7 +55,7 @@
 							$('#name').val(res["result"]["user"]["name"]);
 							$('#userTel').val(res["result"]["user"]["name"]);
 							$('#userDept').val(res["result"]["user"]["deptId"]);
-							$('#userRole').val(res["result"]["user"]["roleId"]);
+							$('#userRole').val(res["result"]["roleList"][0]["roleName"]);
 
 							id = res["result"]["user"]["id"];
 						} else {

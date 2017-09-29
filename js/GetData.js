@@ -12,16 +12,54 @@ var domain = "http://test.ncxct.com";
 	}
 })(jQuery);
 //获取字典
-function GetDirection(keyword) {
+function GetDirection(keyword, successcallback) {
 	var data = {
 		"keyWord": keyword
 	};
 	$.axse(
 		domain + "/api/wordbook/list",
 		JSON.stringify(data),
-		function(res) {},
+		function(res) {
+			successcallback(res);
+		},
 		function() {}
 	);
+}
+
+// 对Date的扩展，将 Date 转化为指定格式的String
+// 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 
+// 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字) 
+// 例子： 
+// (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
+// (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
+Date.prototype.format = function(fmt) { //author: meizz 
+		var o = {
+			"M+": this.getMonth() + 1, //月份 
+			"d+": this.getDate(), //日 
+			"h+": this.getHours(), //小时 
+			"m+": this.getMinutes(), //分 
+			"s+": this.getSeconds(), //秒 
+			"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+			"S": this.getMilliseconds() //毫秒 
+		};
+		if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		for (var k in o)
+			if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		return fmt;
+	}
+	/*
+	调用：
+	var time1 = new Date().Format("yyyy-MM-dd");
+	var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
+	*/
+
+function subString(str, len) {
+	if ((str != "" && str != undefined)) {
+		if (str.length > len) {
+			str = str.replace(/<.*?>/ig, "").substring(0, len) + "...";
+		}
+	} else str = "无";
+	return str;
 }
 
 //===========================公共方法结束=============================//
@@ -41,12 +79,12 @@ function UserLogin(data) {
 			if (res["code"] == 0)
 				window.location = "index.html";
 			else
-				Toast.Err('错误', res["description"], 'mid-center', 'left');
+				Toast.Err('错误', res["description"], 'top-center', 'left');
 			$("#codeimg").attr("src", domain + "/api/validateCode?rnd=" + Math.random());
 			$("#txtCode").val('');
 		},
 		function(xhr, text) {
-			Toast.Err('错误', '请求数据失败~', 'mid-center', 'left');
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 			$("#codeimg").attr("src", domain + "/api/validateCode?rnd=" + Math.random());
 			$("#txtCode").val('');
 		}
@@ -80,7 +118,12 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 							html += "<td><a href='020201.html?id=" + rows[i]["id"] + "&msgtype=msg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 						else
 							html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
-						html += "<td>" + new Date(rows[i]["createTime"]).toLocaleDateString() + "</td>";
+						if (data["status"] != 2 && data["status"] != 1) {
+							html += "<td>" + (rows[i]["publishUserName"] == "" ? "未知" : rows[i]["publishUserName"]) + "</td>";
+							html += "<td>" + new Date(rows[i]["publishTime"]).toLocaleString() + "</td>";
+						} else {
+							html += "<td>" + new Date(rows[i]["createTime"]).toLocaleString() + "</td>";
+						}
 						html += "</tr>";
 					}
 					$("#" + obj).append(html);
@@ -597,7 +640,7 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						html += "<td>" + rows[i]["totalAmount"] + "</td>";
 						html += "<td>" + new Date(rows[i]["startTime"]).toLocaleDateString() + "</td>";
 						html += "<td>结束时间没有</td>";
-						html += "<td>" + rows[i]["status"] + "</td>";
+						html += "<td>" + (rows[i]["status"] == 1 ? "已保存" : "已报建") + "</td>";
 						html += "<td width=\"12%\">";
 
 						if (data["projectType"] == "CITY") {
@@ -651,7 +694,7 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 						html += "<td>" + rows[i]["name"] + "</td>";
 						html += "<td>" + rows[i]["orgName"] + "</td>";
 						html += "<td>" + (rows[i]["projectType"] == "HOUSE" ? "房建项目" : "市政项目") + "</td>";
-						html += "<td>" + rows[i]["status"] + "</td>";
+						html += "<td>" + (rows[i]["status"] == 1 ? "已保存" : "已报建") + "</td>";
 						html += "<td>" + new Date(rows[i]["startTime"]).toLocaleDateString() + "</td>";
 						html += "<td>计划结束时间没有</td>";
 						html += "<td>结束时间没有</td>";
@@ -832,8 +875,10 @@ function GetnoticeTmpList(currentpage, pagesize, data, obj, pageobj, isInit, url
 							html += "<td><a href=\"020203.html?action=edit&id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
 						else
 							html += "<td><a href=\"020201.html?id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
-
-						html += "<td>" + (rows[i]["status"] == "1" ? "未发布" : "已发布") + "</td>";
+						if (obj == "projectList2")
+							html += "<td>" + (rows[i]["userName"] == "" ? "未知" : rows[i]["userName"]) + "</td>";
+						else
+							html += "<td>" + (rows[i]["status"] == "1" ? "未发布" : "已发布") + "</td>";
 
 						if (rows[i]["publishTime"] != undefined)
 							html += "<td>" + new Date(rows[i]["publishTime"]).toLocaleDateString() + "</td>";
@@ -944,15 +989,15 @@ function GetProjectWeekList(currentpage, pagesize, data, sort, obj, pageobj, isI
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + new Date(rows[i]["projectTime"]).toLocaleDateString() + "</td>";
-						html += "<td>" + rows[i]["projectName"] + "</td>";
+						html += "<td title='" + rows[i]["projectName"] + "'>" + subString(rows[i]["projectName"], 6) + "</td>";
 						html += "<td>" + rows[i]["userName"] + "</td>";
-						html += "<td>" + "项目概况" + "</td>";
-						html += "<td>" + rows[i]["allPushPlan"] + "</td>";
+						html += "<td title='" + rows[i]["comment"] + "'>" + subString(rows[i]["comment"], 6) + "</td>";
+						html += "<td title='" + rows[i]["allPushPlan"] + "'>" + subString(rows[i]["allPushPlan"], 6) + "</td>";
 						html += "<td>" + "当前进度情况" + "</td>";
-						html += "<td>" + rows[i]["tWeekPlan"] + "</td>";
-						html += "<td>" + rows[i]["tWeekCase"] + "</td>";
-						html += "<td>" + rows[i]["nWeekCase"] + "</td>";
-						html += "<td>" + rows[i]["issue"] + "</td>";
+						html += "<td title='" + rows[i]["tWeekPlan"] + "'>" + subString(rows[i]["tWeekPlan"], 6) + "</td>";
+						html += "<td title='" + rows[i]["tWeekCase"] + "'>" + subString(rows[i]["tWeekCase"], 6) + "</td>";
+						html += "<td title='" + rows[i]["nWeekCase"] + "'>" + subString(rows[i]["nWeekCase"], 6) + "</td>";
+						html += "<td title='" + rows[i]["issue"] + "'>" + subString(rows[i]["issue"], 6) + "</td>";
 
 						html += "<td width=\"12%\"><a href=\"03020" + sort + ".html?action=view&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
 						html += "<a href=\"03020" + sort + ".html?action=edit&id=" + rows[i]["id"] + "\" style=\"background: #ff0000 ;\">修改</a></td>";
@@ -1132,3 +1177,244 @@ function GetDocmanagePath(obj, url, Id) {
 		}
 	);
 }
+
+/**
+ * 获取配置信息（用户信息，菜单权限信息）
+ */
+function getConfig() {
+	$.ajax({
+		type: "post",
+		url: domain + "/api/config",
+		data: {},
+		dataType: "json",
+		contentType: "application/json",
+		success: function(data) {
+			if (data.code != 0) {
+				console(data.description)
+				return;
+			}
+			//设置用户信息
+			$("#user_info").html("<b>" + data.result.user.userName + "</b>," + data.result.roleList[0].roleName)
+		},
+		error: function(s) {},
+		complete: function(XHR, TS) {
+			if (XHR.status === 401) {
+				location.href = 'login.html';
+			}
+		}
+	});
+
+}
+
+function getSchedule() {
+	var param = {
+		'currentPage': 1,
+		'pageSize': 100000
+	}
+	$("#schedule_list").html('')
+	$.ajax({
+		type: "post",
+		url: domain + "/api/process/task/list",
+		data: JSON.stringify(param),
+		dataType: "json",
+		async: true,
+		contentType: "application/json",
+		success: function(data) {
+			if (data.code != 0) {
+				console(data.description)
+				return;
+			}
+
+			var rows = data["result"]["list"];
+			var html = ""
+			rows.forEach(function(row, index, arr) {
+
+				html = html + '<li><a href="#"><b>' +
+					new Date(row.startTime).format("MM-dd") + '</b><span>' +
+					row.title + "待审批" +
+					'</span></a></li>'
+			})
+			$("#schedule_list").append(html)
+		},
+		error: function(s) {},
+		complete: function(XHR, TS) {
+			if (XHR.status === 401) {
+				location.href = 'login.html';
+			}
+		}
+	});
+
+	$.ajax({
+		type: "post",
+		url: domain + "/api/process/task/list/count",
+		data: {},
+		async: true,
+		dataType: "json",
+		contentType: "application/json",
+		success: function(data) {
+			if (data.code != 0) {
+				console(data.description)
+				return;
+			}
+
+			$("#scheduleSize").text(data.result.goingSize)
+			$("#doneScheduleSize").text(data.result.doneSize)
+		},
+		error: function(s) {},
+		complete: function(XHR, TS) {
+			if (XHR.status === 401) {
+				location.href = 'login.html';
+			}
+		}
+	});
+
+}
+
+function getNoticeList() {
+	var param = {
+		'currentPage': 1,
+		'pageSize': 100000
+	}
+
+	$.ajax({
+		type: "post",
+		url: domain + "/api/notice/list",
+		data: JSON.stringify(param),
+		dataType: "json",
+		async: true,
+		contentType: "application/json",
+		success: function(data) {
+			if (data.code != 0) {
+				console(data.description)
+				return;
+			}
+
+			var rows = data["result"]["list"];
+			var html = ""
+			rows.forEach(function(row, index, arr) {
+
+				html = html + '<li><a href="#"><b>' +
+					new Date(row.publishTime).format("yyyy-MM-dd") + '</b><span>' +
+					row.title + '</span></a></li>';
+			})
+			$(".inform").append(html)
+		},
+		error: function(s) {},
+		complete: function(XHR, TS) {
+			if (XHR.status === 401) {
+				location.href = 'login.html';
+			}
+		}
+	});
+
+}
+
+function getProjectNew() {
+	var param = {
+		'currentPage': 1,
+		'pageSize': 100000,
+		needNew: true
+	}
+	$("#new_project").html('')
+	$.ajax({
+		type: "post",
+		url: domain + "/api/project/list",
+		data: JSON.stringify(param),
+		dataType: "json",
+		async: true,
+		contentType: "application/json",
+		success: function(data) {
+			if (data.code != 0) {
+				console(data.description)
+				return;
+			}
+
+			var rows = data["result"]["list"];
+			var html = ""
+			rows.forEach(function(row, index, arr) {
+
+				html = html + '<li><a href="#"><b>' +
+					new Date(row.createTime).format("yyyy-MM-dd") + '</b><span>' +
+					row.name + '</span></a></li>'
+			})
+			$("#new_project").append(html)
+		},
+		error: function(s) {},
+		complete: function(XHR, TS) {
+			if (XHR.status === 401) {
+				location.href = 'login.html';
+			}
+		}
+	});
+
+	$.ajax({
+		type: "post",
+		url: domain + "/api/project/list/count",
+		data: {},
+		dataType: "json",
+		async: true,
+		contentType: "application/json",
+		success: function(data) {
+			if (data.code != 0) {
+				console(data.description)
+				return;
+			}
+
+			$("#new_size").text(data.result.newSize)
+			$("#total_siz").text(data.result.totalCount)
+		},
+		error: function(s) {},
+		complete: function(XHR, TS) {
+			if (XHR.status === 401) {
+				location.href = 'login.html';
+			}
+		}
+	});
+}
+
+//***********************单位三级联动********************//
+function SelectOrgByTypeAndCategory(orgTypeObj, orgCategoryObj, orgObj) {
+	$("#" + orgTypeObj).change(function() {
+		var orgType = $(this).val();
+		$("#" + orgCategoryObj + " option:not(:first)").remove();
+		$("#" + orgObj + " option:not(:first)").remove();
+		GetOrgCategory(orgType, "#" + orgCategoryObj);
+	});
+	$("#" + orgCategoryObj).change(function() {
+		GetOrgs($("#" + orgTypeObj).val(), $(this).val(), "#" + orgObj);
+	});
+}
+
+function GetOrgCategory(orgType, obj) {
+	$(obj).html("");
+	$(obj).append("<option value=''>请选择单位类型</option>");
+	if (orgType != "" && orgType != undefined) {
+		$.each(unitInfo, function(i, item) {
+			$(obj).append("<option value='" + item.id + "'>" + item.name + "</option>");
+		});
+	}
+}
+
+function GetOrgs(orgType, orgCategory, obj) {
+	$(obj).html("");
+	$(obj).append("<option value=''>请选择单位名称</option>");
+	if (orgCategory == "" || orgCategory == undefined)
+		return;
+	$.axse(
+		domain + "/api/proorg/page/list",
+		JSON.stringify({
+			"currentPage": 1,
+			"orgCategory": orgCategory,
+			"orgType": orgType,
+			"pageSize": 100000,
+			"projectType": projectType
+		}),
+		function(res) {
+			$.each(res.result.list, function(i, item) {
+				$(obj).append("<option value='" + item.id + "'>" + item.name + "</option>");
+			});
+		}
+	)
+}
+
+//**********************单位三级联动结束****************//

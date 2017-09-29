@@ -6,7 +6,13 @@
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
 	</head>
+	<script>
+		getSchedule()
+		getNoticeList()
+		getProjectNew()
+	</script>
 	<body>
 		<div class="title">
 			<div class="page">
@@ -17,12 +23,12 @@
 			<div class="bodyRightBox">
 			<h2>
 				待办工作
-				<span>未办：<b>19</b>条 &nbsp;&nbsp; 已办：<b>240</b>条</span>
-				<a href="#" class="refresh">刷新</a>
+				<span>未办：<b id="scheduleSize">0</b>条 &nbsp;&nbsp; 已办：<b id="doneScheduleSize">0</b>条</span>
+				<a href="#" onclick="getSchedule()" class="refresh">刷新</a>
 				<a href="#" class="lookOver">查看全部 ></a>
 			</h2>
-			<ul class="word">
-				<li>
+			<ul class="word" id="schedule_list">
+				<!--<li>
 					<a href="#">
 						<b>07-20</b>
 						<span>工程-分包合同HFB20162001（分包）提交审批！</span>
@@ -51,13 +57,13 @@
 						<b>07-20</b>
 						<span>工程-分包合同HFB2016</span>
 					</a>
-				</li>
-				<li>
+				</li>-->
+				<!--<li>
 					<a href="#">
 						<b>07-20</b>
 						<span>工程-分包合同HFB20162001提交审批！</span>
 					</a>
-				</li>
+				</li>-->
 			</ul>
 			<div class="chart">
 				<img src="img/img.png">
@@ -73,7 +79,7 @@
 				<a href="#" class="lookOver">查看全部 ></a>
 			</h2>
 			<ul class="inform">
-				<li>
+				<!--<li>
 					<a href="#">
 						<b>07-20</b>
 						<span>工程-分包合同HFB20162001工程-分包合同HFB20162001（分包）提交审批！</span>
@@ -108,18 +114,18 @@
 						<b>07-20</b>
 						<span>工程-分包合同HFB20162001（分包）提交审批！</span>
 					</a>
-				</li>
+				</li>-->
 			</ul>
 		</div>
 		<div class="bodyRightBox">
 			<h2>
 				最新项目
-				<span>本月新增：<b>19</b>条 &nbsp;&nbsp; 总项目数：<b>240</b>条</span>
-				<a href="#" class="refresh">刷新</a>
+				<span>本月新增：<b id="new_size">0</b>条 &nbsp;&nbsp; 总项目数：<b id="total_siz">0</b>条</span>
+				<a href="#"onclick="getProjectNew()" class="refresh">刷新</a>
 				<a href="#" class="lookOver">查看全部 ></a>
 			</h2>
-			<ul class="word">
-				<li class="wordSelect">
+			<ul class="word" id="new_project">
+				<!--<li class="wordSelect">
 					<a href="#">
 						<b>07-20</b>
 						<span>工程-分包合同HFB20162001（分包）提交审批！</span>
@@ -154,7 +160,7 @@
 						<b>07-20</b>
 						<span>工程-分包合同HFB20162001提交审批！</span>
 					</a>
-				</li>
+				</li>-->
 			</ul>
 			<div class="chart">
 				<img src="img/img1.png">
