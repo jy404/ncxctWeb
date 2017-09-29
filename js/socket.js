@@ -1,5 +1,5 @@
 var socket;
-var longconnectUrl = "http://test.ncxct.com:8083";
+var longconnectUrl = "ws://test.ncxct.com:8083";
 var tokenUrl = "http://test.ncxct.com:8082";
 
 function startSocket(url) {
