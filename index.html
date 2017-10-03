@@ -29,15 +29,43 @@
 				color: #fff;
 				text-align: center;
 			}
+			.xxIndexList{
+				width: 350px;
+				background: rgba(0,0,0,0.6);
+				position: absolute;
+				left: 130px;
+				top: 20px;
+				border-radius: 10px;
+				padding: 15px 0;
+				z-index: 999;
+				display: none;
+			}
+			.xxIndexList li{
+				width: 90%;
+				margin: 0 auto;
+				height: 40px;
+				line-height: 40px;
+				border-bottom: 1px dashed #fff;
+				font-size: 14px;
+				color: #ffffff;
+			}
 		</style>
+		<script type="text/javascript">
+			$(function(){
+				$('.indexXx i').click(function(){
+					$('.xxIndexList').slideToggle();
+				})
+			})
+		</script>
 	</head>
 	<script>
+		getToken()
 		getConfig()
 	</script>
 	<body>
 		<header>
 			<img src="img/logoMin.png" />
-			<div class="headNav">
+			<div class="headNav" style=" position: relative;">
 				<a href="http://test.ncxct.com/api/logout"><span class="logout">注销</span></a>
 				<span class="myUrse">
 					<a href="06.html" target="bodyRight">
@@ -48,6 +76,23 @@
 					<i>3</i>
 				</span>
 				<span id="user_info"></span>
+				<ul class="xxIndexList">
+					<li>
+						<a href="#">
+							您有一个审批带确认。
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							您有一个新消息。
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							您有一个新通知。
+						</a>
+					</li>
+				</ul>
 			</div>
 		</header>
 		<div class="content">

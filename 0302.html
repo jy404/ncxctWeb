@@ -59,6 +59,8 @@
 					};
 					GetProjectWeekList(currentpage, pagesize, data, sort, "projectList" + sort, $("#fj_page" + sort), true, "/api/project/week/list");
 				});
+				//签证与设计变更暂时没有数据返回
+				GetDesignChangeList(currentpage, pagesize, data, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/list");
 				data = {
 					"projectType": "HOUSE",
 					"step": "prophase"
@@ -101,19 +103,15 @@
 				<li>市政前期周报表</li>
 				<li>市政在建项目周报表</li>
 			</ul>
-			<div class="xmbbTab" style="display: block;">
-				<a class="addBb">新增报表</a>
+			<div class="xmbbTab">
+				<a class="addBb">新增变更</a>
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle">
-						<span>项目类型</span>
-						<input type="text" class="xmbbSerachTypeSelect" />
-					</div>
-					<div class="xmbbSerachTitle">
-						<span>项目名称</span>
-						<input type="text" class="xmbbSerachTypeSelect" />
-					</div>
-					<div class="xmbbSerachTitle">
 						<span>工程名称</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>金额类型</span>
 						<input type="text" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachTitle">
@@ -121,11 +119,7 @@
 						<input type="text" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachTitle">
-						<span>表单类型</span>
-						<input type="text" class="xmbbSerachTypeSelect" />
-					</div>
-					<div class="xmbbSerachTitle">
-						<span>费用标准</span>
+						<span>单据业务类型</span>
 						<input type="text" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachTitle">
@@ -138,81 +132,21 @@
 					</div>
 				</div>
 				<div class="xmbbTable">
-					<table cellpadding="0" cellspacing="0" class="xmbbTable1">
+					<table cellpadding="0" cellspacing="0" class="xmbbTable1" id="changeList">
 						<tr>
 							<td width="6%">序号</td>
-							<td width="8">项目类型</td>
-							<td width="11%">项目名称</td>
 							<td width="11%">工程名称</td>
-							<td width="10%">变更类型</td>
-							<td width="10%">表单类型</td>
-							<td width="8%">费用标准(万元)</td>
+							<td width="8%">金额类型</td>
+							<td width="11%">变更类型</td>
 							<td width="8%">估算金额(万元)</td>
-							<td width="8%">审批金额(万元)</td>
+							<td width="10%">单据业务类型</td>
 							<td width="10%">审批状态</td>
 							<td width="10%">操作</td>
 						</tr>
-						<tr>
-							<td>1</td>
-							<td>市政</td>
-							<td>南昌县棚户区改造</td>
-							<td>南昌县棚户区改造</td>
-							<td>设计变更</td>
-							<td>确认单</td>
-							<td>
-								<5</td>
-									<td>2</td>
-									<td>2</td>
-									<td>通过</td>
-									<td>
-										<a style="background: #4bb2ff;" href="#">查看</a>
-									</td>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td>房建</td>
-							<td>南昌县棚户区改造</td>
-							<td>南昌县棚户区改造</td>
-							<td>设计变更</td>
-							<td>确认单</td>
-							<td>
-								<5</td>
-									<td>2</td>
-									<td>2</td>
-									<td>通过</td>
-									<td>
-										<a style="background: #4bb2ff;" href="#">查看</a>
-									</td>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td>市政</td>
-							<td>南昌县棚户区改造</td>
-							<td>南昌县棚户区改造</td>
-							<td>工程签证</td>
-							<td>联系单</td>
-							<td>
-								<5</td>
-									<td>2</td>
-									<td>2</td>
-									<td>通过</td>
-									<td>
-										<a style="background: #4bb2ff;" href="#">查看</a>
-									</td>
-						</tr>
+
 					</table>
-					<div class="fy">
-						<a href="#">首页</a>
-						<a href="#">
-							<</a>
-								<a href="#">1</a>
-								<a href="#">2</a>
-								<a href="#">3</a> . . .
-								<a href="#">8</a>
-								<a href="#">9</a>
-								<a href="#">10</a>
-								<a href="#">></a>
-								<a href="#">尾页</a>
+					<div class="page_div fy" id="fy_page">
+
 					</div>
 				</div>
 			</div>

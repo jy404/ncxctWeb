@@ -28,6 +28,17 @@
 		<script src="js/jquery.fileupload-image.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=NvjXWehxrhWlK51T65hyBXzfiOVTFVUV"></script>
+		<style type="text/css">
+			#allmap {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				margin: 0;
+				font-family: "微软雅黑";
+			}
+		</style>
+
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			$(function() {
@@ -68,6 +79,8 @@
 							$('#address').val(res["result"]["address"]);
 							$('#totalAmount').val(res["result"]["totalAmount"]);
 							$('#comment').val(res["result"]["comment"]);
+							$("#latitude").val(res["result"]["latitude"]);
+							$("#longitude").val(res["result"]["longitude"]);
 							id = res["result"]["id"];
 							//附件加上
 							//upload.show(res["result"]["files"], "files_uploader")
@@ -166,6 +179,14 @@
 			<input type="text" id="latitude" />
 		</div>
 		<div class="szxmTjPageRightForm">
+			<span>选取经纬度：</span>
+			<input name="txtAddressName" type="text" id="txtAddressName" class="input normal" placeholder="请输入地点名称" />
+			<input type="button" value="搜索" class="btn yellow" onclick="findaddress();" style="width: 60px;text-align: center;" />
+			<div id="allmap" style="width: 80%; height: 500px;">
+			</div>
+
+		</div>
+		<div class="szxmTjPageRightForm">
 			<span>总金额：</span>
 			<input type="text" id="totalAmount" />
 		</div>
@@ -177,5 +198,42 @@
 
 		</div>
 	</body>
+	<script type="text/javascript">
+		// 百度地图API功能
+		var map = new BMap.Map("allmap");
+		map.centerAndZoom("南昌县", 13);
+		//单击获取点击的经纬度
+		map.addEventListener("click", function(e) {
+			var jing_du_value = e.point.lng;
+			var wei_du_value = e.point.lat;
+			$("#longitude").val(jing_du_value);
+			$("#latitude").val(wei_du_value);
+		});
+		var curlocation = $("#longitude").val() + "," + $("#latitude").val();
+		if (curlocation.length > 1) {
+			var point = new BMap.Point(curlocation.split(',')[0], curlocation.split(',')[1]);
+			map.panTo(point);
+			setTimeout(function() {
+				map.panTo(point);
+				map.setZoom(16);
+				//map.centerAndZoom(point, 16);
+			}, 2000); //2秒后放大到14级
+			var marker = new BMap.Marker(point); // 创建标注
+			map.addOverlay(marker); // 将标注添加到地图中
+			marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+		}
+		map.enableScrollWheelZoom(true);
+		var local = new BMap.LocalSearch(map, {
+			renderOptions: {
+				map: map
+			}
+		});
+
+		function findaddress() {
+			var address = $("#txtAddressName").val();
+			if (address != "")
+				local.search(address);
+		}
+	</script>
 
 </html>

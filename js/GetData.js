@@ -461,7 +461,7 @@ function GetUserList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 		},
 		function(xhr, text) {
 			if (xhr.status == "401")
-				top.location.href = "登录.html";
+				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
 	);
@@ -639,7 +639,7 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + rows[i]["totalAmount"] + "</td>";
 						html += "<td>" + new Date(rows[i]["startTime"]).toLocaleDateString() + "</td>";
-						html += "<td>结束时间没有</td>";
+						html += "<td>&nbsp;</td>";
 						html += "<td>" + (rows[i]["status"] == 1 ? "已保存" : "已报建") + "</td>";
 						html += "<td width=\"12%\">";
 
@@ -652,6 +652,62 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						}
 						html += "</td>";
 						html += "</tr>";
+
+					}
+					$("#" + obj).append(html);
+				}
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
+						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
+							GetProjectList(index, pagesize, data, obj, pageobj, false, url)
+						});
+				}
+
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+
+function GetProjectListForMap(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+	//清除上一页地图覆盖物
+	if (map != undefined && typeof(map) == "object") {
+		map.clearOverlays();
+	}
+	data["currentPage"] = currentpage;
+	data["pageSize"] = pagesize;
+	$.axse(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
+					//$(obj).find("tr").remove();
+					$("#" + obj + " tr").not(':eq(0)').remove();
+					var html = "";
+					var rows = res["result"]["list"];
+					for (i = 0; i < rows.length; i++) {
+						html += "<tr>";
+						html += "<td>" + rows[i]["name"] + "</td>";
+						html += "<td>项目概况</td>";
+
+						html += "<td title='" + rows[i]["address"] + "'>" + subString(rows[i]["address"], 6) + "</td>";
+						html += "<td>" + rows[i]["totalAmount"] + "</td>";
+						html += "<td>" + rows[i]["startTime"] + "</td>";
+						html += "<td>竣工时间</td>";
+						html += "<td>" + rows[i]["userName"] + "</td>";
+						html += "</tr>";
+						//标注地图
+						if (map != undefined && typeof(map) == "object") {
+							var marker = new BMap.Marker(new BMap.Point(rows[i]["longitude"], rows[i]["latitude"]));
+							map.addOverlay(marker)
+						}
 					}
 					$("#" + obj).append(html);
 				}
@@ -1228,8 +1284,21 @@ function getSchedule() {
 			var rows = data["result"]["list"];
 			var html = ""
 			rows.forEach(function(row, index, arr) {
-
-				html = html + '<li><a href="#"><b>' +
+				var foreignType = row.procForeignType;
+				var projectType = row.projectType;
+				var jumpUrl = "";
+				if (foreignType == "project_plan") {
+					if (projectType == "HOUSE")
+						jumpUrl = "030502.html?action=sp&id=" + row.projectId + "&projectType=" + row.projectType + "&projectName=" + escape(row.projectName);
+					else
+						jumpUrl = "030602.html?action=sp&id=" + row.projectId + "&projectType=" + row.projectType + "&projectName=" + escape(row.projectName);
+				} else if (foreignType == "project_visa_design_change") {
+					if (projectType == "HOUSE")
+						jumpUrl = "03020004.html?action=sp&id=" + row.procForeignId + "&projectId=" + row.projectId + "&projectType=" + row.projectType + "&projectName=" + escape(row.projectName);
+					else
+						jumpUrl = "03020004.html?action=sp&id=" + row.procForeignId + "&projectId=" + row.projectId + "&projectType=" + row.projectType + "&projectName=" + escape(row.projectName);
+				}
+				html = html + '<li><a href="' + jumpUrl + '"><b>' +
 					new Date(row.startTime).format("MM-dd") + '</b><span>' +
 					row.title + "待审批" +
 					'</span></a></li>'
@@ -1418,3 +1487,197 @@ function GetOrgs(orgType, orgCategory, obj) {
 }
 
 //**********************单位三级联动结束****************//
+
+//**********************项目签证设计及变更列表********************//
+function GetDesignChangeList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+	data["currentPage"] = currentpage;
+	data["pageSize"] = pagesize;
+	$.axse(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				//$(obj).find("tr").remove();
+				$("#" + obj + " tr").not(':eq(0)').remove();
+				if (res["result"]["totalCount"] != "0") {
+					var html = "";
+					var rows = res["result"]["list"];
+
+					for (i = 0; i < rows.length; i++) {
+						html += "<tr>";
+						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
+						html += "<td>" + rows[i].name + "</td>";
+						html += "<td>" + (rows[i].amountType == "lt_five" ? "小于5万元" : "大于等于5万元") + "</td>";
+						html += "<td>" + (rows[i].changeType == "design_change" ? "设计变更" : "工程签证") + "</td>";
+						html += "<td>" + rows[i].estimateAmount + "</td>";
+						html += "<td>" + (rows[i].visaType == "contact" ? "联系单" : "确认单") + "</td>";
+						html += "<td>" + rows[i].status + "</td>";
+
+						html += "<td width=\"12%\"><a href=\"03020004.html?action=view&id=" + rows[i]["id"] + "&projectId=" + projectId + "&projectType=" + projectType + "\" style=\"background: #4bb2ff ;\">查看</a>";
+						html += "<a href=\"03020004.html?action=edit&id=" + rows[i]["id"] + "&projectId=" + projectId + "&projectType=" + projectType + "\" style=\"background: #ff0000 ;\">修改</a></td>";
+
+						html += "</tr>";
+					}
+					$("#" + obj).append(html);
+				} else {
+					var html = "";
+					html += "<tr>";
+					html += "<td colspan=\"11\">查无数据</td>"
+					html += "</tr>";
+
+					$("#" + obj).append(html);
+				}
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
+						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
+							GetDesignChangeList(index, pagesize, data, obj, pageobj, false, url)
+						});
+				}
+
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+//查询是否是会签最后一个人
+function CheckLastPerson(procTaskId) {
+	$.getJSON(
+		domain + "/api/process/assessor/last/" + procTaskId,
+		function(res) {
+			if (res.code == 0) {
+				return res.result;
+			} else
+				return true;
+		}
+	)
+}
+
+//返回操作状态
+function GetOperateName(enName) {
+	var cnName = "";
+	switch (enName) {
+		case "SUBMIT":
+			cnName = "发起";
+			break;
+		case "AGREE":
+			cnName = "同意";
+			break;
+		case "REFUSE":
+			cnName = "拒绝";
+			break;
+		case "HANDOVER":
+			cnName = "驳回";
+			break;
+		case "GOING":
+			cnName = "进行中";
+			break;
+		default:
+			cnName = "进行中";
+			break;
+	}
+	return cnName;
+}
+//**********************项目签证及变更列表结束*******************//
+
+//*********************驳回节点查询****************************//
+function GetRejectList(procTaskId) {
+	var data = {
+		"procTaskId": procTaskId
+	};
+	$.axse(
+		domain + "/api/process/assessor/list",
+		JSON.stringify(data),
+		function(res) {
+			if (res.code == 0) {
+				$.each(res.result, function(i, item) {
+					if (item.checkType != "COUNTERSIGN")
+						$("#rejectStepId").append("<option value='" + item.id + "'>" + item.assessor + "</option>")
+					else {
+						$("#rejectStepId").append("<option value='" + item.id + "_" + item.pId + "'>" + item.assessor + "</option>")
+					}
+				});
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+
+}
+//********************驳回节点查询结束************************//
+
+//********************项目进度*******************************//
+function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+	data["currentPage"] = currentpage;
+	data["pageSize"] = pagesize;
+	data["projectType"] = "HOUSE";
+	$.axse(
+		domain + url,
+		JSON.stringify(data),
+		function(res) {
+			if (res["code"] == "0") {
+				//$(obj).find("tr").remove();
+				$("#" + obj + " tr").not(':eq(0)').remove();
+				if (res["result"]["totalCount"] != "0") {
+					var html = "";
+					var rows = res["result"]["list"];
+
+					for (i = 0; i < rows.length; i++) {
+						html += "<tr>";
+						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>";
+						html += "<td>" + rows.projectName + "</td>";
+						html += "<ul class=\"nav nav-pills nav-justified step step-round\" data-step=\"3\">";
+						var step = 1;
+						var flag = false;
+						$.each(rows.projectPlanExtensionList, function(i, item) {
+							if (item.done == false) {
+								if (!flag) {
+									step = i;
+									flag = true;
+								}
+							}
+							html += "<li><a>" + item.stageTypeName + "</a></li>";
+						});
+
+						html += "</ul>";
+						html += "</tr>";
+						bsStep(step);
+					}
+					$("#" + obj).append(html);
+					
+				} else {
+					var html = "";
+					html += "<tr>";
+					html += "<td colspan=\"3\">查无数据</td>"
+					html += "</tr>";
+
+					$("#" + obj).append(html);
+				}
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
+						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
+							GetProjectStep(index, pagesize, data, obj, pageobj, false, url)
+						});
+				}
+
+			} else {
+				Toast.Err('错误', jsondata.description, 'top-center', 'left');
+			}
+		},
+		function(xhr, text) {
+			if (xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
+
+//********************项目进度结束*******************************//

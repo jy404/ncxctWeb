@@ -21,13 +21,13 @@
 		<script src="js/messageboxnotitle.js" type="text/javascript"></script>
 		<script type="text/javascript" src="js/drag_v1.0.js"></script>
 		<script type="text/javascript">
-			var action, projectId, projectNo, projectType, projectName, id, stage = [];
+			var action, projectId, projectNo, projectType, projectName, id, procTaskId, stage = [];
 			$(function() {
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
-				projectName = $.getUrlParam("projectName");
+				projectName = unescape($.getUrlParam("projectName"));
 				$("#projectName").val(projectName);
 				if (action != "" && action != undefined) {
 					SetData(projectId)
@@ -35,11 +35,11 @@
 						$("body").find("input,textarea").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
-						if(action!="sp")
-						$("#agreeBtn,#refuseBtn,#rejectBtn").hide();
-						else
-						$("#saveBtn,#submitBtn").hide();
 					}
+					if (action != "sp")
+						$("#agreeBtn,#refuseBtn,#rejectBtn,#comment").hide();
+					else
+						$("#saveBtn,#submitBtn").hide();
 				}
 				GetDirection(projectType + "_PLAN_STAGE_TYPE", CreateHTML)
 				$("#saveBtn").click(function() {
@@ -47,6 +47,15 @@
 				});
 				$("#submitBtn").click(function() {
 					SubmitData(3);
+				});
+				$("#agreeBtn").click(function() {
+					Agree();
+				});
+				$("#refuseBtn").click(function() {
+					Refuse();
+				});
+				$("#rejectBtn").click(function() {
+					Reject();
 				});
 			});
 
@@ -71,12 +80,25 @@
 					function(res) {
 						if (res.code == 0) {
 							id = res.result.id;
+							procTaskId = res.result.procTaskId;
 							$("#sequence").val(res.result.sequence);
 							$("#survey").val(res.result.survey);
 							$.each(res.result.projectPlanExtensionList, function(i, item) {
 								$("#" + item.stageType + "_st").val(item.planStartTime);
 								$("#" + item.stageType + "_et").val(item.planEndTime);
 							});
+							GetRejectList(res.result.procTaskId);
+							/*
+							if (result.histories.length > 0) {
+								$.each(result.histories, function(i, item) {
+									var html = "<div class=\"gcqzsjLong\">";
+									html += "<span>" + item.assessor + "<b style=\"color: red;\">" + GetOperateName(item.checkStat) + "申请</b></span>";
+									html += "<div class=\"spjlBox\"><i>" + item.checkTime + "</i></div>";
+									html += "</div>";
+									$(".spjl").append(html);
+								});
+							}
+							*/
 						}
 					},
 					function(xhr, text) {
@@ -103,13 +125,20 @@
 						users.push(user);
 					});
 				}
-				var assessor = {};
+				if (status == 3 && users.length == 0) {
+					Toast.Err('错误', '请指定下一环节审批人~', 'top-center', 'left');
+					return;
+				}
+				var assessor = null;
 				var assessorSubList = [];
 				if (users.length == 1) {
+					assessor = {};
 					assessor["assessor"] = users[0].username;
 					assessor["assessorId"] = users[0].userid;
 					assessor["assessorSubList"] = [];
+					assessor["assessorType"] = "PERSON";
 				} else if (users.length > 1) {
+					assessor = {};
 					$.each(users, function(i, user) {
 						var assessorSub = {
 							"assessor": user.username,
@@ -118,9 +147,11 @@
 						};
 						assessorSubList.push(assessorSub);
 					});
+					assessor["assessor"] = "";
+					assessor["assessorId"] = "";
 					assessor["assessorSubList"] = assessorSubList;
+					assessor["assessorType"] = "PERSON";
 				}
-				assessor["assessorType"] = "PERSON";
 				var projectPlanExtensionList = [];
 				$.each(stage, function(i) {
 					var stageobj = {};
@@ -139,9 +170,93 @@
 					"status": status,
 					"survey": survey
 				};
-				if (status == 1 && id != "" && id != undefined)
+				if (id != "" && id != undefined)
 					data["id"] = id
 				meetAdd("/api/projectPlan", JSON.stringify(data));
+			}
+
+			function Agree() {
+				var users = [];
+				var id_span = $("#RegionJobBusinessTag").find("span");
+				if (id_span.length > 0) {
+					$.each(id_span, function() {
+						var userid = $(this).attr("id").split("_")[0];
+						var username = $(this).children("a").text();
+						var user = {
+							"userid": userid,
+							"username": username
+						};
+						users.push(user);
+					});
+				}
+				var assessor = null;
+				var assessorSubList = [];
+				if (CheckLastPerson(procTaskId) == true) {
+					if (users.length == 0) {
+						Toast.Err('错误', '请指定下一环节审批人~', 'top-center', 'left');
+						return;
+					}
+				}
+				if (users.length == 1) {
+					assessor = {};
+					assessor["assessor"] = users[0].username;
+					assessor["assessorId"] = users[0].userid;
+					assessor["assessorSubList"] = [];
+					assessor["assessorType"] = "PERSON";
+				} else if (users.length > 1) {
+					assessor = {}
+					$.each(users, function(i, user) {
+						var assessorSub = {
+							"assessor": user.username,
+							"assessorId": user.userid,
+							"assessorType": "PERSON"
+						};
+						assessorSubList.push(assessorSub);
+					});
+					assessor["assessor"] = "";
+					assessor["assessorId"] = "";
+					assessor["assessorSubList"] = assessorSubList;
+					assessor["assessorType"] = "PERSON";
+				}
+				var data = {
+					"checkStat": "AGREE",
+					"comment": $("#comment").val(),
+					"nextProcessAssessor": assessor,
+					"procForeignId": id
+				};
+				meetAdd("/api/projectPlan/check", JSON.stringify(data));
+			}
+
+			function Refuse() {
+				var data = {
+					"checkStat": "REFUSE",
+					"comment": $("#comment").val(),
+					"procForeignId": id
+				};
+				meetAdd("/api/projectPlan/check", JSON.stringify(data));
+			}
+
+			function Reject() {
+				var returnval = $("#rejectStepId").val();
+				if (returnval == "" || returnval == undefined) {
+					Toast.Err('错误', '请选择驳回节点~', 'top-center', 'left');
+					return false;
+				}
+				var returnId, returnSubId;
+				if (returnval.indexOf("_") == -1) {
+					returnId = returnval;
+				} else {
+					returnId = returnval.split("_")[0];
+					returnId = returnval.split("_")[1];
+				}
+				var data = {
+					"checkStat": "HANDOVER",
+					"comment": $("#comment").val(),
+					"procForeignId": id,
+					"returnId": returnId,
+					"returnSubId": returnSubId
+				};
+				meetAdd("/api/projectPlan/check", JSON.stringify(data));
 			}
 		</script>
 	</head>
@@ -162,8 +277,12 @@
 			<input type="text" id="survey" style="width: 388px; margin-left: 20px; background: none;" />
 		</div>
 		<div class="szxmTjPageRightJh">
+			<span>审批意见：</span>
+			<input type="text" id="comment" style="width: 388px; margin-left: 20px; background: none;" />
+		</div>
+		<div class="szxmTjPageRightJh" id="nextperson">
 			<span>审批人：</span>
-			<div id="RegionJobBusinessTag" style="display:none"></div>
+			<div id="RegionJobBusinessTag" ></div>
 			<input id="ApplicationDirection" readonly="readonly" type="text" onkeypress="javascript:return false;" onclick="selectJobBusinessTag()" />
 			<script type="text/javascript">
 				function selectJobBusinessTag() {
@@ -175,6 +294,12 @@
 					m.ShowIframeDialog("data.html");
 				}
 			</script>
+		</div>
+		<div class="szxmTjPageRightJh">
+			<span>驳回节点：</span>
+			<select id="rejectStepId">
+						<option value="">--请选择驳回节点--</option>
+					</select>
 		</div>
 		<!--这里是动态生成内容-->
 

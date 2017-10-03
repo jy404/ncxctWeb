@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>项目报表</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+
+		<style>
+			.window .windowBox a {
+				display: block;
+				width: 100px;
+				height: 60px;
+				padding: 50px 30px;
+				float: left;
+				font-size: 14px;
+				color: #111111;
+				background: #f2f2f2;
+				margin-left: 18px;
+				margin-top: 60px;
+				margin-bottom: -45px;
+				line-height: 20px;
+			}
+		</style>
+		<script type="text/javascript">
+			var projectId, projectName, projectType, projectNo;
+			var currentpage = 1;
+			var pagesize = 10;
+			var data = {};
+			$(function() {
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = $.getUrlParam("projectName");
+				$('.xmbbSerachreset').click(function() {
+					$(this).parent().parent().find(".xmbbSerachTypeSelect").val("");
+				});
+				$(".addBb").click(function(){
+					location.href="03020004.html?action=add&projectId="+projectId+"&projectType="+projectType;
+				})
+				$('.xmbbSerachBtn1').click(function() {
+					currentpage = 1;
+					pagesize = 10;
+					data = {};
+					GetDesignChangeList(currentpage, pagesize, data, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/list");
+				});
+				data = {
+					"projectId": projectId
+				};
+				GetDesignChangeList(currentpage, pagesize, data, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/list");
+			})
+		</script>
+	</head>
+
+	<body>
+		<div class="title">
+			<div class="page">
+				<b>当前位置：</b>
+				<span>> 首页</span>
+				<span>> 项目综合管理</span>
+				<span>> 项目报表</span>
+			</div>
+		</div>
+		<div class="xmbb">
+			<h2 class="xmbbTitle">工程签证与变更列表</h2>
+			<div class="xmbbTab" style="display: block;">
+				<a class="addBb">新增变更</a>
+				<div class="xmbbSerach">
+					<div class="xmbbSerachTitle">
+						<span>工程名称</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>金额类型</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>变更类型</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>单据业务类型</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>审批状态</span>
+						<input type="text" class="xmbbSerachTypeSelect" />
+					</div>
+					<div class="xmbbSerachBtn">
+						<a href="#" class="xmbbSerachBtn1">搜索</a>
+						<a href="#" class="xmbbSerachreset">清空</a>
+					</div>
+				</div>
+				<div class="xmbbTable">
+					<table cellpadding="0" cellspacing="0" class="xmbbTable1" id="changeList">
+						<tr>
+							<td width="6%">序号</td>
+							<td width="11%">工程名称</td>
+							<td width="8%">金额类型</td>
+							<td width="11%">变更类型</td>
+							<td width="8%">估算金额(万元)</td>
+							<td width="10%">单据业务类型</td>
+							<td width="10%">审批状态</td>
+							<td width="10%">操作</td>
+						</tr>
+
+					</table>
+					<div class="page_div fy" id="fy_page">
+
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+	</body>
+
+</html>

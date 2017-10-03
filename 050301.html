@@ -27,7 +27,7 @@
 		<script type="text/javascript">
 			var data = {};
 			$(function() {
-				$.ajaxSettings.async = false;
+				//$.ajaxSettings.async = false;
 				action = $.getUrlParam("action");
 				id = $.getUrlParam("id");
 				GetDept1("ddlRoleType");
@@ -141,11 +141,11 @@
 			</dl>
 			<dl>
 				<dt>岗位编码</dt>
-				<dd><input name="roleCode" type="text" id="roleCode" class="input normal" datatype="*1-100" sucmsg=" "> <span class="Validform_checktip">*岗位编码，100字符内</span></dd>
+				<dd><input name="roleCode" type="text" id="roleCode" class="input normal" datatype="*1-100" sucmsg=" "> </dd>
 			</dl>
 			<dl>
 				<dt>岗位名称</dt>
-				<dd><input name="roleName" type="text" id="roleName" class="input normal" datatype="*1-100" sucmsg=" "> <span class="Validform_checktip">*岗位名称，100字符内</span></dd>
+				<dd><input name="roleName" type="text" id="roleName" class="input normal" datatype="*1-100" sucmsg=" "> </dd>
 			</dl>
 			<dl>
 				<dt>管理权限</dt>
