@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>地质灾害、压覆矿评估</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/jquery.fileupload.css">		
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -27,14 +28,21 @@
 		<script src="js/jquery.fileupload-image.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id, projectName;
-			$(function(){
+			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				upload.init("uploader1", "添加附件...");
 				UploadProcess("uploader1");
 				/*页面传参并判断类型 start*/
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -49,17 +57,20 @@
 					}
 				}
 				/*页面传参并判断类型 end*/
-				
-				
-				 $('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+
+				$('.szxmTjPageRightFormBc').click(function() {
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
-				
 
 			});
+
 			function SetData(projectId) {
 				$.getJSON(
 					domain + "/api/prophase/evaluation/geologic/orders/" + projectId,
@@ -81,70 +92,73 @@
 					}
 				)
 			}
-				function SubmitData(status){
-					 var diNo=$('#diNo').val();
-					 var ditime=$('#ditime').val();
-					 var difile=$('#fileurl_uploader').val();
-					 
-					 var yaNo=$('#diNo').val();
-					 var yatime=$('#yatime').val();
-					 var yafile=$('#fileurl_uploader1').val();
-					 var projectId=12;
-					 var data={
-					 "deptId":1,
-					 "details":[{
-					 	"dispatchTime":ditime,
-					 	"docNo":diNo,
-					 	"fileUrl":difile,
-					 	"projectEvaluationType":2
-					 },{
-					 	"dispatchTime":yatime,
-					 	"docNo":yaNo,
-					 	"fileUrl":yafile,
-					 	"projectEvaluationType":3
-					 }],					
-					"projectId":projectId,
-					"status":status					
-					}
-					
-			 		meetAdd('/api/prophase/evaluation/geologic/order',JSON.stringify(data));
-				};
+
+			function SubmitData(status) {
+				var diNo = $('#diNo').val();
+				var ditime = $('#ditime').val();
+				var difile = $('#fileurl_uploader').val();
+
+				var yaNo = $('#diNo').val();
+				var yatime = $('#yatime').val();
+				var yafile = $('#fileurl_uploader1').val();
+				var projectId = 12;
+				var data = {
+					"deptId": 1,
+					"details": [{
+						"dispatchTime": ditime,
+						"docNo": diNo,
+						"fileUrl": difile,
+						"projectEvaluationType": 2
+					}, {
+						"dispatchTime": yatime,
+						"docNo": yaNo,
+						"fileUrl": yafile,
+						"projectEvaluationType": 3
+					}],
+					"projectId": projectId,
+					"status": status
+				}
+
+				meetAdd('/api/prophase/evaluation/geologic/order', JSON.stringify(data));
+			};
 		</script>
 	</head>
+
 	<body>
-		
-				<h2 class="szTitle">地质灾害、压覆矿评估</h2>
-				<h3 class="ydsxHead">地质灾害评估</h3>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" id="diNo" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" id="ditime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					
-				</div>
-				<div id="uploader" class="fjStyle"></div>
-				<h3 class="ydsxHead">压覆矿评估</h3>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" id="yaNo"/>
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" id="yatime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					
-				</div>
-				<div id="uploader1" class="fjStyle"></div>
-				<div class="szBtn">
-					<a href="#" class="szxmTjPageRightFormBc">保存</a>
-					<a href="#" class="szxmTjPageRightFormBtn">提交</a>
-				</div>
+
+		<h2 class="szTitle">地质灾害、压覆矿评估</h2>
+		<h3 class="ydsxHead">地质灾害评估</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="diNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="ditime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+		<h3 class="ydsxHead">压覆矿评估</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="yaNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="yatime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader1" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
 	</body>
+
 </html>

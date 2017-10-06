@@ -30,17 +30,20 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			var completion, fileUrl, exsitProblem;
 			$(function() {
-				upload.init("uploader1", "添加附件...");
-				UploadProcess("uploader1");
-				upload.init("uploader2", "添加附件...");
-				UploadProcess("uploader2");
-				upload.init("uploader3", "添加附件...");
-				UploadProcess("uploader3");
+				upload.init("uploader", "添加附件...");
+				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -56,11 +59,15 @@
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
 					alert("暂时没接口");
-					//SubmitData(1)
+					if(vali.subByJs()) {
+						//SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
 					alert("暂时没接口");
-					//SubmitData(2)
+					if(vali.subByJs()) {
+						//SubmitData(2);
+					}
 				});
 			});
 
@@ -69,14 +76,12 @@
 					domain + "/api/construction/schedule/situation/" + projectId,
 					function(res) {
 						if(res["code"] == "0") {
-							upload.show(res["result"]["fileUrl"], "files_uploader1")
-							upload.show(res["result"]["fileUrl"], "files_uploader2")
-							upload.show(res["result"]["fileUrl"], "files_uploader3")
-
 							completion = res["result"]["completion"];
 							exsitProblem = res["result"]["exsitProblem"];
+							rectification = res["result"]["rectification"];
 							fileUrl = res["result"]["fileUrl"];
 							id = res["result"]["id"];
+							upload.show(res["result"]["fileUrl"], "files_uploader");
 						} else {
 							//Toast.Err("错误", res["description"], 'top-center', 'left')
 						}
@@ -88,9 +93,7 @@
 			}
 
 			function SubmitData(status) {
-				var rectification = $('#txtrectification').val();
-				var rectification = $('#txtrectification').val();
-				var rectification = $('#txtrectification').val();
+				var artfu = $('#fileurl_uploader').val();
 
 				var data = {
 					"projectId": projectId,
@@ -101,7 +104,7 @@
 					"rectification": rectification,
 					"exsitProblem": exsitProblem,
 
-					"fileUrl": fileUrl,
+					"fileUrl": artfu,
 					"status": status
 				}
 				if(action == "edit")
@@ -118,23 +121,11 @@
 			<span>附件：</span>
 			<!--<input type="text" />-->
 		</div>
-		<div id="uploader1" class="fjStyle">
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>附件：</span>
-			<!--<input type="text" />-->
-		</div>
-		<div id="uploader2" class="fjStyle">
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>附件：</span>
-			<!--<input type="text" />-->
-		</div>
-		<div id="uploader3" class="fjStyle">
+		<div id="uploader" class="fjStyle">
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

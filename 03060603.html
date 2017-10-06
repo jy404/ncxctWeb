@@ -32,6 +32,12 @@
 		<script type="text/javascript" src="js/upload.js"></script>
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id;
 			$(function() {
@@ -40,6 +46,7 @@
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -59,10 +66,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -180,15 +191,15 @@
 		<h2 class="szTitle">工程移交</h2>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo" />
+			<input type="text" id="txtdocNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>责任部门：</span>
-			<input type="text" id="txtresponsibleDeptId" />
+			<input type="text" id="txtresponsibleDeptId" valType="required" msg="<font color=red>*</font>责任部门不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>责任人：</span>
-			<input type="text" id="txtresponsiblePerson" />
+			<input type="text" id="txtresponsiblePerson" valType="required" msg="<font color=red>*</font>责任人不能为空"/>
 		</div>
 		<h3 class="ydsxHead">外业移交</h3>
 		<div class="szxmTjPageRightForm">
@@ -197,15 +208,15 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与人员：</span>
-			<input type="text" id="txtouterParticipants"/>
+			<input type="text" id="txtouterParticipants" valType="required" msg="<font color=red>*</font>参与人员不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>移交进度：</span>
-			<input type="text" id="txthandoverProgress"/>
+			<input type="text" id="txthandoverProgress" valType="required" msg="<font color=red>*</font>移交进度不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="txtfinishTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+			<input type="text" id="txtfinishTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -228,15 +239,15 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与人员：</span>
-			<input type="text" id="txtinnerParticipants"/>
+			<input type="text" id="txtinnerParticipants" valType="required" msg="<font color=red>*</font>参与人员不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>移交进度：</span>
-			<input type="text" id="txtinnerhandoverProgress"/>
+			<input type="text" id="txtinnerhandoverProgress" valType="required" msg="<font color=red>*</font>移交进度不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="txtinnerfinishTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+			<input type="text" id="txtinnerfinishTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -253,8 +264,8 @@
 			<textarea id="txtinnerrectification"></textarea>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

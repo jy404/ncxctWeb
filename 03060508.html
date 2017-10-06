@@ -30,12 +30,19 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -50,10 +57,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -123,19 +134,19 @@
 		<h2 class="szTitle">非机动车道</h2>
 		<div class="szxmTjPageRightForm">
 			<span>开始时间：</span>
-			<input type="text" id="txtstartTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtstartTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>开始时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="txtcompletedTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtcompletedTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成百分比：</span>
-			<input type="text" id="txtcompletePercentage" />
+			<input type="text" id="txtcompletePercentage" valType="required" msg="<font color=red>*</font>完成百分比不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="txtamount" />
+			<input type="text" id="txtamount" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -145,11 +156,11 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>工作计划：</span>
-			<textarea id="txtworkPlan"></textarea>
+			<textarea id="txtworkPlan" valType="required" msg="<font color=red>*</font>工作计划不能为空"></textarea>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成情况：</span>
-			<textarea id="txtcompletion"></textarea>
+			<textarea id="txtcompletion" valType="required" msg="<font color=red>*</font>完成情况不能为空"></textarea>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>整改情况：</span>
@@ -160,8 +171,8 @@
 			<textarea id="txtexsitProblem"></textarea>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

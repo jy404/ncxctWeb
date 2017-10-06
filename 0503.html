@@ -16,10 +16,15 @@
 		<script type="text/javascript" src="js/jquery.toast.js"></script>
 		<script type="text/javascript">
 			var currentpage = 1;
+			var moduleId = 0;
 			var pagesize = 10;
 			var data = {};
 
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
+				$(".lzzjgAdd").click(function() {
+					location.href = "050301.html?moduleId=" + moduleId;
+				});
 				$('.fjxmSerachreset').click(function() {
 					$(".fjxmSerachTypeSelect").val("");
 				});
@@ -46,7 +51,7 @@
 		</div>
 		<div class="lzzjgBigBox">
 			<h2 class="lzzjgTitle">岗位管理</h2>
-			<a href="050301.html" class="lzzjgAdd">新增岗位</a>
+			<a href="#" class="lzzjgAdd">新增岗位</a>
 			<div class="fjxmSerach">
 				<div class="fjxmSerachList">
 					<div class="fjxmSerachTitle">

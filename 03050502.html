@@ -30,14 +30,21 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
-		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css"/>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -54,10 +61,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -67,8 +78,7 @@
 					function(res) {
 						if(res["code"] == "0") {
 							$('#txtdocNo').val(res["result"]["docNo"]);
-							$('#txtresponsibilityUnitId').val(res["result"]["responsibilityUnitId"]);
-							$('#txtresponsibilityUnitName').val(res["result"]["responsibilityUnitName"]);
+							$("#txtresponsibilityUnit").val(res["result"]["responsibilityUnitId"])
 							$('#txtresponsibilityUserName').val(res["result"]["responsibilityUserName"]);
 							$('#txtresponsibilityUserTel').val(res["result"]["responsibilityUserTel"]);
 							$('#txtbudgetAmount').val(res["result"]["budgetAmount"]);
@@ -89,8 +99,8 @@
 
 			function SubmitData(status) {
 				var docNo = $('#txtdocNo').val();
-				var responsibilityUnitId = $('#txtresponsibilityUnitId').val();
-				var responsibilityUnitName = $('#txtresponsibilityUnitName').val();
+				var responsibilityUnitId = $("#txtresponsibilityUnit option:selected").val();
+				var responsibilityUnitName = $("#txtresponsibilityUnit option:selected").text();
 				var responsibilityUserName = $('#txtresponsibilityUserName').val();
 				var responsibilityUserTel = $('#txtresponsibilityUserTel').val();
 				var budgetAmount = $('#txtbudgetAmount').val();
@@ -102,7 +112,7 @@
 					"projectNo": projectNo,
 					"projectType": projectType,
 					"docNo": docNo,
-					"responsibilityUnitId": responsibilityUnitId==""?0:responsibilityUnitId,
+					"responsibilityUnitId": responsibilityUnitId == "" ? 0 : responsibilityUnitId,
 					"responsibilityUnitName": responsibilityUnitName,
 					"responsibilityUserName": responsibilityUserName,
 					"responsibilityUserTel": responsibilityUserTel,
@@ -120,45 +130,47 @@
 	</head>
 
 	<body>
-		<h2 class="szTitle">施工图交桩手续</h2>
-		<div class="szxmTjPageRightForm">
-			<span>文号：</span>
-			<input type="text" id="txtdocNo" />
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>责任单位：</span>
-			<div id="txtresponsibilityUnit"></div>
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>责任单位负责人：</span>
-			<input type="text" id="txtresponsibilityUserName" />
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>责任单位负责人电话：</span>
-			<input type="text" id="txtresponsibilityUserTel" />
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>预算金额：</span>
-			<input type="text" id="txtbudgetAmount" />
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>交桩时间：</span>
-			<input type="text" id="txtdeliveryTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>附件：</span>
-			<!--<input type="text" />-->
-		</div>
-		<div id="uploader" class="fjStyle">
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>备注及存在问题：</span>
-			<textarea id="txtcomment"></textarea>
-		</div>
-		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
-		</div>
+		<form>
+			<h2 class="szTitle">施工图交桩手续</h2>
+			<div class="szxmTjPageRightForm">
+				<span>文号：</span>
+				<input type="text" id="txtdocNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>责任单位：</span>
+				<div id="txtresponsibilityUnit" valType="required" msg="<font color=red>*</font>责任单位不能为空"></div>
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>责任单位负责人：</span>
+				<input type="text" id="txtresponsibilityUserName" valType="required" msg="<font color=red>*</font>责任单位人不能为空" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>责任单位负责人电话：</span>
+				<input type="text" id="txtresponsibilityUserTel" valType="required" msg="<font color=red>*</font>责任单位负责人电话不能为空" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>预算金额：</span>
+				<input type="text" id="txtbudgetAmount" valType="required" msg="<font color=red>*</font>预算金额不能为空" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>交桩时间：</span>
+				<input type="text" id="txtdeliveryTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>交桩时间不能为空" />
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>附件：</span>
+				<!--<input type="text" />-->
+			</div>
+			<div id="uploader" class="fjStyle">
+			</div>
+			<div class="szxmTjPageRightForm">
+				<span>备注及存在问题：</span>
+				<textarea id="txtcomment"></textarea>
+			</div>
+			<div class="szBtn">
+				<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+				<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
+			</div>
+		</form>
 	</body>
 
 </html>

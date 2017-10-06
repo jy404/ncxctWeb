@@ -30,6 +30,12 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, artid, yongid, guoid;
 			$(function() {
@@ -40,6 +46,7 @@
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -55,10 +62,14 @@
 				}
 				
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -183,48 +194,45 @@
 		<h3 class="ydsxHead">项目选址意见书</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="artNo" />
+			<input type="text" id="artNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="arttime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+			<input type="text" id="arttime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
-
 		</div>
 		<div id="uploader" class="fjStyle"></div>
 		<h3 class="ydsxHead">用地红线</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="yongNo" />
+			<input type="text" id="yongNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="yongtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+			<input type="text" id="yongtime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
-
 		</div>
 		<div id="uploader1" class="fjStyle"></div>
 		<h3 class="ydsxHead">国土测绘</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="guoNo" />
+			<input type="text" id="guoNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="guotime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+			<input type="text" id="guotime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
-
 		</div>
 		<div id="uploader2" class="fjStyle"></div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" class="szxmTjPageRightFormBc" id="saveButton">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn" id="submitButton">提交</a>
 		</div>
 	</body>
 

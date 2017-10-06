@@ -46,7 +46,7 @@ function UploadProcess(obj) {
 		url: host,
 		autoUpload: false,
 		acceptFileTypes: /(\.|\/)(gif|jpe?g|png|xls|ppt|txt|xlsx|docx|pdf|doc)$/i,
-		maxFileSize: 5120,
+		maxFileSize: 5242880,
 		// Enable image resizing, except for Android and Opera,
 		// which actually support image resizing, but fail to
 		// send Blob objects via XHR requests:

@@ -10,11 +10,12 @@
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/socket.js"></script>
 		<script type="text/javascript" src="js/GetData.js"></script>
-        <style>
-			.indexXx{
+		<style>
+			.indexXx {
 				background: url(img/ld.png) no-repeat center;
 			}
-			.indexXx i{
+			
+			.indexXx i {
 				display: block;
 				width: 20px;
 				height: 20px;
@@ -29,9 +30,11 @@
 				color: #fff;
 				text-align: center;
 			}
-			.xxIndexList{
+			
+			.xxIndexList {
 				width: 350px;
-				background: rgba(0,0,0,0.6);
+				height: 500px;
+				background: rgba(0, 0, 0, 0.6);
 				position: absolute;
 				left: 130px;
 				top: 20px;
@@ -39,8 +42,10 @@
 				padding: 15px 0;
 				z-index: 999;
 				display: none;
+				overflow: scroll;
 			}
-			.xxIndexList li{
+			
+			.xxIndexList li {
 				width: 90%;
 				margin: 0 auto;
 				height: 40px;
@@ -51,17 +56,23 @@
 			}
 		</style>
 		<script type="text/javascript">
-			$(function(){
-				$('.indexXx i').click(function(){
-					$('.xxIndexList').slideToggle();
+			$(function() {
+				$('.indexXx').click(function() {
+					$('.xxIndexList').slideToggle(function() {
+						if($(this).is(":visible")) {
+							getUnreadMessage()
+						}
+					});
 				})
+				var data = [];
+				GetMenuList(data, ".leftNav", "/api/config");
 			})
 		</script>
 	</head>
 	<script>
-		getToken()
 		getConfig()
 	</script>
+
 	<body>
 		<header>
 			<img src="img/logoMin.png" />
@@ -72,11 +83,12 @@
 						<li>我的账户</li>
 					</a>
 				</span>
-                <span class="indexXx" style="position: relative;">
-					<i>3</i>
+				<span class="indexXx" style="position: relative;">
+					<i>0</i>
 				</span>
 				<span id="user_info"></span>
 				<ul class="xxIndexList">
+					<!--
 					<li>
 						<a href="#">
 							您有一个审批带确认。
@@ -91,13 +103,13 @@
 						<a href="#">
 							您有一个新通知。
 						</a>
-					</li>
+					</li>-->
 				</ul>
 			</div>
 		</header>
 		<div class="content">
 			<div class="leftNav">
-				<h4 class="column">系统栏目</h4>
+				<!--<h4 class="column">系统栏目</h4>
 				<div class="index">
 					<a href="01.html" target="bodyRight"><h2><span>首页</span></h2></a>
 				</div>
@@ -163,7 +175,7 @@
 				</div>
 				<div class="my">
 					<h2><a href="06.html" target="bodyRight"><li>我的账户</li></a></h2>
-				</div>
+				</div>-->
 			</div>
 			<div class="bodyRight">
 				<div class="leftNavHide"></div>

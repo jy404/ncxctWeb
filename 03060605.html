@@ -30,6 +30,12 @@
 		<script type="text/javascript" src="js/upload.js"></script>
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id;
 			$(function() {
@@ -37,6 +43,7 @@
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -53,10 +60,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -132,15 +143,15 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>责任部门：</span>
-			<input type="text" id="txtresponsibleDeptId" />
+			<input type="text" id="txtresponsibleDeptId" valType="required" msg="<font color=red>*</font>责任部门不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>责任人：</span>
-			<input type="text" id="txtresponsiblePerson" />
+			<input type="text" id="txtresponsiblePerson" valType="required" msg="<font color=red>*</font>责任人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>起始时间：</span>
-			<input type="text" id="txtstartTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtstartTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>起始时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>工程保修书附件：</span>
@@ -150,7 +161,7 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>保修内容：</span>
-			<textarea id="txtwarrantyContent"></textarea>
+			<textarea id="txtwarrantyContent" valType="required" msg="<font color=red>*</font>报修内容不能为空"></textarea>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>存在问题：</span>
@@ -161,8 +172,8 @@
 			<textarea id="txtrectification"></textarea>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

@@ -28,18 +28,33 @@
 		<script src="js/jquery.fileupload-image.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
+			var moduleId = 0;
 			$(function() {
 				//判断编辑或者查看
+				moduleId = $.getUrlParam("moduleId");
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
-				SelectDept("projectOrg")
-				if (action != "" && action != undefined) {
+				SelectDept("projectOrg");
+				$("#projectOrg").on("change", function() {
+					SelectDeptMember("prophaseUserName", this.value);
+					SelectDeptMember("landUserName", this.value);
+					SelectDeptMember("contUserName", this.value);
+					SelectDeptMember("compUserName", this.value);
+				});
+				if(action != "" && action != undefined) {
 					SetData(projectId)
-					if (action == "view") {
+					if(action == "view") {
 						$("body").find("input,textarea").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
@@ -47,7 +62,9 @@
 					}
 				}
 				$('.szxmTjPageRightFormBtn1').click(function() {
-					SubmitData()
+					if(vali.subByJs()) {
+						SubmitData();
+					}
 				});
 			});
 
@@ -55,20 +72,23 @@
 				$.getJSON(
 					domain + "/api/project/" + projectId,
 					function(res) {
-						if (res["code"] == "0") {
+						if(res["code"] == "0") {
 							$('#projectName').val(res["result"]["name"]);
 							$('#projectNo').val(res["result"]["projectNo"]);
 							$('#projectOrg').val(res["result"]["orgId"]);
+							SelectDeptMember("prophaseUserName", res["result"]["orgId"]);
+							SelectDeptMember("landUserName", res["result"]["orgId"]);
+							SelectDeptMember("contUserName", res["result"]["orgId"]);
+							SelectDeptMember("compUserName", res["result"]["orgId"]);
 							$('#startTime').val(res["result"]["createTime"]);
-							$('#prophaseUserName').val(res["result"]["prophaseUserName"]);
-							$('#landUserName').val(res["result"]["landUserName"]);
-							$('#contUserName').val(res["result"]["contUserName"]);
-							$('#compUserName').val(res["result"]["compUserName"]);
+							$('#prophaseUserName').val(res["result"]["prophaseUserId"]);
+							$('#landUserName').val(res["result"]["landUserId"]);
+							$('#contUserName').val(res["result"]["contUserId"]);
+							$('#compUserName').val(res["result"]["compUserId"]);
 							$('#address').val(res["result"]["address"]);
 							$('#totalAmount').val(res["result"]["totalAmount"]);
 							$('#comment').val(res["result"]["comment"]);
-							$("#latitude").val(res["result"]["latitude"]);
-							$("#longitude").val(res["result"]["longitude"]);
+
 							id = res["result"]["id"];
 							//附件加上
 							//upload.show(res["result"]["files"], "files_uploader")
@@ -91,47 +111,54 @@
 					"projectNo": $("#projectNo").val(),
 					"orgId": $("#projectOrg").val(),
 					"startTime": $("#startTime").val(),
-					"prophaseUserId": "1",
-					"prophaseUserName": $("#prophaseUserName").val(),
-					"landUserId": "1",
-					"landUserName": $("#landUserName").val(),
-					"contUserId": "1",
-					"contUserName": $("#contUserName").val(),
-					"compUserId": 1,
-					"compUserName": $("#compUserName").val(),
+					"prophaseUserId": parseInt($("#prophaseUserName").val()),
+					"prophaseUserName": $("#prophaseUserName option:selected").text(),
+					"landUserId": parseInt($("#landUserName").val()),
+					"landUserName": $("#landUserName option:selected").text(),
+					"contUserId": parseInt($("#contUserName").val()),
+					"contUserName": $("#contUserName option:selected").text(),
+					"compUserId": parseInt($("#compUserName").val()),
+					"compUserName": $("#compUserName option:selected").text(),
 					"address": $("#address").val(),
 					"totalAmount": $("#totalAmount").val(),
 					"comment": $("#comment").val(),
-					"latitude": $("#latitude").val(),
-					"longitude": $("#longitude").val(),
+					"latitude": "123",
+					"longitude": "234",
 					"status": "1"
 				}
-				if (action == "edit")
+				if(action == "edit")
 					data["id"] = id;
-				meetAdd('/api/project/save', JSON.stringify(data), "0306.html");
+				meetAdd('/api/project/save', JSON.stringify(data), "0306.html?moduleId=" + moduleId);
 			}
 		</script>
+		<style type="text/css">
+			select {
+				width: 380px;
+				height: 35px;
+			}
+		</style>
 	</head>
 
 	<body>
 		<h2 class="szTitle">项目报建</h2>
 		<div class="szxmTjPageRightForm">
 			<span>项目名称：</span>
-			<input type="text" id="projectName" />
+			<input type="text" id="projectName" valType="required" msg="<font color=red>*</font>项目名称不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>项目编号：</span>
-			<input type="text" id="projectNo" />
+			<input type="text" id="projectNo" valType="required" msg="<font color=red>*</font>项目编号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>负责部门：</span>
+			<!--<input type="text" id="projectOrg" />-->
 			<select id="projectOrg">
 				<option value="">请选择部门</option>
 			</select>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预计开工时间：</span>
-			<input type="text" id="startTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+			<input type="text" id="startTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" valType="required" msg="<font color=red>*</font>预计开工时间不能为空" />
 		</div>
 		<!--<div class="szxmTjPageRightForm">
 					<span>预计竣工时间：</span>
@@ -139,41 +166,45 @@
 				</div>-->
 		<div class="szxmTjPageRightForm">
 			<span>项目前期负责人：</span>
-			<input type="text" id="prophaseUserName" />
+			<select id="prophaseUserName">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="prophaseUserName" valType="required" msg="<font color=red>*</font>项目前期负责人不能为空" />-->
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>征地拆迁工作负责人：</span>
-			<input type="text" id="landUserName" />
+			<select id="landUserName">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="landUserName" valType="required" msg="<font color=red>*</font>征地拆迁工作负责人不能为空" />-->
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>施工工作负责人：</span>
-			<input type="text" id="contUserName" />
+			<select id="contUserName">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="contUserName" valType="required" msg="<font color=red>*</font>施工工作负责人不能为空" />-->
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>竣工工作负责人：</span>
-			<input type="text" id="compUserName" />
+			<select id="compUserName">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="compUserName" valType="required" msg="<font color=red>*</font>竣工工作负责人不能为空" />-->
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>项目地址：</span>
-			<input type="text" id="address" />
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>经度：</span>
-			<input type="text" id="longitude" />
-		</div>
-		<div class="szxmTjPageRightForm">
-			<span>纬度：</span>
-			<input type="text" id="latitude" />
+			<input type="text" id="address" valType="required" msg="<font color=red>*</font>项目地址不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>总金额：</span>
-			<input type="text" id="totalAmount" />
+			<input type="text" id="totalAmount" valType="required" msg="<font color=red>*</font>总金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>项目概况：</span>
-			<textarea id="comment"></textarea>
+			<textarea id="comment" valType="required" msg="<font color=red>*</font>项目概况不能为空"></textarea>
 		</div>
-		<a href="#" class="szxmTjPageRightFormBtn1">提交</a>
+		<a href="#" id="saveButton" class="szxmTjPageRightFormBtn1">提交</a>
 
 		</div>
 	</body>

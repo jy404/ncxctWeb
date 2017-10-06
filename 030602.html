@@ -23,29 +23,30 @@
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id, stage = [];
 			$(function() {
+				$.ajaxSettings.async = false;
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = $.getUrlParam("projectName");
 				$("#projectName").val(projectName);
-				if (action != "" && action != undefined) {
+				GetDirection(projectType + "_PLAN_STAGE_TYPE", CreateHTML);
+				if(action != "" && action != undefined) {
 					SetData(projectId)
-					if (action == "view") {
+					if(action == "view") {
 						$("body").find("input,textarea").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
 					}
 				}
-				GetDirection(projectType + "_PLAN_STAGE_TYPE", CreateHTML)
-				$("#saveBtn").click(function() {
-					if (id != undefined && id != "")
+				$("#saveButton").click(function() {
+					if(id != undefined && id != "")
 						SubmitData(2);
 					else
 						SubmitData(1);
 				});
-				$("#submitBtn").click(function() {
+				$("#submitButton").click(function() {
 					SubmitData(3);
 				});
 			});
@@ -62,25 +63,27 @@
 					html += "<input type='text' id='" + item.wordValue + "_et' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" readonly='readonly' />";
 					html += "</div>";
 				});
-				$("#saveBtn").before(html);
+				$(".szBtn").before(html);
 			}
 
 			function SetData(projectID) {
 				$.getJSON(
 					domain + '/api/projectPlan/' + projectID,
 					function(res) {
-						if (res.code == 0) {
+						if(res.code == 0) {
 							id = res.result.id;
 							$("#sequence").val(res.result.sequence);
 							$("#survey").val(res.result.survey);
 							$.each(res.result.projectPlanExtensionList, function(i, item) {
-								$("#" + item.stageType + "_st").val(item.planStartTime);
-								$("#" + item.stageType + "_et").val(item.planEndTime);
+								if(typeof item.planStartTime != "undefined")
+									$("#" + item.stageType + "_st").val(new Date(item.planStartTime).format("yyyy-MM-dd"));
+								if(typeof item.planEndTime != "undefined")
+									$("#" + item.stageType + "_et").val(new Date(item.planEndTime).format("yyyy-MM-dd"));
 							});
 						}
 					},
 					function(xhr, text) {
-						if (xhr.status == "401")
+						if(xhr.status == "401")
 							top.location.href = "login.html";
 						Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 					}
@@ -92,7 +95,7 @@
 				var survey = $("#survey").val();
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if (id_span.length > 0) {
+				if(id_span.length > 0) {
 					$.each(id_span, function() {
 						var userid = $(this).attr("id").split("_")[0];
 						var username = $(this).children("a").text();
@@ -105,11 +108,11 @@
 				}
 				var assessor = {};
 				var assessorSubList = [];
-				if (users.length == 1) {
+				if(users.length == 1) {
 					assessor["assessor"] = users[0].username;
 					assessor["assessorId"] = users[0].userid;
 					assessor["assessorSubList"] = [];
-				} else if (users.length > 1) {
+				} else if(users.length > 1) {
 					$.each(users, function(i, user) {
 						var assessorSub = {
 							"assessor": user.username,
@@ -139,7 +142,7 @@
 					"status": status,
 					"survey": survey
 				};
-				if (status == 2)
+				if(status == 2)
 					data["id"] = id
 				meetAdd("/api/projectPlan", JSON.stringify(data));
 			}
@@ -178,8 +181,8 @@
 		</div>
 		<!--这里是动态生成内容-->
 		<div class="szBtn">
-			<a href="#" id="saveBtn" class="szxmTjPageRightFormBtn1">保存</a>
-			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn1">保存并发起流程</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBtn1">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn1">保存并发起流程</a>
 		</div>
 	</body>
 

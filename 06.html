@@ -38,8 +38,8 @@
 			$(function() {
 				$.ajaxSettings.async = false;
 
-				GetDept1("userDept");
-				GetRole1("userRole");
+				//GetDept1("userDept");
+				//GetRole1("userRole");
 				SetData()
 				$('.lwdzhBtn').click(function() {
 					SubmitData()
@@ -54,7 +54,7 @@
 							$('#userName').val(res["result"]["user"]["userName"]);
 							$('#name').val(res["result"]["user"]["name"]);
 							$('#userTel').val(res["result"]["user"]["name"]);
-							$('#userDept').val(res["result"]["user"]["deptId"]);
+							$('#userDept').val(res["result"]["user"]["orgName"]);
 							$('#userRole').val(res["result"]["roleList"][0]["roleName"]);
 
 							id = res["result"]["user"]["id"];

@@ -9,7 +9,10 @@
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/GetData.js"></script>
 		<script type="text/javascript">
+			var moduleId = 0;
 			$(function() {
+				$.ajaxSettings.async = false;
+				moduleId = $.getUrlParam("moduleId");
 				var action = $.getUrlParam("action");
 				var id = $.getUrlParam("id");
 				var projectNo = $.getUrlParam("projectNo");
@@ -36,8 +39,10 @@
 		</div>
 		<div class="szxmTjPage">
 			<div class="leftNavSz">
-				<a href="03050101.html" target="szRight"><h6>项目报建</h6></a>
-				<a href="030502.html" target="szRight"><h6>项目计划</h6></a>
+				<a href="03050101.html" target="szRight">
+					<h6>项目报建</h6></a>
+				<a href="030502.html" target="szRight">
+					<h6>项目计划</h6></a>
 				<div>
 					<h2><span>前期</span></h2>
 					<ul style="display: none;">

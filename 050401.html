@@ -32,11 +32,18 @@
 		<script type="text/javascript" src="js/upload.js"></script>
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, id, status = 1,
 				password;
 			$(function() {
 				$.ajaxSettings.async = false;
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				id = $.getUrlParam("id");
 				//判断编辑或者查看
@@ -53,7 +60,9 @@
 					}
 				}
 				$('.lyhglxqyBot').click(function() {
-					SubmitData()
+					if(vali.subByJs()) {
+						SubmitData();
+					}
 				});
 			});
 
@@ -115,6 +124,22 @@
 				meetAdd('/api/saveUser', JSON.stringify(data), "0504.html");
 			}
 		</script>
+		<style type="text/css">
+			.lyhglxqyBox1 span {
+				line-height: 37px;
+			}
+			
+			.lyhglxqyBox1 input {
+				height: 37px !important;
+				line-height: 37px;
+			}
+			
+			.lyhglxqyBox1 select {
+				width: 272px;
+				height: 37px;
+				background: #00000000;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -132,21 +157,21 @@
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
 					<span>账号：</span>
-					<input type="text" id="userName" />
+					<input type="text" id="userName" valType="required" msg="<font color=red>*</font>帐号不能为空" />
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>密码：</span>
-					<input type="text" id="password" />
+					<input type="text" id="password" valType="required" msg="<font color=red>*</font>密码不能为空" />
 				</div>
 			</div>
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
 					<span>姓名：</span>
-					<input type="text" id="name" />
+					<input type="text" id="name" valType="required" msg="<font color=red>*</font>姓名不能为空" />
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>性别：</span>
-					<select id="gender" style="width: 100px;height: 37px;">
+					<select id="gender">
 						<option value="MALE">男</option>
 						<option value="WOMAN">女</option>
 					</select>
@@ -155,21 +180,21 @@
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
 					<span>民族：</span>
-					<input type="text" id="nation" />
+					<input type="text" id="nation" valType="required" msg="<font color=red>*</font>民族不能为空" />
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>出生日期：</span>
-					<input type="text" id="birthTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+					<input type="text" id="birthTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" valType="required" msg="<font color=red>*</font>出生日期不能为空" />
 				</div>
 			</div>
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
 					<span>入职日期：</span>
-					<input type="text" id="joinTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+					<input type="text" id="joinTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" valType="required" msg="<font color=red>*</font>入职日期不能为空" />
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>手机号：</span>
-					<input type="text" id="tel" />
+					<input type="text" id="tel" valType="required" msg="<font color=red>*</font>手机号不能为空" />
 				</div>
 			</div>
 			<div class="lyhglxqyBox1">
@@ -190,7 +215,7 @@
 			<div class="lyhglxqyBox1">
 				<div class="lyhglxqyBox1Left">
 					<span>主管工作：</span>
-					<textarea id="jobContent" style="width: 272px;resize: none;"></textarea>
+					<textarea id="jobContent" style="width: 272px;resize: none;" valType="required" msg="<font color=red>*</font>主管工作不能为空"></textarea>
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>状态：</span>
@@ -198,7 +223,7 @@
 					<input type="radio" name="txtState" value="false" />离职
 				</div>
 			</div>
-			<a href="#" class="lyhglxqyBot">确定</a>
+			<a href="#" id="saveButton" class="lyhglxqyBot">确定</a>
 		</div>
 	</body>
 

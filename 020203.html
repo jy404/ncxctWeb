@@ -8,7 +8,7 @@
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/jquery.fileupload.css">
-			<link type="text/css" rel="stylesheet" href="css/commen.css" />
+		<link type="text/css" rel="stylesheet" href="css/commen.css" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -34,10 +34,17 @@
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
 		<script type="text/javascript" src="js/core.js"></script>
 		<script type="text/javascript" src="js/client.js"></script>
-		<script src="js/messageboxnotitle.js" type="text/javascript"></script>
+		<script type="text/javascript" src="js/messageboxnotitle.js"></script>
 		<script type="text/javascript" src="js/drag_v1.0.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
-			var Id, file=[], action;
+			var Id, file = [],
+				action;
 			$(function() {
 				$.ajaxSettings.async = false;
 				upload.init("uploader1", "添加附件...");
@@ -45,19 +52,24 @@
 				//upload.init("uploader2", "添加附件...");
 				//UploadProcess("uploader2");
 				SelectUserList("txtUserIds");
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				Id = $.getUrlParam("id");
 				//action = "edit";
 				//Id = 1;
-				if (action != "" && action != undefined) {
+				if(action != "" && action != undefined) {
 					SetData(Id)
 				}
 				//判断编辑或者查看
 				$('.szxmTjPageLeftFormBtn1').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn1').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 				$('.tzggSerachTypeSelect h2').click(function() {
 					$('.tzggSerachTypeSelect ul').toggle();
@@ -90,19 +102,27 @@
 				$.getJSON(
 					domain + "/api/noticeTmp/" + Id,
 					function(res) {
-						if (res["code"] == "0") {
+						if(res["code"] == "0") {
 							$('#title').val(res["result"]["title"]);
 							$('#noticeType').val(res["result"]["noticeType"]);
 							$('#content').val(res["result"]["content"]);
 							file = res["result"]["attachments"];
 							var fileurl = "";
-							for (var filecnt = 0; filecnt < file.length; filecnt++) {
+							for(var filecnt = 0; filecnt < file.length; filecnt++) {
 								fileurl += file[filecnt]["url"] + ";";
 							}
 							//fileurl = fileurl.substring(0, fileurl.length - 1);
 							upload.show(fileurl, "files_uploader1");
-							var unitIds = res["result"]["user"];
-							SetUserList(unitIds, "txtUserIds");
+							//var unitIds = res["result"]["user"];
+							//SetUserList(unitIds, "txtUserIds");
+							var users = "";
+							$("#RegionJobBusinessTag").html = "";
+							$.each(res["result"]["user"]["userIds"], function(i, userid) {
+								var html = "<span ty='r' id='" + userid + "_ed'><a href='#'>" + res["result"]["user"]["names"][i] + "</a><input type='button' onclick='del(" + userid + ") name='selectedCity' id='" + userid + "_ch' class='city_det'></span>"
+								$("#RegionJobBusinessTag").append(html);
+								users += res["result"]["user"]["names"][i] + " ";
+							});
+							$("#ApplicationDirection").val(users);
 							Id = res["result"]["id"];
 						} else {
 							Toast.Err("错误", res["description"], 'top-center', 'left')
@@ -133,7 +153,7 @@
 				*/
 				var userIds = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if (id_span.length == 0) {
+				if(id_span.length == 0) {
 					Toast.Err('错误', '请选择接收人员~', 'top-center', 'left');
 					return false;
 				}
@@ -150,10 +170,10 @@
 						"userIds": userIds
 					}
 				}
-				if ($("#files_uploader1 span").length > 0) {
+				if($("#files_uploader1 span").length > 0) {
 					var fileurls = $('#fileurl_uploader1').val().split(';');
-					for (var cnt = 0; cnt < $("#files_uploader1 span").length; cnt++) {
-						if (cnt < file.length) {
+					for(var cnt = 0; cnt < $("#files_uploader1 span").length; cnt++) {
+						if(cnt < file.length) {
 							data["attachments"][cnt] = {
 								id: file[cnt]["id"],
 								name: $("#files_uploader1 span")[cnt].innerHTML,
@@ -167,13 +187,13 @@
 						}
 					}
 				}
-				if (action == "edit") {
+				if(action == "edit") {
 					data["id"] = Id;
 				}
-				if (status == 2)
+				if(status == 2)
 					meetAdd('/api/notice/send', JSON.stringify(data), "0202.html");
 				else
-					meetAdd('/api/notice/save', JSON.stringify(data));
+					meetAdd('/api/notice/save', JSON.stringify(data), "0202.html");
 			}
 		</script>
 		<style type="text/css">
@@ -215,7 +235,7 @@
 				line-height: 35px;
 				color: #666666;
 				font-size: 14px;
-				padding-left: 10px;
+				padding: 0 0 0 10px;
 				font-weight: normal;
 			}
 			
@@ -224,7 +244,7 @@
 				position: absolute;
 				z-index: 11;
 				background: #ffffff;
-				left: -1px;
+				left: -14px;
 				top: 34px;
 				display: none;
 			}
@@ -260,7 +280,7 @@
 		<h2 class="szTitle">发布公告</h2>
 		<div class="szxmTjPageRightForm">
 			<span>标题：</span>
-			<input type="text" id="title" />
+			<input type="text" id="title" valType="required" msg="<font color=red>*</font>标题不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm" style="overflow: initial;">
 			<span>公告类型：</span>
@@ -303,8 +323,8 @@
 			<span>编辑公告：</span>
 			<textarea id="content" class="editor-mini"></textarea>
 		</div>
-		<a href="#" class="szxmTjPageLeftFormBtn1">保存</a>
-		<a href="#" class="szxmTjPageRightFormBtn1">发布</a>
+		<a href="#" class="szxmTjPageLeftFormBtn1" id="saveButton">保存</a>
+		<a href="#" class="szxmTjPageRightFormBtn1" id="submitButton">发布</a>
 		</div>
 	</body>
 

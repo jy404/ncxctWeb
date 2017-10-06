@@ -30,6 +30,12 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id, projectName;
 			$(function() {
@@ -39,6 +45,7 @@
 				UploadProcess("uploader1");
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -59,11 +66,15 @@
 					$('.xmjyshkypfTab').eq($(this).index()).show().siblings('.xmjyshkypfTab').hide();
 				});
 				
-				$('#saveBtn').click(function() {
-					SubmitData(1)
+				$('#saveButton').click(function() {
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
-				$('#submitBtn').click(function() {
-					SubmitData(2)
+				$('#submitButton').click(function() {
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -225,38 +236,36 @@
 			<h3 class="ydsxHead ">编制初步设计</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
-				<input type="text" id="bNo" />
+				<input type="text" id="bNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="btime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+				<input type="text" id="btime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
-				<input type="text" id="bprice" />
+				<input type="text" id="bprice" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-
 			</div>
 			<div id="uploader" class="fjStyle"></div>
 			<h3 class="ydsxHead ">专家评审会</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
-				<input type="text" id="zNo" />
+				<input type="text" id="zNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="ztime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+				<input type="text" id="ztime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
-				<input type="text" id="zprice" />
+				<input type="text" id="zprice" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 			</div>
 
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-
 			</div>
 			<div id="uploader1" class="fjStyle"></div>
 		</div>
@@ -264,19 +273,18 @@
 			<h3 class="ydsxHead ">概算批复</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
-				<input type="text" id="gNo" />
+				<input type="text" id="gNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="gtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
+				<input type="text" id="gtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
-				<input type="text" id="gprice" />
+				<input type="text" id="gprice" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
-
 			</div>
 			<div id="uploader2" class="fjStyle"></div>
 			<div class="szxmTjPageRightForm">
@@ -285,8 +293,8 @@
 			</div>
 		</div>
 		<div class="szBtn">
-			<a href="#" id="saveBtn" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

@@ -30,6 +30,12 @@
 		<script type="text/javascript" src="js/upload.js"></script>
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id;
 			var id1, id2, id3, id4, id5, id6;
@@ -48,6 +54,7 @@
 				upload.init("uploader6", "添加附件...");
 				UploadProcess("uploader6");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -66,10 +73,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -235,23 +246,23 @@
 		<h2 class="szTitle">工程结算</h2>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo" />
+			<input type="text" id="txtdocNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>责任部门：</span>
-			<input type="text" id="txtresponsibleDeptId" />
+			<input type="text" id="txtresponsibleDeptId" valType="required" msg="<font color=red>*</font>责任 部门不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>责任人：</span>
-			<input type="text" id="txtresponsiblePerson" />
+			<input type="text" id="txtresponsiblePerson" valType="required" msg="<font color=red>*</font>负责人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="txtfinishTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtfinishTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>总金额：</span>
-			<input type="text" id="txtamount" />
+			<input type="text" id="txtamount" valType="required" msg="<font color=red>*</font>总金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -276,19 +287,19 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>联系人：</span>
-			<input type="text" id="txtlinkman1" />
+			<input type="text" id="txtlinkman1" valType="required" msg="<font color=red>*</font>联系人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>联系电话：</span>
-			<input type="text" id="txtlinkPhone1" />
+			<input type="text" id="txtlinkPhone1" valType="required" msg="<font color=red>*</font>联系电话不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算金额：</span>
-			<input type="text" id="txtsettlementAmount1" />
+			<input type="text" id="txtsettlementAmount1" valType="required" msg="<font color=red>*</font>结算金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算时间：</span>
-			<input type="text" id="txtsettlementTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtsettlementTime1" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结算时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -305,19 +316,19 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>联系人：</span>
-			<input type="text" id="txtlinkman2" />
+			<input type="text" id="txtlinkman2" valType="required" msg="<font color=red>*</font>联系人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>联系电话：</span>
-			<input type="text" id="txtlinkPhone2" />
+			<input type="text" id="txtlinkPhone2" valType="required" msg="<font color=red>*</font>联系电话不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算金额：</span>
-			<input type="text" id="txtsettlementAmount2" />
+			<input type="text" id="txtsettlementAmount2" valType="required" msg="<font color=red>*</font>结算金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算时间：</span>
-			<input type="text" id="txtsettlementTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtsettlementTime2" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结束时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -334,19 +345,19 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>联系人：</span>
-			<input type="text" id="txtlinkman3" />
+			<input type="text" id="txtlinkman3" valType="required" msg="<font color=red>*</font>联系人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>联系电话：</span>
-			<input type="text" id="txtlinkPhone3" />
+			<input type="text" id="txtlinkPhone3" valType="required" msg="<font color=red>*</font>联系电话不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算金额：</span>
-			<input type="text" id="txtsettlementAmount3" />
+			<input type="text" id="txtsettlementAmount3" valType="required" msg="<font color=red>*</font>结束金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算时间：</span>
-			<input type="text" id="txtsettlementTime3" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtsettlementTime3" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结算时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -357,19 +368,19 @@
 		<h3 class="ydsxHead">县财政局</h3>
 		<div class="szxmTjPageRightForm">
 			<span>联系人：</span>
-			<input type="text" id="txtlinkman4" />
+			<input type="text" id="txtlinkman4" valType="required" msg="<font color=red>*</font>联系人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>联系电话：</span>
-			<input type="text" id="txtlinkPhone4" />
+			<input type="text" id="txtlinkPhone4" valType="required" msg="<font color=red>*</font>联系电话不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算金额：</span>
-			<input type="text" id="txtsettlementAmount4" />
+			<input type="text" id="txtsettlementAmount4" valType="required" msg="<font color=red>*</font>结算金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算时间：</span>
-			<input type="text" id="txtsettlementTime4" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtsettlementTime4" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结算时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -380,19 +391,19 @@
 		<h3 class="ydsxHead">县审计局</h3>
 		<div class="szxmTjPageRightForm">
 			<span>联系人：</span>
-			<input type="text" id="txtlinkman5" />
+			<input type="text" id="txtlinkman5" valType="required" msg="<font color=red>*</font>联系人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>联系电话：</span>
-			<input type="text" id="txtlinkPhone5" />
+			<input type="text" id="txtlinkPhone5" valType="required" msg="<font color=red>*</font>联系电话不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算金额：</span>
-			<input type="text" id="txtsettlementAmount5" />
+			<input type="text" id="txtsettlementAmount5" valType="required" msg="<font color=red>*</font>结算金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结算时间：</span>
-			<input type="text" id="txtsettlementTime5" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtsettlementTime5" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结束时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -401,8 +412,8 @@
 		<div id="uploader6" class="fjStyle">
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

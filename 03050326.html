@@ -1,68 +1,194 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>质、安监</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-audio.js"></script>
+		<script src="js/jquery.fileupload-video.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
+		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, projectName, id;
+			var zid, aid, wid;
+			$(function() {
+				upload.init("zuploader", "添加附件...");
+				UploadProcess("zuploader");
+				upload.init("auploader", "添加附件...");
+				UploadProcess("auploader");
+				upload.init("wuploader", "添加附件...");
+				UploadProcess("wuploader");
+				/*页面传参并判断类型 start*/
+				var vali = new Validators();
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				projectName = unescape($.getUrlParam("projectName"));
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					if(action == "view") {
+						$("body").find("input").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+					}
+				}
+
+				$('.szxmTjPageRightFormBc').click(function() {
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
+				});
+				$('.szxmTjPageRightFormBtn').click(function() {
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
+				});
+			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/prophase/supervisor/orders/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							zid = res["result"]["qualitySupervisor"]["id"];
+							$("#zdocNo").val(res["result"]["qualitySupervisor"]["docNo"]);
+							$("#zdispatchTime").val(res["result"]["qualitySupervisor"]["dispatchTime"]);
+
+							aid = res["result"]["securitySupervisor"]["id"];
+							$("#adocNo").val(res["result"]["securitySupervisor"]["docNo"]);
+							$("#adispatchTime").val(res["result"]["securitySupervisor"]["dispatchTime"]);
+
+							wid = res["result"]["countersignSupervisor"]["id"];
+							$("#wdocNo").val(res["result"]["countersignSupervisor"]["docNo"]);
+							$("#wdispatchTime").val(res["result"]["countersignSupervisor"]["dispatchTime"]);
+
+							upload.show(res["result"]["qualitySupervisor"]["fileUrl"], "files_zuploader");
+							upload.show(res["result"]["securitySupervisor"]["fileUrl"], "files_auploader");
+							upload.show(res["result"]["countersignSupervisor"]["fileUrl"], "files_wuploader");
+							id = res["result"]["id"];
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var docNo = $('#docNo').val();
+				var stime = $('#stime').val();
+				var shifile = $('#fileurl_uploader').val();
+				var price = $('#dpriace').val();
+				var data = {
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectName": projectName,
+					"projectType": projectType,
+
+					"qualitySupervisor": {
+						"docNo": $("#zdocNo").val(),
+						"dispatchTime": $("#zdispatchTime").val(),
+						"fileUrl": $("#files_zuploader").val()
+					},
+					"securitySupervisor": {
+						"docNo": $("#adocNo").val(),
+						"dispatchTime": $("#adispatchTime").val(),
+						"fileUrl": $("#files_auploader").val()
+					},
+					"countersignSupervisor": {
+						"docNo": $("#wdocNo").val(),
+						"dispatchTime": $("#wdispatchTime").val(),
+						"fileUrl": $("#files_wuploader").val()
+					}
+				}
+				if(action == "edit") {
+					data["id"] = id;
+					data["qualitySupervisor"]["id"] = zid;
+					data["securitySupervisor"]["id"] = aid;
+					data["countersignSupervisor"]["id"] = wid;
+				}
+				meetAdd('/api/prophase/supervisor/order', JSON.stringify(data));
+			}
+		</script>
 	</head>
+
 	<body>
-				<h2 class="szTitle">质、安监</h2>
-				<h3 class="ydsxHead">质量检测</h3>
-				<div class="szxmTjPageRightForm">
-					<span>需缴纳安全文明押金：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					<input type="text" />
-				</div>
-				<h3 class="ydsxHead">安全检测</h3>
-				<div class="szxmTjPageRightForm">
-					<span>需缴纳安全文明押金：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					<input type="text" />
-				</div>
-				<h3 class="ydsxHead">五方会签</h3>
-				<div class="szxmTjPageRightForm">
-					<span>需缴纳安全文明押金：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					<input type="text" />
-				</div>
-				<div class="szBtn">
-					<a href="#" class="szxmTjPageRightFormBc">保存</a>
-					<a href="#" class="szxmTjPageRightFormBtn">提交</a>
-				</div>
+		<h2 class="szTitle">质、安监</h2>
+		<h3 class="ydsxHead">质量检测</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="zdocNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="zdispatchTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>时间不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+		</div>
+		<div id="zuploader" class="fjStyle"></div>
+		<h3 class="ydsxHead">安全检测</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="adocNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="adispatchTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>时间不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+		</div>
+		<div id="auploader" class="fjStyle"></div>
+		<h3 class="ydsxHead">五方会签</h3>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="wdocNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="wdispatchTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>时间不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+		</div>
+		<div id="wuploader" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
 	</body>
+
 </html>

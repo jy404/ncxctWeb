@@ -9,6 +9,7 @@
 		<link type="text/css" rel="stylesheet" href="css/commen.css" />
 
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/common.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
 		<script type="text/javascript" src="js/json2.js"></script>
@@ -22,6 +23,12 @@
 		<script type="text/javascript" src="js/drag_v1.0.js"></script>
 		<link rel="stylesheet" href="js/editor/themes/default/default.css" />
 		<script type="text/javascript" src="js/editor/kindeditor-min.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<style>
 			span.ke-outline {
 				width: 24px !important;
@@ -38,7 +45,8 @@
 			}
 		</style>
 		<script type="text/javascript">
-			var id = 0;
+			var id = 0,
+				moduleId = 0;
 			var currentpage = 1;
 			var pagesize = 10;
 			var read = false;
@@ -46,12 +54,25 @@
 				GetMessage(1, pagesize, false, "unread", $("#unread_page"), true, "/api/message/list");
 				GetMessage(1, pagesize, true, "hasread", $("#hasread_page"), true, "/api/message/list");
 				GetMessage(1, pagesize, 2, "hassend", $("#hassend_page"), true, "/api/sended/message/list");
-				GetMessage(1, 999, 1, "nosend", null, true, "/api/sended/message/list");
-				$("#saveBtn").click(function() {
-					SubmitData(1);
+				GetMessage(1, 999, 1, "nosend", $("#nosend_page"), true, "/api/sended/message/list");
+				var vali = new Validators();
+				$("#saveButton").click(function() {
+					if(vali.subByJs()) {
+						SubmitData(1);
+						$("#title").val("");
+						$("#content").val("");
+						$("#RegionJobBusinessTag").html = "";
+						$("#ApplicationDirection").val("");
+					}
 				});
-				$("#sendBtn").click(function() {
-					SubmitData(2);
+				$("#submitButton").click(function() {
+					if(vali.subByJs()) {
+						SubmitData(2);
+						$("#title").val("");
+						$("#content").val("");
+						$("#RegionJobBusinessTag").html = "";
+						$("#ApplicationDirection").val("");
+					}
 				});
 				//初始化编辑器
 				var editorMini = KindEditor.create('.editor-mini', {
@@ -74,22 +95,24 @@
 				$.getJSON(
 					domain + '/api/messagetmp/' + msgId,
 					function(res) {
-						if (res["code"] == 0) {
+						if(res["code"] == 0) {
 							var html = "";
 							$("#title").val(res["result"]["title"]);
 							$("#content").val(res["result"]["content"]);
-							/*
+							var users = "";
+							$("#RegionJobBusinessTag").html = "";
 							$.each(res["result"]["user"]["userIds"], function(i, userid) {
 								var html = "<span ty='r' id='" + userid + "_ed'><a href='#'>" + res["result"]["user"]["names"][i] + "</a><input type='button' onclick='del(" + userid + ") name='selectedCity' id='" + userid + "_ch' class='city_det'></span>"
 								$("#RegionJobBusinessTag").append(html);
+								users += res["result"]["user"]["names"][i] + " ";
 							});
-							*/
+							$("#ApplicationDirection").val(users);
 							id = res["result"]["id"];
 						} else
 							Toast.Err('错误', res["description"], 'top-center', 'left');
 					},
 					function(xhr, text) {
-						if (xhr.status == "401")
+						if(xhr.status == "401")
 							top.location.href = "login.html";
 						Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 					}
@@ -101,7 +124,7 @@
 				var content = $("#content").val();
 				var userIds = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if (id_span.length == 0) {
+				if(id_span.length == 0) {
 					Toast.Err('错误', '请选择接收人员~', 'top-center', 'left');
 					return false;
 				}
@@ -117,11 +140,11 @@
 					}
 				};
 				var api_url = "";
-				if (status == 1)
+				if(status == 1)
 					api_url = "/api/message/save";
 				else {
 					api_url = "/api/message/send";
-					if (id != 0)
+					if(id != 0)
 						data["id"] = id;
 				}
 				meetAdd(api_url, JSON.stringify(data));
@@ -206,7 +229,7 @@
 					<h2>消息内容</h2>
 					<div>
 						<h3>消息标题</h3>
-						<input type="text" id="title" />
+						<input type="text" id="title" valType="required" msg="<font color=red>*</font>消息标题不能为空" />
 					</div>
 					<div>
 						<h3>接收人员</h3>
@@ -231,8 +254,8 @@
 						<h3>消息详情</h3>
 						<textarea id="content"></textarea>
 					</div>
-					<a href="#" id="saveBtn">保存为草稿</a>
-					<a href="#" id="sendBtn">保存并发送</a>
+					<a href="#" id="saveButton">保存为草稿</a>
+					<a href="#" id="submitButton">保存并发送</a>
 				</div>
 			</div>
 		</div>

@@ -8,29 +8,32 @@
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
-		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
 		<script type="text/javascript" src="js/json2.js"></script>
 		<script type="text/javascript" src="js/GetData.js"></script>
 		<script type="text/javascript" src="js/paging.js"></script>
 		<script type="text/javascript" src="js/PluginFun.js"></script>
 		<script type="text/javascript" src="js/jquery.toast.js"></script>
-		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
-		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
 		<script type="text/javascript">
 			var currentpage = 1;
-			var pagesize = 2;
+			var pagesize = 10;
+			var moduleId = 0;
 			var data = {};
 
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
+				$(".lzzjgAdd").click(function() {
+					location.href = "050201.html?moduleId=" + moduleId;
+				});
 				$('.fjxmSerachreset').click(function() {
 					$(".fjxmSerachTypeSelect").val("");
 				});
 				$('.fjxmSerachBtn1').click(function() {
 					currentpage = 1;
-					pagesize = 2;
+					pagesize = 10;
+					var state = $("#activation option:selected").val();
 					data = {
-						"activation": $("#activation").val(),
+						"activation": state == "true" ? true : false,
 						"orgName": $("#orgName").val()
 					};
 					GetOrgList(currentpage, pagesize, data, "projectList", $("#fj_page"), false, "/api/system/org/tier/list");
@@ -38,6 +41,15 @@
 				GetOrgList(currentpage, pagesize, data, "projectList", $("#fj_page"), false, "/api/system/org/tier/list");
 			})
 		</script>
+		<style type="text/css">
+			#activation {
+				width: 230px;
+				height: 32px;
+				padding: 0 3px;
+				background: #00000000;
+				margin: 0 10px;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -51,12 +63,15 @@
 		</div>
 		<div class="lzzjgBigBox">
 			<h2 class="lzzjgTitle">组织架构</h2>
-			<a href="050201.html" class="lzzjgAdd">新增部门</a>
+			<a href="#" class="lzzjgAdd">新增部门</a>
 			<div class="fjxmSerach">
 				<div class="fjxmSerachList">
 					<div class="fjxmSerachTitle">
 						<span>状态</span>
-						<input type="text" id="activation" class="fjxmSerachTypeSelect" />
+						<select id="activation">
+							<option value="true">启用</option>
+							<option value="false">停用</option>
+						</select>
 					</div>
 					<div class="fjxmSerachTitle">
 						<span>部门名称</span>

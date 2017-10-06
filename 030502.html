@@ -20,33 +20,45 @@
 		<script type="text/javascript" src="js/client.js"></script>
 		<script src="js/messageboxnotitle.js" type="text/javascript"></script>
 		<script type="text/javascript" src="js/drag_v1.0.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id, procTaskId, stage = [];
 			$(function() {
+				$.ajaxSettings.async = false;
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = unescape($.getUrlParam("projectName"));
 				$("#projectName").val(projectName);
-				if (action != "" && action != undefined) {
+				GetDirection(projectType + "_PLAN_STAGE_TYPE", CreateHTML);
+				if(action != "" && action != undefined) {
 					SetData(projectId)
-					if (action == "view") {
+					if(action == "view") {
 						$("body").find("input,textarea").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 					}
-					if (action != "sp")
+					if(action != "sp")
 						$("#agreeBtn,#refuseBtn,#rejectBtn,#comment").hide();
 					else
 						$("#saveBtn,#submitBtn").hide();
 				}
-				GetDirection(projectType + "_PLAN_STAGE_TYPE", CreateHTML)
 				$("#saveBtn").click(function() {
-					SubmitData(1);
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$("#submitBtn").click(function() {
-					SubmitData(3);
+					if(vali.subByJs()) {
+						SubmitData(3);
+					}
 				});
 				$("#agreeBtn").click(function() {
 					Agree();
@@ -78,14 +90,16 @@
 				$.getJSON(
 					domain + '/api/projectPlan/' + projectID,
 					function(res) {
-						if (res.code == 0) {
+						if(res.code == 0) {
 							id = res.result.id;
 							procTaskId = res.result.procTaskId;
 							$("#sequence").val(res.result.sequence);
 							$("#survey").val(res.result.survey);
 							$.each(res.result.projectPlanExtensionList, function(i, item) {
-								$("#" + item.stageType + "_st").val(item.planStartTime);
-								$("#" + item.stageType + "_et").val(item.planEndTime);
+								if(typeof item.planStartTime != "undefined")
+									$("#" + item.stageType + "_st").val(new Date(item.planStartTime).format("yyyy-MM-dd"));
+								if(typeof item.planEndTime != "undefined")
+									$("#" + item.stageType + "_et").val(new Date(item.planEndTime).format("yyyy-MM-dd"));
 							});
 							GetRejectList(res.result.procTaskId);
 							/*
@@ -102,7 +116,7 @@
 						}
 					},
 					function(xhr, text) {
-						if (xhr.status == "401")
+						if(xhr.status == "401")
 							top.location.href = "login.html";
 						Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 					}
@@ -114,7 +128,7 @@
 				var survey = $("#survey").val();
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if (id_span.length > 0) {
+				if(id_span.length > 0) {
 					$.each(id_span, function() {
 						var userid = $(this).attr("id").split("_")[0];
 						var username = $(this).children("a").text();
@@ -125,19 +139,19 @@
 						users.push(user);
 					});
 				}
-				if (status == 3 && users.length == 0) {
+				if(status == 3 && users.length == 0) {
 					Toast.Err('错误', '请指定下一环节审批人~', 'top-center', 'left');
 					return;
 				}
 				var assessor = null;
 				var assessorSubList = [];
-				if (users.length == 1) {
+				if(users.length == 1) {
 					assessor = {};
 					assessor["assessor"] = users[0].username;
 					assessor["assessorId"] = users[0].userid;
 					assessor["assessorSubList"] = [];
 					assessor["assessorType"] = "PERSON";
-				} else if (users.length > 1) {
+				} else if(users.length > 1) {
 					assessor = {};
 					$.each(users, function(i, user) {
 						var assessorSub = {
@@ -170,7 +184,7 @@
 					"status": status,
 					"survey": survey
 				};
-				if (id != "" && id != undefined)
+				if(id != "" && id != undefined)
 					data["id"] = id
 				meetAdd("/api/projectPlan", JSON.stringify(data));
 			}
@@ -178,7 +192,7 @@
 			function Agree() {
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if (id_span.length > 0) {
+				if(id_span.length > 0) {
 					$.each(id_span, function() {
 						var userid = $(this).attr("id").split("_")[0];
 						var username = $(this).children("a").text();
@@ -191,19 +205,19 @@
 				}
 				var assessor = null;
 				var assessorSubList = [];
-				if (CheckLastPerson(procTaskId) == true) {
-					if (users.length == 0) {
+				if(CheckLastPerson(procTaskId) == true) {
+					if(users.length == 0) {
 						Toast.Err('错误', '请指定下一环节审批人~', 'top-center', 'left');
 						return;
 					}
 				}
-				if (users.length == 1) {
+				if(users.length == 1) {
 					assessor = {};
 					assessor["assessor"] = users[0].username;
 					assessor["assessorId"] = users[0].userid;
 					assessor["assessorSubList"] = [];
 					assessor["assessorType"] = "PERSON";
-				} else if (users.length > 1) {
+				} else if(users.length > 1) {
 					assessor = {}
 					$.each(users, function(i, user) {
 						var assessorSub = {
@@ -238,12 +252,12 @@
 
 			function Reject() {
 				var returnval = $("#rejectStepId").val();
-				if (returnval == "" || returnval == undefined) {
+				if(returnval == "" || returnval == undefined) {
 					Toast.Err('错误', '请选择驳回节点~', 'top-center', 'left');
 					return false;
 				}
 				var returnId, returnSubId;
-				if (returnval.indexOf("_") == -1) {
+				if(returnval.indexOf("_") == -1) {
 					returnId = returnval;
 				} else {
 					returnId = returnval.split("_")[0];
@@ -266,23 +280,23 @@
 		<h2 class="szTitle">项目计划</h2>
 		<div class="szxmTjPageRightJh">
 			<span>序号：</span>
-			<input type="text" id="sequence" style="width: 388px; margin-left: 18px; background: none;" />
+			<input type="text" id="sequence" style="width: 388px; margin-left: 18px; background: none;" valType="required" msg="<font color=red>*</font>序号不能为空" />
 		</div>
 		<div class="szxmTjPageRightJh">
 			<span>项目名称：</span>
-			<input type="text" id="projectName" readonly="readonly" style="width: 388px; margin-left: 18px; background: none;" />
+			<input type="text" id="projectName" readonly="readonly" style="width: 388px; margin-left: 18px; background: none;" valType="required" msg="<font color=red>*</font>项目名称不能为空" />
 		</div>
 		<div class="szxmTjPageRightJh">
 			<span>项目概况：</span>
-			<input type="text" id="survey" style="width: 388px; margin-left: 20px; background: none;" />
+			<input type="text" id="survey" style="width: 388px; margin-left: 20px; background: none;" valType="required" msg="<font color=red>*</font>项目概况不能为空" />
 		</div>
 		<div class="szxmTjPageRightJh">
 			<span>审批意见：</span>
-			<input type="text" id="comment" style="width: 388px; margin-left: 20px; background: none;" />
+			<input type="text" id="comment" style="width: 388px; margin-left: 20px; background: none;" valType="required" msg="<font color=red>*</font>审批意见不能为空" />
 		</div>
 		<div class="szxmTjPageRightJh" id="nextperson">
 			<span>审批人：</span>
-			<div id="RegionJobBusinessTag" ></div>
+			<div id="RegionJobBusinessTag"></div>
 			<input id="ApplicationDirection" readonly="readonly" type="text" onkeypress="javascript:return false;" onclick="selectJobBusinessTag()" />
 			<script type="text/javascript">
 				function selectJobBusinessTag() {
@@ -298,8 +312,8 @@
 		<div class="szxmTjPageRightJh">
 			<span>驳回节点：</span>
 			<select id="rejectStepId">
-						<option value="">--请选择驳回节点--</option>
-					</select>
+				<option value="">--请选择驳回节点--</option>
+			</select>
 		</div>
 		<!--这里是动态生成内容-->
 

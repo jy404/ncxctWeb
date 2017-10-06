@@ -8,22 +8,24 @@
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
-		<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
-		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
 		<script type="text/javascript" src="js/json2.js"></script>
 		<script type="text/javascript" src="js/GetData.js"></script>
 		<script type="text/javascript" src="js/paging.js"></script>
 		<script type="text/javascript" src="js/PluginFun.js"></script>
 		<script type="text/javascript" src="js/jquery.toast.js"></script>
-		<script type="text/javascript" src="js/jquery-powerFloat-min.js"></script>
-		<script type="text/javascript" src="js/jquery-xmenu.js"></script>
 		<script type="text/javascript">
 			var currentpage = 1;
 			var pagesize = 10;
+			var moduleId = 0;
 			var data = {};
 
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
+				$(".addBb").click(function() {
+					location.href = "050401.html?moduleId=" + moduleId;
+				});
+				GetDept1("deptId");
 				$('.lyhglSerachreset').click(function() {
 					$(".fjxmSerachTypeSelect").val("");
 					currentpage = 1;
@@ -44,6 +46,13 @@
 				GetUserList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/user/list");
 			})
 		</script>
+		<style type="text/css">
+			#deptId {
+				height: 32px;
+				width: 240px;
+				background: #00000000;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -57,7 +66,7 @@
 		</div>
 		<div class="lyhgl">
 			<h2 class="lyhglTitle">用户管理</h2>
-			<a href="050401.html" target="bodyRight" class="addBb">新增用户</a>
+			<a href="#" target="bodyRight" class="addBb">新增用户</a>
 			<div class="lyhglSerach">
 				<div class="lyhglSerachList">
 					<div class="lyhglSerachTitle">
@@ -70,7 +79,9 @@
 					</div>
 					<div class="lyhglSerachTitle">
 						<span>所属部门：</span>
-						<input type="text" id="deptId" class="lyhglSerachTypeSelect" />
+						<select id="deptId">
+							<option value="0">--请选择部门--</option>
+						</select>
 					</div>
 					<div class="lyhglSerachBtn">
 						<a href="#" class="lyhglSerachBtn1">查询</a>

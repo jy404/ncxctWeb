@@ -28,6 +28,12 @@
 		<script src="js/jquery.fileupload-image.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<style>
 			.btnOk {
 				display: block;
@@ -51,6 +57,7 @@
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				orgCategory = $.getUrlParam("orgCategory");
 				orgType = "AGENT";//$.getUrlParam("orgType");
@@ -64,8 +71,10 @@
 						$(".lfjqqzbbBottom").hide();
 					}
 				}
-				$('#saveBtn').click(function() {
-					SubmitData()
+				$('#saveButton').click(function() {
+					if(vali.subByJs()) {
+						SubmitData();
+					}
 				});
 				$("#addPersonBtn").click(function() {
 					var selectJobType = $("#selJobType").val();
@@ -197,27 +206,27 @@
 			<div class="lfjqqzbbBox1">
 				<div class="lfjqqzbbBox1Left">
 					<span>单位名称：</span>
-					<input type="text" id="name" />
+					<input type="text" id="name" valType="required" msg="<font color=red>*</font>单位名称不能为空"/>
 				</div>
 				<div class="lfjqqzbbBox1Right">
 					<span>单位地址：</span>
-					<input type="text" id="address" />
+					<input type="text" id="address" valType="required" msg="<font color=red>*</font>单位地址不能为空"/>
 				</div>
 			</div>
 			<div class="lfjqqzbbBox1">
 				<div class="lfjqqzbbBox1Left">
 					<span>单位法人：</span>
-					<input type="text" id="entity" />
+					<input type="text" id="entity" valType="required" msg="<font color=red>*</font>单位法人不能为空"/>
 				</div>
 				<div class="lfjqqzbbBox1Right">
 					<span>项目负责人：</span>
-					<input type="text" id="projectEntity" />
+					<input type="text" id="projectEntity" valType="required" msg="<font color=red>*</font>项目负责人不能为空"/>
 				</div>
 			</div>
 			<div class="lfjqqzbbBox1">
 				<div class="lfjqqzbbBox1Left">
 					<span>联系方式：</span>
-					<input type="text" id="contact" />
+					<input type="text" id="contact" valType="required" msg="<font color=red>*</font>联系方式不能为空"/>
 				</div>
 				<div class="lfjqqzbbBox1Right">
 					<span>项目类别：</span>
@@ -229,11 +238,11 @@
 			<div class="lfjqqzbbBox1">
 				<div class="lfjqqzbbBox1Left">
 					<span>成立时间：</span>
-					<input type="text" id="foundTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+					<input type="text" id="foundTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" valType="required" msg="<font color=red>*</font>成立时间不能为空"/>
 				</div>
 				<div class="lfjqqzbbBox1Right">
-					<span>负责项目内容：</span>
-					<input type="text" id="chargeProject" />
+					<span>项目内容：</span>
+					<input type="text" id="chargeProject" valType="required" msg="<font color=red>*</font>项目内容不能为空"/>
 				</div>
 			</div>
 			<div class="lfjqqzbbBoxSame">
@@ -281,7 +290,7 @@
 			</div>
 			<div id="div_personinfo"></div>
 
-			<a href="#" id="saveBtn" class="lfjqqzbbBottom">保存</a>
+			<a href="#" id="saveButton" class="lfjqqzbbBottom">保存</a>
 		</div>
 	</body>
 

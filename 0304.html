@@ -23,15 +23,17 @@
 			var currentpage = 1;
 			var pagesize = 10;
 			var projecttype = "HOUSE";
+			var moduleId = 0;
 			var data = {
 				//"projectType": projecttype
 			};
 
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
 				$('.xmcxSerachreset').click(function() {
 					$(".xmcxSerachTypeSelect").val("");
 				});
-				$("#noticeType").click(function(){
+				$("#noticeType").click(function() {
 					$(".noticeUl").show();
 				});
 				$('#noticeUl li').click(function() {

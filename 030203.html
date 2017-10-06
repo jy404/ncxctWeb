@@ -32,10 +32,17 @@
 		<script type="text/javascript" src="js/upload.js"></script>
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var Id, action, projectType, step;
 			$(function() {
 				$.ajaxSettings.async = false;
+				var vali = new Validators();
 				SelectUserList("txtUserIds");
 				action = $.getUrlParam("action");
 				projectType = $.getUrlParam("projectType");
@@ -56,7 +63,9 @@
 				}
 				//判断编辑或者查看
 				$('.lfjqqzbbBottom').click(function() {
-					SubmitData();
+					if(vali.subByJs()) {
+						SubmitData();
+					}
 				});
 			});
 
@@ -137,7 +146,7 @@
 				</div>
 				<div class="lfjqqzbbBox1Right">
 					<span>时间：</span>
-					<input type="text" id="projectTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+					<input type="text" id="projectTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 				</div>
 			</div>
 			<div class="lfjqqzbbBox2">
@@ -151,37 +160,37 @@
 			<div class="lfjqqzbbBoxSame">
 				<div class="lfjqqzbbBoxSameLeft">
 					<span>推进计划：</span>
-					<textarea id="pushPlan"></textarea>
+					<textarea id="pushPlan" valType="required" msg="<font color=red>*</font>推进计划不能为空"></textarea>
 				</div>
 				<div class="lfjqqzbbBoxSameRight">
 					<span>整体推进计划：</span>
-					<textarea id="allPushPlan"></textarea>
+					<textarea id="allPushPlan" valType="required" msg="<font color=red>*</font>整体推进计划不能为空"></textarea>
 				</div>
 			</div>
 			<div class="lfjqqzbbBoxSame">
 				<div class="lfjqqzbbBoxSameLeft">
 					<span>本周计划：</span>
-					<textarea id="tWeekPlan"></textarea>
+					<textarea id="tWeekPlan" valType="required" msg="<font color=red>*</font>本周计划不能为空"></textarea>
 				</div>
 				<div class="lfjqqzbbBoxSameRight">
 					<span>本周落实情况：</span>
-					<textarea id="tWeekCase"></textarea>
+					<textarea id="tWeekCase" valType="required" msg="<font color=red>*</font>本周落实情况不能为空"></textarea>
 				</div>
 			</div>
 			<div class="lfjqqzbbBoxSame">
 				<div class="lfjqqzbbBoxSameLeft">
 					<span>下周情况：</span>
-					<textarea id="nWeekCase"></textarea>
+					<textarea id="nWeekCase" valType="required" msg="<font color=red>*</font>下周情况不能为空"></textarea>
 				</div>
 				<div class="lfjqqzbbBoxSameRight">
 					<span>存在问题：</span>
-					<textarea id="issue"></textarea>
+					<textarea id="issue" valType="required" msg="<font color=red>*</font>存在问题不能为空"></textarea>
 				</div>
 			</div>
 			<div class="lfjqqzbbBoxSame">
 				<div class="lfjqqzbbBoxSameLeft">
 					<span>基本情况：</span>
-					<textarea id="condition"></textarea>
+					<textarea id="condition" valType="required" msg="<font color=red>*</font>基本情况不能为空"></textarea>
 				</div>
 				<div class="lfjqqzbbBoxSameRight">
 					<span>备注：</span>

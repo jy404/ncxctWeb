@@ -30,12 +30,19 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				/*页面传参并判断类型 start*/
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -52,10 +59,14 @@
 				}
 				
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -102,20 +113,19 @@
 		<h2 class="szTitle">规划方案设计评选</h2>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo" />
+			<input type="text" id="docNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="arttime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" />
+			<input type="text" id="arttime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
-
 		</div>
 		<div id="uploader" class="fjStyle"></div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" class="szxmTjPageRightFormBc" id="saveButton">保存</a>
+			<a href="#" class="szxmTjPageRightFormBtn" id="submitButton">提交</a>
 		</div>
 	</body>
 

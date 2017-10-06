@@ -18,21 +18,26 @@
 		<script type="text/javascript">
 			var currentpage = 1;
 			var pagesize = 10;
+			var moduleId = 0;
 			var projecttype = "CITY";
 			var data = {
 				"projectType": projecttype
 			};
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
+				$(".addBb").click(function() {
+					location.href = "030601.html?moduleId=" + moduleId;
+				});
 				GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
 				$("#searchBtn").click(function() {
 					var projectName = $("#txtProjectName").val();
 					var startTime = $("#txtstartTime").val();
 					var projectNo = $("#txtProjectNo").val();
-					if (projectName != undefined && projectName != "")
+					if(projectName != undefined && projectName != "")
 						data["name"] = projectName;
-					if (startTime != undefined && startTime != "")
+					if(startTime != undefined && startTime != "")
 						data["startTime"] = startTime;
-					if (projectNo != undefined && projectNo != "")
+					if(projectNo != undefined && projectNo != "")
 						data["projectNo"] = projectNo;
 					GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
 				})
@@ -63,7 +68,7 @@
 		</div>
 		<div class="szxm">
 			<h2 class="szxmTitle">市政项目</h2>
-			<a href="030601.html" target="bodyRight" class="addBb">添加新项目</a>
+			<a href="#" target="bodyRight" class="addBb">添加新项目</a>
 			<div class="szxmSerach">
 				<div class="szxmSerachList">
 					<div class="szxmSerachTitle">

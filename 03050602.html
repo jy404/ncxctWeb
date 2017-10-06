@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>工程竣工图</title>
@@ -29,12 +30,19 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -49,10 +57,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -61,14 +73,11 @@
 					domain + "/api/construction/schedule/materialinquiry/" + projectId,
 					function(res) {
 						if(res["code"] == "0") {
-							$('#txtstartTime').val(res["result"]["startTime"]);
-							$('#txtcompletedTime').val(res["result"]["completedTime"]);
-							$('#txtcompletePercentage').val(res["result"]["completePercentage"]);
-							$('#txtamount').val(res["result"]["amount"]);
-							$('#txtworkPlan').val(res["result"]["workPlan"]);
-							$('#txtcompletion').val(res["result"]["completion"]);
+							$('#docNo').val(res["result"]["docNo"]);
+							$('#preAcceptanceTime').val(res["result"]["preAcceptanceTime"]);
+							$('#finishTime').val(res["result"]["finishTime"]);
+							$('#problem').val(res["result"]["problem"]);
 							$('#txtrectification').val(res["result"]["rectification"]);
-							$('#txtexsitProblem').val(res["result"]["exsitProblem"]);
 
 							id = res["result"]["id"];
 							//附件加上
@@ -84,14 +93,11 @@
 			}
 
 			function SubmitData(status) {
-				var startTime = $('#txtstartTime').val();
-				var completedTime = $('#txtcompletedTime').val();
-				var completePercentage = $('#txtcompletePercentage').val();
-				var amount = $('#txtamount').val();
-				var workPlan = $('#txtworkPlan').val();
-				var completion = $('#txtcompletion').val();
+				var docNo = $('#docNo').val();
+				var preAcceptanceTime = $('#preAcceptanceTime').val();
+				var finishTime = $('#finishTime').val();
+				var problem = $('#problem').val();
 				var rectification = $('#txtrectification').val();
-				var exsitProblem = $('#txtexsitProblem').val();
 				var artfu = $('#fileurl_uploader').val();
 
 				var status = "2";
@@ -100,53 +106,53 @@
 					"projectNo": projectNo,
 					"projectType": projectType,
 
-					"startTime": startTime,
-					"completedTime": completedTime,
-					"completePercentage": completePercentage,
-					"amount": amount,
-					"workPlan": workPlan,
-					"completion": completion,
+					"docNo": startTime,
+					"preAcceptanceTime": preAcceptanceTime,
+					"finishTime": finishTime,
+					"problem": problem,
 					"rectification": rectification,
-					"exsitProblem": exsitProblem,
 
 					"fileUrl": artfu,
 					"status": status
 				}
 				if(action == "edit")
 					data["id"] = id;
-				meetAdd('/api/construction/schedule/materialinquiry/save', JSON.stringify(data));
+				meetAdd('/api/recordDrawings/submit', JSON.stringify(data));
 			}
 		</script>
 	</head>
+
 	<body>
-				<h2 class="szTitle">工程竣工图</h2>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>结束时间：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>图片上传：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					<input type="text" />
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>存在问题：</span>
-					<textarea></textarea>
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>整改情况：</span>
-					<textarea></textarea>
-				</div>
-				<div class="szBtn">
-					<a href="#" class="szxmTjPageRightFormBc">保存</a>
-					<a href="#" class="szxmTjPageRightFormBtn">提交</a>
-				</div>	
+		<h2 class="szTitle">工程竣工图</h2>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预验收时间：</span>
+			<input type="text" id="preAcceptanceTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>完成时间：</span>
+			<input type="text" id="finishTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+		</div>
+		<div id="uploader" class="fjStyle">
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>存在问题：</span>
+			<textarea id="problem"></textarea>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>整改情况：</span>
+			<textarea id="rectification"></textarea>
+		</div>
+		<div class="szBtn">
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
 	</body>
+
 </html>

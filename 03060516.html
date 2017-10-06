@@ -30,16 +30,24 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
+				SelectUnitList("txtapplyUnit", "A0004", projectType);
 				if(action != "" && action != undefined) {
 					SetData(projectId)
 					if(action == "view") {
@@ -50,10 +58,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -63,8 +75,7 @@
 					function(res) {
 						if(res["code"] == "0") {
 							//$('#txtname').val(res["result"]["name"]);
-							$('#txtapplyUnitId').val(res["result"]["applyUnitId"]);
-							$('#txtapplyUnitName').val(res["result"]["applyUnitName"]);
+							$('#txtapplyUnit').val(res["result"]["applyUnitId"]);
 							$('#txtproject_no').val(res["result"]["project_no"]);
 							$('#txtdispatchTime').val(res["result"]["dispatchTime"]);
 							$('#txtcontent').val(res["result"]["content"]);
@@ -95,8 +106,8 @@
 
 			function SubmitData(status) {
 				var name = $('#txtname').val();
-				var applyUnitId = $('#txtapplyUnitId').val() == "" ? 0 : $('#txtapplyUnitId').val();
-				var applyUnitName = $('#txtapplyUnitName').val();
+				var applyUnitId = $('#txtapplyUnit option:selected').val();
+				var applyUnitName = $('#txtapplyUnit option:selected').text();
 				var project_no = $('#txtproject_no').val();
 				var dispatchTime = $('#txtdispatchTime').val();
 				var artfu = $('#fileurl_uploader').val();
@@ -153,23 +164,19 @@
 		<h2 class="szTitle">工程签证及变更</h2>
 		<div class="szxmTjPageRightForm">
 			<span>工程名称：</span>
-			<input type="text" id="txtname" />
-		</div>
-		<div class="szxmTjPageRightForm" style="display: none;">
-			<span>申请单位：</span>
-			<input type="text" id="txtapplyUnitId" />
+			<input type="text" id="txtname" valType="required" msg="<font color=red>*</font>工程名称不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>申请单位：</span>
-			<input type="text" id="txtapplyUnitName" />
+			<div id="txtapplyUnit"></div>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>编号：</span>
-			<input type="text" id="txtproject_no" />
+			<input type="text" id="txtproject_no" valType="required" msg="<font color=red>*</font>编号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="txtdispatchTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtdispatchTime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -179,7 +186,7 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>内容：</span>
-			<textarea id="txtcontent"></textarea>
+			<textarea id="txtcontent" valType="required" msg="<font color=red>*</font>内容不能为空"></textarea>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>备注：</span>
@@ -188,40 +195,40 @@
 		<h3 class="ydsxHead">联系单（实施前）</h3>
 		<div class="szxmTjPageRightForm">
 			<span>造价审核人：</span>
-			<input type="text" id="txtcostAuditor1" />
+			<input type="text" id="txtcostAuditor1" valType="required" msg="<font color=red>*</font>造价审核人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>技术审核人：</span>
-			<input type="text" id="txttechnicalAuditor1" />
+			<input type="text" id="txttechnicalAuditor1" valType="required" msg="<font color=red>*</font>技术审核人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>申报金额（元）：</span>
-			<input type="text" id="txtdeclareAmount1" />
+			<input type="text" id="txtdeclareAmount1" valType="required" msg="<font color=red>*</font>申报金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>申报后金额（元）：</span>
-			<input type="text" id="txtdeclareAfterAmount1" />
+			<input type="text" id="txtdeclareAfterAmount1" valType="required" msg="<font color=red>*</font>申报后金额不能为空"/>
 		</div>
 		<h3 class="ydsxHead">确认单（实施前）</h3>
 		<div class="szxmTjPageRightForm">
 			<span>造价审核人：</span>
-			<input type="text" id="txtcostAuditor2" />
+			<input type="text" id="txtcostAuditor2" valType="required" msg="<font color=red>*</font>造价审核人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>技术审核人：</span>
-			<input type="text" id="txttechnicalAuditor2" />
+			<input type="text" id="txttechnicalAuditor2" valType="required" msg="<font color=red>*</font>技术审核人不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>申报金额（元）：</span>
-			<input type="text" id="txtdeclareAmount2" />
+			<input type="text" id="txtdeclareAmount2" valType="required" msg="<font color=red>*</font>申报金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>申报后金额（元）：</span>
-			<input type="text" id="txtdeclareAfterAmount2" />
+			<input type="text" id="txtdeclareAfterAmount2" valType="required" msg="<font color=red>*</font>申报后金额不能为空"/>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

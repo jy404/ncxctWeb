@@ -32,11 +32,19 @@
 		<script type="text/javascript" src="js/upload.js"></script>
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css"/>
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
+				var vali = new Validators();
 				//判断编辑或者查看
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -56,10 +64,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -130,19 +142,19 @@
 		<h2 class="szTitle">施工图会审</h2>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo" />
+			<input type="text" id="txtdocNo" valType="required" msg="<font color=red>*</font>文号不能为空"  />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
-			<div id="txtUnitName"></div>
+			<div id="txtUnitName" valType="required" msg="<font color=red>*</font>参与单位不能为空" ></div>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>增减金额：</span>
-			<input type="text" id="txtinoutAmount" />
+			<input type="text" id="txtinoutAmount" valType="required" msg="<font color=red>*</font>增减金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>会审时间：</span>
-			<input type="text" id="txtreviewingTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" readonly="readonly" id="txtreviewingTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  valType="required" msg="<font color=red>*</font>会审时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -155,8 +167,8 @@
 			<textarea id="txtcomment"></textarea>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

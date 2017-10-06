@@ -16,7 +16,13 @@
 		<script type="text/javascript" src="js/PluginFun.js"></script>
 		<script type="text/javascript" src="js/jquery.toast.js"></script>
 		<script type="text/javascript">
+			var moduleId = 0;
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
+				$(".addBba").click(function() {
+					var Rname = $(this).attr("name");
+					location.href = "030701.html?orgCategory=" + Rname + "&moduleId=" + moduleId;
+				});
 				$('.zjdw .addBb').click(function() {
 					$('.window').show();
 				});
@@ -99,6 +105,123 @@
 			<div class="windowBox">
 				<h2>单位类型<b></b></h2>
 				<ul>
+					<a class="addBba" name="A0001" href="#">
+						<li>业主单位</li>
+					</a>
+					<a class="addBba" name="A0002" href="#">
+						<li>地勘单位</li>
+					</a>
+					<a class="addBba" name="A0003" href="#">
+						<li>设计单位</li>
+					</a>
+					<a class="addBba" name="A0004" href="#">
+						<li>施工单位</li>
+					</a>
+					<a class="addBba" name="A0005" href="#">
+						<li>监理单位</li>
+					</a>
+					<a class="addBba" name="A0006" href="#">
+						<li>监督单位</li>
+					</a>
+					<!--<a href="030701.html?orgCategory=A0007"><li>测绘单位</li></a>-->
+					<a class="addBba" name="A0007" href="#">
+						<li>科研及初设评审单位</li>
+					</a>
+					<a class="addBba" name="A0008" href="#">
+						<li>科研编制单位</li>
+					</a>
+					<a class="addBba" name="A0009" href="#">
+						<li>初设单位</li>
+					</a>
+					<a class="addBba" name="A0010" href="#">
+						<li>土建设计单位</li>
+					</a>
+					<a class="addBba" name="A0011" href="#">
+						<li>强电设计单位</li>
+					</a>
+					<a class="addBba" name="A0012" href="#">
+						<li>检测单位</li>
+					</a>
+					<a class="addBba" name="A0013" href="#">
+						<li>图审单位</li>
+					</a>
+					<a class="addBba" name="A0014" href="#">
+						<li>水保咨询单位</li>
+					</a>
+					<a class="addBba" name="A0015" href="#">
+						<li>环评咨询单位</li>
+					</a>
+					<a class="addBba" name="A0016" href="#">
+						<li>交评咨询单位</li>
+					</a>
+					<a class="addBba" name="A0017" href="#">
+						<li>地质灾害、压覆矿评估单位</li>
+					</a>
+					<a class="addBba" name="A0018" href="#">
+						<li>防洪咨询单位</li>
+					</a>
+					<a class="addBba" name="A0019" href="#">
+						<li>稳定咨询单位</li>
+					</a>
+					<a class="addBba" name="A0020" href="#">
+						<li>招标代理单位</li>
+					</a>
+					<a class="addBba" name="A0021" href="#">
+						<li>清单编制单位</li>
+					</a>
+					<a class="addBba" name="A0022" href="#">
+						<li>监督单位</li>
+					</a>
+					<a class="addBba" name="A0023" href="#">
+						<li>行业主管部门</li>
+					</a>
+
+					<a class="addBba" name="A0024" href="#">
+						<li>交评单位</li>
+					</a>
+					<a class="addBba" name="A0025" href="#">
+						<li>环评单位</li>
+					</a>
+					<a class="addBba" name="A0026" href="#">
+						<li>科研编制、评估单位</li>
+					</a>
+					<a class="addBba" name="A0027" href="#">
+						<li>地勘见证单位</li>
+					</a>
+					<a class="addBba" name="A0028" href="#">
+						<li>初设评估单位</li>
+					</a>
+					<a class="addBba" name="A0029" href="#">
+						<li>设计审查单位</li>
+					</a>
+					<a class="addBba" name="A0030" href="#">
+						<li>招标代理单位</li>
+					</a>
+					<a class="addBba" name="A0031" href="#">
+						<li>预算编制单位</li>
+					</a>
+					<a class="addBba" name="A0032" href="#">
+						<li>测量测绘单位</li>
+					</a>
+					<a class="addBba" name="A0033" href="#">
+						<li>桩基检测单位</li>
+					</a>
+					<a class="addBba" name="A0034" href="#">
+						<li>房屋检测单位</li>
+					</a>
+					<a class="addBba" name="A0035" href="#">
+						<li>防雷检测单位</li>
+					</a>
+					<a class="addBba" name="A0036" href="#">
+						<li>室内环境及节能检测单位</li>
+					</a>
+					<a class="addBba" name="A0037" href="#">
+						<li>沉降观测单位</li>
+					</a>
+					<a class="addBba" name="A0038" href="#">
+						<li>消防检测单位</li>
+					</a>
+				</ul>
 					<a href="030801.html?orgCategory=A0001">
 						<li>业主单位</li>
 					</a>

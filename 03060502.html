@@ -30,16 +30,24 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
+				SelectUnitList("responsibilityUnit", "A0004", projectType);
 				if(action != "" && action != undefined) {
 					SetData(projectId)
 					if(action == "view") {
@@ -50,10 +58,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -63,8 +75,7 @@
 					function(res) {
 						if(res["code"] == "0") {
 							$('#txtdocNo').val(res["result"]["docNo"]);
-							$('#txtresponsibilityUnitId').val(res["result"]["responsibilityUnitId"]);
-							$('#txtresponsibilityUnitName').val(res["result"]["responsibilityUnitName"]);
+							$('#responsibilityUnit').val(res["result"]["responsibilityUnitId"]);
 							$('#txtresponsibilityUserName').val(res["result"]["responsibilityUserName"]);
 							$('#txtresponsibilityUserTel').val(res["result"]["responsibilityUserTel"]);
 							$('#txtbudgetAmount').val(res["result"]["budgetAmount"]);
@@ -85,8 +96,8 @@
 
 			function SubmitData(status) {
 				var docNo = $('#txtdocNo').val();
-				var responsibilityUnitId = $('#txtresponsibilityUnitId').val();
-				var responsibilityUnitName = $('#txtresponsibilityUnitName').val();
+				var responsibilityUnitId = $("#responsibilityUnit option:selected").val();
+				var responsibilityUnitName = $("#responsibilityUnit option:selected").text();
 				var responsibilityUserName = $('#txtresponsibilityUserName').val();
 				var responsibilityUserTel = $('#txtresponsibilityUserTel').val();
 				var budgetAmount = $('#txtbudgetAmount').val();
@@ -119,15 +130,11 @@
 		<h2 class="szTitle">施工图交桩手续</h2>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo" />
-		</div>
-		<div class="szxmTjPageRightForm" style="display: none;">
-			<span>责任单位：</span>
-			<input type="text" id="txtresponsibilityUnitId" />
+			<input type="text" id="txtdocNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>责任单位：</span>
-			<input type="text" id="txtresponsibilityUnitName" />
+			<div id="responsibilityUnit"></div>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>责任单位负责人：</span>
@@ -156,8 +163,8 @@
 			<textarea id="txtcomment"></textarea>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

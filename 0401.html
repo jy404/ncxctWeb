@@ -48,11 +48,14 @@
 				data = {
 					"parentId": Id
 				}
+				$(".har").click(function() {
+					location.href = "04.html?moduleId=" + moduleId;
+				});
 				$("#addBtn1").click(function() {
-					location.href = "0403.html?id=" + Id;
+					location.href = "0403.html?moduleId=" + moduleId + "&id=" + Id;
 				});
 				$("#addBtn2").click(function() {
-					location.href = "0402.html?parentId=" + Id;
+					location.href = "0402.html?moduleId=" + moduleId + "&parentId=" + Id;
 				});
 				$('.fjxmSerachreset').click(function() {
 					$(".fjxmSerachTypeSelect").val("");
@@ -86,7 +89,7 @@
 			<div class="page">
 				<b>当前位置：</b>
 				<span>> 首页</span>
-				<span>> <a href="04.html">文档管理</a></span>
+				<span>> <a class="har" href="#">文档管理</a></span>
 				<div id="filepath" style="display: none;"></div>
 			</div>
 		</div>

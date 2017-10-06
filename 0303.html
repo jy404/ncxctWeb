@@ -7,7 +7,7 @@
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" type="text/css" href="css/lib/bootstrap.min.css" />
-		<link rel="stylesheet" type="text/css" href="css/less/style.css"/>
+		<link rel="stylesheet" type="text/css" href="css/less/style.css" />
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -19,6 +19,13 @@
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=NvjXWehxrhWlK51T65hyBXzfiOVTFVUV"></script>
 		<script type="text/javascript" src="js/step/lib.js"></script>
 		<style>
+			.fjjdTable{ width:6000px;}
+			.fjjdTable tr{ width:100%; height:40px;}
+			.fjjdTable td{ width:80px; line-height:18px; font-size:12px; color:#111111; text-align:center; position:relative}
+			.fjjdTable td span{ display:block; width:100%; height:1px; background:#666666; position:absolute; left:0; top:19px;}
+			.fjjdTable td b{ display:block; width:20px; height:20px; border-radius:20px; background:#ffffff; position:absolute; left:30px; top:9px; z-index:111; border:1px solid #666666;}
+			.fjjdTable .selectRed{ background:#F00;}
+			.fjjdTable .selectGreen{ background:#0C0;}
 			.map {
 				width: 100%;
 				height: 480px;
@@ -63,9 +70,46 @@
 			.xmbbTable tr td a {
 				padding: 4px 8px;
 				font-size: 14px;
-				color: #ffffff;
+				color: #333333;
 				border-radius: 4px;
 				cursor: pointer;
+			}
+			
+			.page_div a {
+				height: 38px;
+			}
+			.jdTab {
+				width: 100%;
+				height: 44px;
+				border-bottom: 2px solid #4bb2ff;
+				margin-top: 10px;
+			}
+			
+			.jdTab li {
+				width: 120px;
+				height: 34px;
+				line-height: 34px;
+				background: #dfdfdf;
+				text-align: center;
+				color: #666666;
+				font-size: 14px;
+				float: left;
+				border-radius: 5px 5px 0 0;
+				margin-right: 5px;
+				margin-top: 8px;
+				cursor: pointer;
+			}
+			
+			.jdTab li:first-child {
+				margin-left: 37px;
+			}
+			
+			.jdTab li.xmbbTabSelect {
+				color: #ffffff;
+				background: #4bb2ff;
+			}
+			.jdTabBox{
+				width: 100%;
 			}
 		</style>
 		<script type="text/javascript">
@@ -76,8 +120,14 @@
 				//"projectType": projecttype
 			};
 			$(function() {
-				GetProjectStep(currentpage,pagesize,data,"projectStepList",$("#step_page"),true,"/api/project/schedule/list");
+				GetProjectStep(currentpage, pagesize, data, "projectStepList", $("#step_page"), true, "/api/project/schedule/list");
 				GetProjectListForMap(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				$('.jdTab li').click(function(){
+					$(this).addClass('xmbbTabSelect').siblings('li').removeClass('xmbbTabSelect');
+					$('.jdTabBox').eq($(this).index()).show().siblings('.jdTabBox').hide();
+				});
+				
+			
 			})
 		</script>
 	</head>
@@ -93,35 +143,707 @@
 		</div>
 		<div class="xmbb">
 			<h2 class="xmbbTitle">项目进度</h2>
-			<ul class="xmbbTabList">
+			<ul class="xmbbTabList" style="margin-bottom: 0px; height: 44px;">
 				<li class="xmbbTabSelect">项目进度图</li>
 				<li>项目分布图</li>
 			</ul>
-			<div class="xmbbTab" style="display:block">
-				<h2 class="xmbbTitle">项目进度</h2>
-				<table cellpadding="0" cellspacing="0" class="xmbbTable" id="projectStepList">
-					<tr>
-						<td width="5%">序号</td>
-						<td width="15%">项目名称</td>
-						<td width="80%">项目进度</td>
-					</tr>
-
-				</table>
-				<div class="page_div fy" id="step_page">
-
+			<div class="xmbbTab" style="display:block;">
+				<ul class="jdTab" style="height: 44px;">
+					<li class="xmbbTabSelect">房建项目</li>
+					<li>市政项目</li>
+				</ul>
+				<div class="jdTabBox" style="overflow: auto; padding-bottom: 20px;">
+					<table class="fjjdTable" cellpadding="0" cellspacing="0">
+				        <tr>
+				            <td>序号</td>
+				            <td style="width:200px;">项目名称</td>     
+				            <td>会议纪要或抄告单</td>
+				            <td>项目选址意见书、用地红线、用地测绘</td>
+				            <td>规划方案设计评选</td>
+				            <td>规划方案报批</td>
+				            <td>环评、交评</td>
+				            <td>项目建议书或可研批复、节能批复</td>
+				            <td>人防方案报批</td>
+				            <td>地勘</td>
+				            <td>用地手续报批</td>
+				            <td>用地规划许可证</td>
+				            <td>初步设计及概算批复</td>
+				            <td>施工图设计及设计审查</td>
+				            <td>工程规划许可证</td>
+				            <td>八家联审</td>
+				            <td>招标代理</td>
+				            <td>预算控制价编制</td>
+				            <td>财政出具预算控制价审核报告、财政复函</td>
+				            <td>招标核准、摸取下浮系数</td>
+				            <td>期望中标价</td>
+				            <td>招标邀请函、发布招标告知、招标文件</td>
+				            <td>项目招标，确定施工单位及监理单位</td>
+				            <td>中标通知书</td>
+				            <td>施工合同</td>
+				            <td>监理合同</td>
+				            <td>质、安监</td>
+				            <td>施工许可证</td>
+				            <td>消防建审</td>
+				            <td>征地拆迁交底</td>
+				            <td>征地</td>
+				            <td>拆迁</td>
+				            <td>强弱电改迁</td>
+				            <td>其他附着物清除</td>
+				            <td>施工图会审</td>
+				            <td>施工图交桩手续</td>
+				            <td>原地面复测</td>
+				            <td>工程清表推进</td>
+				            <td>桩基工程</td>
+				            <td>地下室工程</td>
+				            <td>主体工程</td>
+				            <td>装修工程</td>
+				            <td>安装工程</td>
+				            <td>室外市政工程</td>
+				            <td>材料及设备询价</td>
+				            <td>基坑支付及降水工程</td>
+				            <td>工程签证及变更</td>
+				            <td>房屋检测</td>
+				            <td>工程竣工图</td>
+				            <td>配套专业验收</td>
+				            <td>消防验收</td>
+				            <td>人防验收</td>
+				            <td>规划验收</td>
+				            <td>城管验收</td>
+				            <td>环保验收</td>
+				            <td>国土验收</td>
+				            <td>防震减灾局验收</td>
+				            <td>交通验收</td>
+				            <td>卫生验收</td>
+				            <td>园林验收</td>
+				            <td>管线验收</td>
+				            <td>质量终身责任牌</td>
+				            <td>门牌楼牌号安装</td>
+				            <td>工程预验收</td>
+				            <td>分户验收</td>
+				            <td>工程竣工验收</td>
+				            <td>质安监验收</td>
+				            <td>安监站验收</td>
+				            <td>城建局抽取专家验收</td>
+				            <td>城建档案馆资料移交</td>
+				            <td>竣工验收备案表</td>
+				            <td>工程移交</td>
+				            <td>工程结算</td>
+				            <td>工程保修</td>
+				        </tr>
+				        <tr>
+				            <td>1</td>
+				            <td>南昌县棚户区改造</td>
+				        	<td>
+				            	<span style="left: 40px;"></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectGreen"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectGreen"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectGreen"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span style="left: -40px;"></span>
+				                <b></b>
+				            </td>
+				        </tr>
+					</table>
+				</div>
+				<div class="jdTabBox" style="overflow: auto; padding-bottom: 20px; display: none;">
+					<table style="width: 5300px;" class="fjjdTable" cellpadding="0" cellspacing="0">
+				        <tr>
+				            <td>序号</td>
+				            <td style="width:200px;">项目名称</td>     
+				            <td>会议纪要或抄告单</td>
+				            <td>项目选址意见书</td>
+				            <td>环评、交评</td>
+				            <td>用地预审</td>
+				            <td>用地批准</td>
+				            <td>土地证</td>
+				            <td>用地规划许可证</td>
+				            <td>项目建议书请求</td>
+				            <td>项目建议书、可研批复</td>
+				            <td>地勘</td>
+				            <td>测绘</td>
+				            <td>水土保持评估</td>
+				            <td>地址灾害评估</td>
+				            <td>压覆矿评估</td>
+				            <td>防洪评估</td>
+				            <td>稳定评估</td>
+				            <td>施工图设计</td>
+				            <td>施工图图审</td>
+				            <td>施工图备案</td>
+				            <td>工程规划许可证</td>
+				            <td>初步设计概算批复请求</td>
+				            <td>初步设计概算批复</td>
+				            <td>确定招标代理</td>
+				            <td>预算控制价编制</td>
+				            <td>财政复函、预算控制价审核报告</td>
+				            <td>下浮系数</td>
+				            <td>期望中标价</td>
+				            <td>招标告知</td>
+				            <td>招标核准</td>
+				            <td>项目招标、确定施工单位及监理单位</td>
+				            <td>中标通知书</td>
+				            <td>施工合同</td>
+				            <td>监理合同</td>
+				            <td>质监</td>
+				            <td>安检</td>
+				            <td>施工许可证</td>
+				            <td>征地拆迁交底</td>
+				            <td>征地</td>
+				            <td>拆迁</td>
+				            <td>强弱电改迁</td>
+				            <td>其他附着物清除</td>
+				            <td>施工图会审</td>
+				            <td>施工图交桩手续</td>
+				            <td>原地面复测</td>
+				            <td>工程清表推进</td>			            
+				            <td>路基工程</td>
+				            <td>排水工程</td>
+				            <td>路面结构工程</td>
+				            <td>非机动车道</td>
+				            <td>人行道及路沿石附属工程</td>
+				            <td>交通工程</td>
+				            <td>绿化工程</td>
+				            <td>亮化工程</td>
+				            <td>工程签证及变更</td>
+				            <td>工程预验收</td>
+				            <td>工程竣工验收</td>
+				            <td>工程移交</td>
+				            <td>工程结算</td>
+				            <td>工程保修</td>
+				        </tr>
+				        <tr>
+				            <td>1</td>
+				            <td>莲一中改建项目</td>
+				        	<td>
+				            	<span style="left: 40px;"></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectRed"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectGreen"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b class="selectGreen"></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span></span>
+				                <b></b>
+				            </td>
+				            <td>
+				            	<span style="left: -40px;"></span>
+				                <b></b>
+				            </td>
+				        </tr>
+					</table>
 				</div>
 			</div>
 			<div class="xmbbTab">
-				<h2 class="xmbbTitle">项目分布</h2>
-				<div class="mapBox">
+				<div class="mapBox" style="margin-top: 20px;">
 					<div id="allmap" class="map">
 					</div>
 				</div>
-				<div class="mapRight">
+				<div class="mapRight" style="margin-top: 20px;">
 					<table cellpadding="0" cellspacing="0" class="xmbbTable" id="projectList">
 						<tr>
-							<td width="18%">项目名称</td>
-							<td width="18%">项目概况</td>
+							<td width="5%">序号</td>
+							<td width="16%">项目名称</td>
+							<td width="15%">项目概况</td>
 							<td width="18%">项目地址</td>
 							<td width="10%">投资金额（万元）</td>
 							<td width="13%">开工时间</td>

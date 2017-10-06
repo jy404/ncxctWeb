@@ -19,11 +19,16 @@
 		<script type="text/javascript">
 			var currentpage = 1;
 			var pagesize = 10;
+			var moduleId = 0;
 			var projecttype = "HOUSE";
 			var data = {
 				"projectType": projecttype
 			};
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
+				$(".addBb").click(function() {
+					location.href = "03050101.html?moduleId=" + moduleId;
+				});
 				GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
 				$("#searchBtn").click(function() {
 					currentpage = 1;
@@ -65,7 +70,7 @@
 		</div>
 		<div class="fjxm">
 			<h2 class="fjxmTitle">房建项目</h2>
-			<a href="03050101.html" target="bodyRight" class="addBb">添加新项目</a>
+			<a href="#" target="bodyRight" class="addBb">添加新项目</a>
 			<div class="fjxmSerach">
 				<div class="fjxmSerachList">
 					<div class="fjxmSerachTitle">

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="UTF-8">
 		<title>环境影响评估报告</title>
- 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
 		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/jquery.fileupload.css">		
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/AjaxRequest.js"></script>
@@ -29,101 +30,111 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
-			$(function(){		
+			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
-				if (action != "" && action != undefined) {
+				if(action != "" && action != undefined) {
 					SetData(projectId)
-					if (action == "view") {
+					if(action == "view") {
 						$("body").find("input").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
 					}
 				}
-				
-				
-				
-		  	 $('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+
+				$('.szxmTjPageRightFormBc').click(function() {
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
-				
-
 			});
-			
+
 			function SetData(projectId) {
 				$.getJSON(
 					domain + "/api/traenv/ENVIRONMENT/" + projectId,
 					function(res) {
-						if (res["code"] == "0") {
+						if(res["code"] == "0") {
 							$('#docNo').val(res["result"]["docNo"]);
 							$('#dispatchTime').val(res["result"]["dispatchTime"]);
 							$('#fileurl_uploader').val(res["result"]["fileUrl"]);
 							id = res["result"]["id"];
 							//附件加上
-							upload.show(res["result"]["fileUrl"],"files_uploader")
-						} 
+							upload.show(res["result"]["fileUrl"], "files_uploader")
+						}
 					},
 					function() {
 						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
 					}
 				);
 			}
-			function SubmitData(status){
-//			 		var comments=$('#comment').val();
-			 		var dispatchTime=$('#dispatchTime').val();
-			 		var docNo=$('#docNo').val();
-			 		var fileUrl=$('#fileurl_uploader').val();
-			 		var estimateType="ENVIRONMENT";	
-//			 		
-			 		var data={
-			 			
-//			 		"comment":comments,
-					"dispatchTime":dispatchTime,
-					"docNo":docNo,
-					"fileUrl":fileUrl,
-					"estimateType":estimateType,
-					"projectId":projectId,
-					"projectNo":projectNo,
-					"projectType":projectType,				
-					"status":status
-					}
-			 		if (action == "edit")
+
+			function SubmitData(status) {
+				//			 		var comments=$('#comment').val();
+				var dispatchTime = $('#dispatchTime').val();
+				var docNo = $('#docNo').val();
+				var fileUrl = $('#fileurl_uploader').val();
+				var estimateType = "ENVIRONMENT";
+				//			 		
+				var data = {
+
+					//			 		"comment":comments,
+					"dispatchTime": dispatchTime,
+					"docNo": docNo,
+					"fileUrl": fileUrl,
+					"estimateType": estimateType,
+					"projectId": projectId,
+					"projectNo": projectNo,
+					"projectType": projectType,
+					"status": status
+				}
+				if(action == "edit")
 					data["id"] = id;
-			 		meetAdd('/api/traenv/save',JSON.stringify(data));
-			 	};
+				meetAdd('/api/traenv/save', JSON.stringify(data));
+			};
 		</script>
 	</head>
+
 	<body>
-		
-				<h2 class="szTitle">环境影响评估报告</h2>
-				<div class="szxmTjPageRightForm">
-					<span>文号：</span>
-					<input type="text" id="docNo"/>
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>时间：</span>
-					<input type="text" id="dispatchTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly"/>
-				</div>
-				<div class="szxmTjPageRightForm">
-					<span>附件：</span>
-					
-				</div>
-				<div id="uploader" class="fjStyle"></div>
-				<div class="szBtn">
-					<a href="#" class="szxmTjPageRightFormBc">保存</a>
-					<a href="#" class="szxmTjPageRightFormBtn">提交</a>
-				</div>
-					
+
+		<h2 class="szTitle">环境影响评估报告</h2>
+		<div class="szxmTjPageRightForm">
+			<span>文号：</span>
+			<input type="text" id="docNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>时间：</span>
+			<input type="text" id="dispatchTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>附件：</span>
+
+		</div>
+		<div id="uploader" class="fjStyle"></div>
+		<div class="szBtn">
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
+		</div>
+
 	</body>
+
 </html>

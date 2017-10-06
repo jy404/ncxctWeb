@@ -30,6 +30,12 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id;
 			var id1, id2, id3, id4, id5, id6;
@@ -45,6 +51,7 @@
 				upload.init("uploader5", "添加附件...");
 				UploadProcess("uploader5");
 				//判断编辑或者查看
+				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -60,10 +67,14 @@
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {
-					SubmitData(1)
+					if(vali.subByJs()) {
+						SubmitData(1);
+					}
 				});
 				$('.szxmTjPageRightFormBtn').click(function() {
-					SubmitData(2)
+					if(vali.subByJs()) {
+						SubmitData(2);
+					}
 				});
 			});
 
@@ -211,15 +222,15 @@
 		<h3 class="ydsxHead">施工单位</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo1" />
+			<input type="text" id="txtdocNo1" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结束时间：</span>
-			<input type="text" id="txtendTime1" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtendTime1" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结束时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="txtamount1" />
+			<input type="text" id="txtamount1" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -238,15 +249,15 @@
 		<h3 class="ydsxHead">监理单位 </h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo2" />
+			<input type="text" id="txtdocNo2" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结束时间：</span>
-			<input type="text" id="txtendTime2" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtendTime2" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结束时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="txtamount2" />
+			<input type="text" id="txtamount2" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -265,15 +276,15 @@
 		<h3 class="ydsxHead">业主单位 </h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo3" />
+			<input type="text" id="txtdocNo3" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结束时间：</span>
-			<input type="text" id="txtendTime3" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtendTime3" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结束时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="txtamount3" />
+			<input type="text" id="txtamount3" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -292,15 +303,15 @@
 		<h3 class="ydsxHead">县财政局 </h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo4" />
+			<input type="text" id="txtdocNo4" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结束时间：</span>
-			<input type="text" id="txtendTime4" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtendTime4" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结束时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="txtamount4" />
+			<input type="text" id="txtamount4" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -319,15 +330,15 @@
 		<h3 class="ydsxHead">县局审计 </h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="txtdocNo5" />
+			<input type="text" id="txtdocNo5" valType="required" msg="<font color=red>*</font>文号不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>结束时间：</span>
-			<input type="text" id="txtendTime5" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+			<input type="text" id="txtendTime5" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>结束时间不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="txtamount5" />
+			<input type="text" id="txtamount5" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -344,8 +355,8 @@
 			<textarea id="txtrectification5"></textarea>
 		</div>
 		<div class="szBtn">
-			<a href="#" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" class="szxmTjPageRightFormBtn">提交</a>
+			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
+			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>
 

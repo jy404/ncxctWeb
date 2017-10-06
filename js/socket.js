@@ -1,31 +1,63 @@
 var socket;
-var longconnectUrl = "http://test.ncxct.com:8083";
-var tokenUrl = "http://test.ncxct.com:8082";
+var longconnectUrl = "ws://test.ncxct.com:8083";
+var tokenUrl = "http://test.ncxct.com";
 
 function startSocket(url) {
 	socket = io.connect(url);
 	socket.on('connect', function() {
+
 	});
 
 	socket.on('active_push', function(data) {
-		
+		var currentCount = $('.indexXx i').text()
+		var count = parseInt(currentCount) + 1
+		$('.indexXx i').text(count)
 	});
 
 	socket.on('disconnect', function() {
-		alert("连接已断开,无法接收最新推送消息~")
+		console.info("连接已断开,无法接收最新推送消息~")
 	});
 }
 
 function getToken() {
-	post(tokenUrl + "/api/websocket/token?_" + new Date().getTime(),
+		getUnreadMessage();
+		post(tokenUrl + "/api/websocket/token?_" + new Date().getTime(),
 
-		{}, "json",
-		function(data) {
-			if (data.code === '0') {
-				startSocket(longconnectUrl + "?token=" + data.result.token
+			{}, "json",
+			function(data) {
+				if (data.code === '0') {
+					startSocket(longconnectUrl + "?token=" + data.result.token
 
-					+ "&paramId=" + data.result.userId);
-			}
+						+ "&paramId=" + data.result.userId);
+				}
+		})
+}
+
+/**未读消息*/
+function getUnreadMessage(){
+	var param = {"pageSize":500,"currentPage":1,"read":false}
+	post(tokenUrl + "/api/message/list",
+
+			JSON.stringify(param), "json",
+			function(data) {
+				if (data.code === '0') {
+					$('.xxIndexList').append('')
+					var list = data.result.list;
+					var count = data.result.totalCount;
+					$('.indexXx i').text(count)
+					if(typeof list == 'undefined' || list.size == 0){
+						$('.xxIndexList').append("<li><a href='javascript:void(0)'>无消息</a></li>")
+					}
+					//加载列表
+					var html = ''
+					for(index in list){
+						html += '<li><a href="#">'+
+							list[index].title
+						+'</a></li>'
+					}
+					$('.xxIndexList').append(html)
+
+				}
 		})
 }
 
