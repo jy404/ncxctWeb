@@ -39,10 +39,11 @@
 		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
 		<!--表单验证-->
 		<script type="text/javascript">
-			var action, id, status = 1,
+			var action, id, moduleId, status = 1,
 				password;
 			$(function() {
 				$.ajaxSettings.async = false;
+				moduleId = $.getUrlParam("moduleId");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				id = $.getUrlParam("id");
@@ -53,13 +54,14 @@
 				if(action != "" && action != undefined) {
 					SetData()
 					if(action == "view") {
-						$("body").find("input,textarea").each(function() {
+						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
-						$(".lyhglxqyBot").hide();
+						$("#saveButton").hide();
 					}
+					$("#userName").attr("readonly",true);
 				}
-				$('.lyhglxqyBot').click(function() {
+				$('#saveButton').click(function() {
 					if(vali.subByJs()) {
 						SubmitData();
 					}
@@ -121,7 +123,7 @@
 				}
 				if(action == "edit")
 					data["id"] = id;
-				meetAdd('/api/saveUser', JSON.stringify(data), "0504.html");
+				meetAdd('/api/saveUser', JSON.stringify(data), "0504.html?moduleId=" + moduleId);
 			}
 		</script>
 		<style type="text/css">
@@ -223,7 +225,8 @@
 					<input type="radio" name="txtState" value="false" />离职
 				</div>
 			</div>
-			<a href="#" id="saveButton" class="lyhglxqyBot">确定</a>
+			<a href="#" id="saveButton" class="lyhglxqyBot">提交</a>
+			<a href="javascript:history.back(-1)" style="margin-left: 10px;" class="lyhglxqyBot">关闭</a>
 		</div>
 	</body>
 

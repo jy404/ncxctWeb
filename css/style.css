@@ -517,7 +517,7 @@ header .headNav span.myUrse b{
 }
 
 .bodyRightBox .word {
-	width: 68%;
+	width: 95%;
 	margin-left: 2.5%;
 	overflow: hidden;
 	float: left;
@@ -539,6 +539,7 @@ header .headNav span.myUrse b{
 .bodyRightBox .word li b {
 	font-weight: normal;
 	margin-right: 3px;
+	float: right;
 }
 
 .bodyRightBox .chart {
@@ -948,7 +949,7 @@ header .headNav span.myUrse b{
 .xxtz .xxtzTab .draftList {
 	width: 39%;
 	float: left;
-	border: 1px solid #c7c7c7;
+	
 	min-height: 380px;
 	border-top: none;
 	border-radius:0 0 3px 3px;
@@ -961,7 +962,7 @@ header .headNav span.myUrse b{
 	color: #fe7c54;
 	font-weight: normal;
 	padding-bottom: 10px;
-	margin: 10px 0;
+	margin: 15px 0;
 }
 
 .xxtz .xxtzTab .draftList ul {
@@ -1008,9 +1009,9 @@ header .headNav span.myUrse b{
 
 .xxtz .xxtzTab .xzxx div h3 {
 	width: 85px;
-	height: 50px;
+	height: 30px;
 	float: left;
-	line-height: 30px;
+	line-height: 10px;
 	font-size: 16px;
 	color: #333333;
 	font-weight: normal;
@@ -1947,6 +1948,7 @@ header .headNav span.myUrse b{
 	color: #ffffff;
 	border-radius: 4px;
 	cursor: pointer;
+	margin-right: 5px;
 }
 
 
@@ -2090,6 +2092,7 @@ header .headNav span.myUrse b{
 	color: #ffffff;
 	border-radius: 4px;
 	cursor: pointer;
+	margin-right: 5px;
 }
 
 
@@ -2233,6 +2236,7 @@ header .headNav span.myUrse b{
 	color: #ffffff;
 	border-radius: 4px;
 	cursor: pointer;
+	margin-right: 5px;
 }
 
 
@@ -2689,6 +2693,7 @@ header .headNav span.myUrse b{
 	color: #ffffff;
 	border-radius: 4px;
 	cursor: pointer;
+	margin-right: 5px;
 }
 
 
@@ -2711,7 +2716,7 @@ header .headNav span.myUrse b{
 }
 
 .lfjqqzbbBox1 {
-	margin-top: 20px;
+	margin-top: 10px;
 	font-size: 14px;
 	width: 100%;
 	height: 37px;
@@ -2722,6 +2727,7 @@ header .headNav span.myUrse b{
 	float: left;
 	width: 40%;
 	height: 37px;
+	line-height: 35px;
 }
 
 .lfjqqzbbBox1 .lfjqqzbbBox1Left span {
@@ -2733,6 +2739,7 @@ header .headNav span.myUrse b{
 	color: #333333;
 	text-align: right;
 	margin-right: 2%;
+	line-height: 35px;
 }
 
 .lfjqqzbbBox1 .lfjqqzbbBox1Left input[type=text] {
@@ -2747,6 +2754,7 @@ header .headNav span.myUrse b{
 	font-size: 14px;
 	font-family: "微软雅黑";
 	color: #333333;
+	line-height: 35px;
 }
 
 .lfjqqzbbBox1 .lfjqqzbbBox1Right {
@@ -2754,6 +2762,7 @@ header .headNav span.myUrse b{
 	float: left;
 	width: 40%;
 	height: 37px;
+	line-height: 35px;
 }
 
 .lfjqqzbbBox1 .lfjqqzbbBox1Right span {
@@ -2765,6 +2774,7 @@ header .headNav span.myUrse b{
 	color: #333333;
 	text-align: right;
 	margin-right: 2%;
+	line-height: 35px;
 }
 
 .lfjqqzbbBox1 .lfjqqzbbBox1Right input[type=text] {
@@ -2773,26 +2783,29 @@ header .headNav span.myUrse b{
 	margin-right: 0;
 	padding: 5px;
 	outline: none;
-	height: 25px;
+	height: 35px;
 	border: 1px solid #cbcbcb;
 	background: white;
 	font-size: 14px;
 	font-family: "微软雅黑";
 	color: #333333;
+	line-height: 35px;
 }
 
 .lfjqqzbbBox2 {
-	margin-top: 20px;
+	margin-top: 10px;
 	font-size: 14px;
 	width: 100%;
 	height: 37px;
 	line-height: 35px;
+	
 }
 
 .lfjqqzbbBox2 .lfjqqzbbBox2Left {
 	float: left;
 	width: 40%;
 	height: 37px;
+	line-height: 35px;
 }
 
 .lfjqqzbbBox2 .lfjqqzbbBox2Left span {
@@ -2804,6 +2817,7 @@ header .headNav span.myUrse b{
 	color: #333333;
 	text-align: right;
 	margin-right: 2%;
+	line-height: 35px;
 }
 
 .lfjqqzbbBox2 .lfjqqzbbBox2Left input[type=text] {
@@ -2818,20 +2832,23 @@ header .headNav span.myUrse b{
 	font-size: 14px;
 	font-family: "微软雅黑";
 	color: #333333;
+	line-height: 35px;
 }
 
 .lfjqqzbbBoxSame {
-	margin-top: 20px;
+	margin-top: 10px;
 	font-size: 14px;
 	width: 100%;
-	height: 135px;
+	height: 92px;
 	line-height: 35px;
+	
 }
 
 .lfjqqzbbBoxSame .lfjqqzbbBoxSameLeft {
 	float: left;
 	width: 40%;
 	height: 100px;
+	line-height: 35px;
 }
 
 .lfjqqzbbBoxSame .lfjqqzbbBoxSameLeft span {
@@ -2842,6 +2859,7 @@ header .headNav span.myUrse b{
 	color: #333333;
 	text-align: right;
 	margin-right: 2%;
+	line-height: 35px;
 }
 
 .lfjqqzbbBoxSame .lfjqqzbbBoxSameLeft textarea {
@@ -2863,7 +2881,7 @@ header .headNav span.myUrse b{
 	margin-left: 1%;
 	float: left;
 	width: 40%;
-	height: 135px;
+	height: 92px;
 }
 
 .lfjqqzbbBoxSame .lfjqqzbbBoxSameRight span {
@@ -2874,6 +2892,7 @@ header .headNav span.myUrse b{
 	color: #333333;
 	text-align: right;
 	margin-right: 2%;
+	line-height: 35px;
 }
 
 .lfjqqzbbBoxSame .lfjqqzbbBoxSameRight textarea {
@@ -2895,7 +2914,6 @@ header .headNav span.myUrse b{
 	font-size: 14px;
 	margin-top: 30px;
 	margin-bottom: 20px;
-	margin-left: 38.5%;
 	padding-top: 5px;
 	padding-bottom: 5px;
 	width: 10%;
@@ -3291,6 +3309,7 @@ header .headNav span.myUrse b{
 	color: #ffffff;
 	border-radius: 4px;
 	cursor: pointer;
+	margin-right: 5px;
 }
 
 
@@ -3647,6 +3666,7 @@ header .headNav span.myUrse b{
 	color: #ffffff;
 	border-radius: 4px;
 	cursor: pointer;
+	margin-right: 5px;
 }
 
 
@@ -3925,6 +3945,14 @@ header .headNav span.myUrse b{
 }
 .gcqzsjLong input[type='radio']{
 	margin-right: 4px;
+}
+
+
+.lfjqqzbbBox1Left select,.lfjqqzbbBox2Left select{
+	width: 65%;
+	height: 35px;
+	border: 1px solid #cbcbcb;
+	border-radius: 3px;
 }
 
 

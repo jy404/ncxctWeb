@@ -44,14 +44,24 @@
 				projectName = $.getUrlParam("projectName");
 				$('.xmbbSerachreset').click(function() {
 					$(this).parent().parent().find(".xmbbSerachTypeSelect").val("");
+					GetDesignChangeList1(currentpage, pagesize, data1, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/list");
 				});
-				$(".addBb").click(function(){
-					location.href="03020004.html?action=add&projectId="+projectId+"&projectType="+projectType;
+				$(".addBb").click(function() {
+					location.href = "03020004.html?action=add&projectId=" + projectId + "&projectType=" + projectType;
 				})
 				$('.xmbbSerachBtn1').click(function() {
 					currentpage = 1;
 					pagesize = 10;
-					data = {};
+					data = {
+						"projectId": projectId,
+						"name": $("#gcname").val(),
+						"xmname": $("#xmname").val(),
+						"projectType": $("#xmtype option:selected").val(),
+						"amountType": $("#jetype option:selected").val(),
+						"changeType": $("#bgtype option:selected").val(),
+						"visaType": $("#djtype option:selected").val(),
+						"status": $("#spstate option:selected").val()
+					};
 					GetDesignChangeList(currentpage, pagesize, data, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/list");
 				});
 				data = {
@@ -64,42 +74,68 @@
 			.xmbb .xmbbTab .xmbbTable table {
 				min-width: 500px !important;
 			}
+			
+			.xmbbSerachTitle select {
+				width: 170px;
+				height: 32px;
+				margin-left: 8px;
+				background: #00000000;
+			}
 		</style>
 	</head>
 
 	<body>
-		<div class="title">
-			<div class="page">
-				<b>当前位置：</b>
-				<span>> 首页</span>
-				<span>> 项目综合管理</span>
-				<span>> 项目报表</span>
-			</div>
-		</div>
 		<div class="xmbb">
 			<h2 class="xmbbTitle">工程签证与变更列表</h2>
 			<div class="xmbbTab" style="display: block;">
 				<a class="addBb">新增变更</a>
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle">
+						<span>项目类型</span>
+						<select id="xmtype">
+							<option value="HOUSE">房建</option>
+							<option value="CITY">市政</option>
+						</select>
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>项目名称</span>
+						<input type="text" class="xmbbSerachTypeSelect" id="xmname" />
+					</div>
+					<div class="xmbbSerachTitle">
 						<span>工程名称</span>
-						<input type="text" class="xmbbSerachTypeSelect" />
+						<input type="text" class="xmbbSerachTypeSelect" id="gcname" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>金额类型</span>
-						<input type="text" class="xmbbSerachTypeSelect" />
+						<select id="jetype">
+							<option value="gt_five">大于5万</option>
+							<option value="lt_five">小于5万</option>
+							<option value="gteq_five">大于等于5万</option>
+							<option value="lteq_five">小于等于5万</option>
+						</select>
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>变更类型</span>
-						<input type="text" class="xmbbSerachTypeSelect" />
+						<select id="bgtype">
+							<option value="project_visa">工程签证</option>
+							<option value="design_change">设计变更</option>
+						</select>
 					</div>
 					<div class="xmbbSerachTitle">
-						<span>单据业务类型</span>
-						<input type="text" class="xmbbSerachTypeSelect" />
+						<span style="text-align: center;">单据业务类型</span>
+						<select id="djtype">
+							<option value="contact">联系单</option>
+							<option value="confirm">确认单</option>
+						</select>
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>审批状态</span>
-						<input type="text" class="xmbbSerachTypeSelect" />
+						<select id="spstate">
+							<option value="1">保存</option>
+							<option value="2">审批通过</option>
+							<option value="3">流程进行中</option>
+							<option value="4">拒绝</option>
+						</select>
 					</div>
 					<div class="xmbbSerachBtn">
 						<a href="#" class="xmbbSerachBtn1">搜索</a>

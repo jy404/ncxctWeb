@@ -37,8 +37,9 @@
 		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
 		<!--表单验证-->
 		<script type="text/javascript">
-			var action, id;
+			var action, id, moduleId;
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				id = $.getUrlParam("id");
@@ -47,7 +48,7 @@
 				if(action != "" && action != undefined) {
 					SetData()
 					if(action == "view") {
-						$("body").find("input,textarea").each(function() {
+						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
@@ -102,10 +103,10 @@
 				}
 				if(action == "edit") {
 					data["id"] = id;
-					meetPut('/api/system/org/update', JSON.stringify(data), "0502.html");
+					meetPut('/api/system/org/update', JSON.stringify(data), "0502.html?moduleId=" + moduleId);
 
 				} else {
-					meetAdd('/api/system/org/add', JSON.stringify(data), "0502.html");
+					meetAdd('/api/system/org/add', JSON.stringify(data), "0502.html?moduleId=" + moduleId);
 				}
 			}
 		</script>

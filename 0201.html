@@ -100,7 +100,8 @@
 							$("#title").val(res["result"]["title"]);
 							$("#content").val(res["result"]["content"]);
 							var users = "";
-							$("#RegionJobBusinessTag").html = "";
+							//$("#RegionJobBusinessTag").html = "";
+							$('#RegionJobBusinessTag').html("");
 							$.each(res["result"]["user"]["userIds"], function(i, userid) {
 								var html = "<span ty='r' id='" + userid + "_ed'><a href='#'>" + res["result"]["user"]["names"][i] + "</a><input type='button' onclick='del(" + userid + ") name='selectedCity' id='" + userid + "_ch' class='city_det'></span>"
 								$("#RegionJobBusinessTag").append(html);
@@ -213,7 +214,7 @@
 			<div class="xxtzTab">
 				<div class="draftList">
 					<h2 style="padding-bottom: 0;">草稿箱</h2>
-					<table cellpadding="0" cellspacing="0" class="wdxx" id="nosend">
+					<table style="border: 1px solid #c7c7c7;" cellpadding="0" cellspacing="0" class="wdxx" id="nosend">
 						<tr>
 							<td width="10%">序号</td>
 							<td width="70%">消息标题</td>

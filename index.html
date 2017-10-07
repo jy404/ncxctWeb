@@ -33,7 +33,6 @@
 			
 			.xxIndexList {
 				width: 350px;
-				height: 500px;
 				background: rgba(0, 0, 0, 0.6);
 				position: absolute;
 				left: 130px;
@@ -42,7 +41,6 @@
 				padding: 15px 0;
 				z-index: 999;
 				display: none;
-				overflow: scroll;
 			}
 			
 			.xxIndexList li {
@@ -70,7 +68,8 @@
 		</script>
 	</head>
 	<script>
-		getConfig()
+		getConfig();
+		getUnreadMessageNum();
 	</script>
 
 	<body>
@@ -84,7 +83,7 @@
 					</a>
 				</span>
 				<span class="indexXx" style="position: relative;">
-					<i>0</i>
+					<!--<i>0</i>-->
 				</span>
 				<span id="user_info"></span>
 				<ul class="xxIndexList">

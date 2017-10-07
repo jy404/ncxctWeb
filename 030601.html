@@ -54,12 +54,12 @@
 				});
 				if(action != "" && action != undefined) {
 					SetData(projectId)
-					if(action == "view") {
-						$("body").find("input,textarea").each(function() {
+					//if(action == "view") {
+						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-					}
+					//}
 				}
 				$('.szxmTjPageRightFormBtn1').click(function() {
 					if(vali.subByJs()) {
@@ -197,14 +197,14 @@
 			<input type="text" id="address" valType="required" msg="<font color=red>*</font>项目地址不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
-			<span>总金额：</span>
+			<span>总金额(万元)：</span>
 			<input type="text" id="totalAmount" valType="required" msg="<font color=red>*</font>总金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>项目概况：</span>
 			<textarea id="comment" valType="required" msg="<font color=red>*</font>项目概况不能为空"></textarea>
 		</div>
-		<a href="#" id="saveButton" class="szxmTjPageRightFormBtn1">提交</a>
+		<a href="#" id="saveButton" class="szxmTjPageRightFormBtn1" style="margin-left: 44%;">提交</a>
 
 		</div>
 	</body>

@@ -20,44 +20,70 @@ function startSocket(url) {
 }
 
 function getToken() {
-		getUnreadMessage();
-		post(tokenUrl + "/api/websocket/token?_" + new Date().getTime(),
+	getUnreadMessage();
+	post(tokenUrl + "/api/websocket/token?_" + new Date().getTime(),
 
-			{}, "json",
-			function(data) {
-				if (data.code === '0') {
-					startSocket(longconnectUrl + "?token=" + data.result.token
+		{}, "json",
+		function(data) {
+			if(data.code === '0') {
+				startSocket(longconnectUrl + "?token=" + data.result.token
 
-						+ "&paramId=" + data.result.userId);
-				}
+					+
+					"&paramId=" + data.result.userId);
+			}
 		})
 }
 
 /**未读消息*/
-function getUnreadMessage(){
-	var param = {"pageSize":500,"currentPage":1,"read":false}
+function getUnreadMessage() {
+	var param = {
+		"pageSize": 500,
+		"currentPage": 1,
+		"read": false
+	}
 	post(tokenUrl + "/api/message/list",
 
-			JSON.stringify(param), "json",
-			function(data) {
-				if (data.code === '0') {
-					$('.xxIndexList').append('')
-					var list = data.result.list;
-					var count = data.result.totalCount;
-					$('.indexXx i').text(count)
-					if(typeof list == 'undefined' || list.size == 0){
-						$('.xxIndexList').append("<li><a href='javascript:void(0)'>无消息</a></li>")
-					}
-					//加载列表
-					var html = ''
-					for(index in list){
-						html += '<li><a href="#">'+
-							list[index].title
-						+'</a></li>'
-					}
-					$('.xxIndexList').append(html)
-
+		JSON.stringify(param), "json",
+		function(data) {
+			if(data.code === '0') {
+				$('.xxIndexList').append('')
+				var list = data.result.list;
+				var count = data.result.totalCount;
+				//$('.indexXx i').text(count)
+				if(count != 0)
+					$('.indexXx')[0].innerHTML = "<i>" + count + "</i>";
+				if(typeof list == 'undefined' || list.size == 0) {
+					$('.xxIndexList').append("<li><a href='javascript:void(0)'>无消息</a></li>")
 				}
+				//加载列表
+				var html = ''
+				for(index in list) {
+					html += '<li><a href="020201.html?moduleId=4&id=' + list[index].id + '">' +
+						list[index].title +
+						'</a></li>'
+				}
+				$('.xxIndexList').append(html)
+
+			}
+		})
+}
+
+function getUnreadMessageNum() {
+	var param = {
+		"pageSize": 500,
+		"currentPage": 1,
+		"read": false
+	}
+	post(tokenUrl + "/api/message/list",
+		JSON.stringify(param), "json",
+		function(data) {
+			if(data.code === '0') {
+				$('.xxIndexList').append('')
+				var list = data.result.list;
+				var count = data.result.totalCount;
+				if(count != 0)
+					$('.indexXx')[0].innerHTML = "<i>" + count + "</i>";
+			}
 		})
 }
 
@@ -71,7 +97,7 @@ function post(url, param, datat, callback) {
 		dataType: datat,
 		contentType: "application/json",
 		success: function(data) {
-			if (data.code != 0) {
+			if(data.code != 0) {
 				alert(data.description)
 				return;
 			}
@@ -79,7 +105,7 @@ function post(url, param, datat, callback) {
 		},
 		error: function(s) {},
 		complete: function(XHR, TS) {
-			if (XHR.status === 401) {
+			if(XHR.status === 401) {
 				location.href = 'login.html';
 			}
 		}

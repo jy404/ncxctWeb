@@ -52,11 +52,12 @@
 		</style>
 
 		<script type="text/javascript">
-			var action, orgCategory, orgType, id, personCount = 0;
+			var action, orgCategory, orgType, moduleId, id, personCount = 0;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				moduleId = $.getUrlParam("moduleId");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				orgCategory = $.getUrlParam("orgCategory");
@@ -137,7 +138,7 @@
 						"fileUrl": $("#fileurl_uploader").val(),
 						"foundTime": $("#foundTime").val(),
 						"name": $("#name").val(),
-						"orgCategory": $("#orgCategory").val(),
+						//"orgCategory": $("#orgCategory").val(),
 						"orgType": orgType,
 						"projectEntity": $("#projectEntity").val(),
 						"projectType": $("input[name='projectType']:checked").val(),
@@ -146,7 +147,7 @@
 				}
 				if(action == "edit")
 					data["projectOrg"]["id"] = id;
-				meetAdd('/api/proorg/save', JSON.stringify(data), "0307.html");
+				meetAdd('/api/proorg/save', JSON.stringify(data), "0307.html?moduleId=" + moduleId);
 			}
 
 			function CreateHTML(jobTitleType, selectJobTypeName) {
@@ -232,7 +233,7 @@
 				</div>
 				<div class="lfjqqzbbBox1Right">
 					<span>项目类别：</span>
-					<input type="radio" name="projectType" value="CITY" />市政
+					<input type="radio" name="projectType" value="CITY" checked="checked" />市政
 					<input type="radio" name="projectType" value="HOUSE" />房建
 				</div>
 			</div>
@@ -287,7 +288,7 @@
 						<option value="Bridge_Engine_Person">桥梁工程负责人</option>
 						<option value="Other">其他人员</option>
 					</select>
-					<a href="#" id="addPersonBtn" class="btnOk">确定</a>
+					<a href="#" id="addPersonBtn" class="btnOk" style="margin-left: 100%;">确定</a>
 				</div>
 			</div>
 			<div id="div_personinfo"></div>

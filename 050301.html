@@ -31,9 +31,10 @@
 		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
 		<!--表单验证-->
 		<script type="text/javascript">
-			var data = {};
+			var moduleId, data = {};
 			$(function() {
-				//$.ajaxSettings.async = false;
+				$.ajaxSettings.async = false;
+				moduleId = $.getUrlParam("moduleId");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				id = $.getUrlParam("id");
@@ -47,11 +48,18 @@
 						$(this).parent().siblings("td").find("input[type='checkbox']").prop("checked", false);
 					}
 				});
+				$("input[name='Allcheck']").on("click", function() {
+					if($(this).prop("checked") == true) {
+						$("body").find("input[type='checkbox']").prop("checked", true);
+					} else {
+						$("body").find("input[type='checkbox']").prop("checked", false);
+					}
+				});
 				//判断编辑或者查看
 				if(action != "" && action != undefined) {
 					SetData()
 					if(action == "view") {
-						$("body").find("input,textarea").each(function() {
+						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
@@ -115,7 +123,7 @@
 				}
 				if(action == "edit")
 					data["id"] = id;
-				meetAdd('/api/saveRole', JSON.stringify(data));
+				meetAdd('/api/saveRole', JSON.stringify(data), "0503.html?moduleId=" + moduleId);
 			}
 		</script>
 		<style type="text/css">
@@ -129,7 +137,8 @@
 				height: 32px;
 				line-height: 32px;
 			}
-			.cbllist label{
+			
+			.cbllist label {
 				float: none !important;
 			}
 		</style>
@@ -179,7 +188,7 @@
 							<tr>
 								<th width="30%">导航名称</th>
 								<th>权限分配</th>
-								<th width="10%">全选</th>
+								<th width="10%"><input name="Allcheck" type="checkbox"></th>
 							</tr>
 						</thead>
 						<tbody id="txtAuthDiv">

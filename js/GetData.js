@@ -115,7 +115,9 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 					for(i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
-						if(data["status"] != 1)
+						if(data["status"] == 2)
+							html += "<td><a href='020201.html?id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+						else if(data["status"] != 1)
 							html += "<td><a href='020201.html?id=" + rows[i]["id"] + "&msgtype=msg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 						else
 							html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
@@ -370,6 +372,7 @@ function GetRoleList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 						html += "<td>" + rows[i]["roleCode"] + "</td>";
 						html += "<td>" + rows[i]["roleName"] + "</td>";
 						html += "<td>" + rows[i]["deptId"] + "</td>";
+						html += "<td>" + rows[i]["orgName"] + "</td>";
 						html += "<td width=\"12%\">";
 
 						html += "<a href=\"050301.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
@@ -458,9 +461,9 @@ function GetUserList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 		JSON.stringify(data),
 		function(res) {
 			if(res["code"] == "0") {
+				$("#" + obj + " tr").not(':eq(0)').remove();
 				if(res["result"]["totalCount"] != "0") {
 					//$(obj).find("tr").remove();
-					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
 					for(i = 0; i < rows.length; i++) {
@@ -699,8 +702,8 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 							html += "<a href=\"03060101.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
 							html += "<a href=\"03060101.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
 						} else if(data["projectType"] == "HOUSE") {
-							html += "<a href=\"030501.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
-							html += "<a href=\"030501.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
+							html += "<a href=\"03050101.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
+							html += "<a href=\"03050101.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
 						}
 						html += "</td>";
 						html += "</tr>";
@@ -746,13 +749,13 @@ function GetProjectListForMap(currentpage, pagesize, data, obj, pageobj, isInit,
 					var rows = res["result"]["list"];
 					for(i = 0; i < rows.length; i++) {
 						html += "<tr>";
-						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
+						html += "<td title=\"" + (rows[i]["longitude"].toString() + "," + rows[i]["latitude"].toString()) + "\">" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["name"] + "</td>";
 						html += "<td>无返回</td>";
 
 						html += "<td title='" + rows[i]["address"] + "'>" + subString(rows[i]["address"], 6) + "</td>";
 						html += "<td>" + rows[i]["totalAmount"] + "</td>";
-						html += "<td>无返回</td>";
+						//						html += "<td>无返回</td>";
 						html += "<td>无返回</td>";
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "</tr>";
@@ -801,7 +804,7 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["projectNo"] + "</td>";
 						html += "<td>" + rows[i]["name"] + "</td>";
-						html += "<td>" + rows[i]["orgName"] + "</td>";
+						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + (rows[i]["projectType"] == "HOUSE" ? "房建项目" : "市政项目") + "</td>";
 						html += "<td>" + (rows[i]["status"] == 1 ? "已保存" : "已报建") + "</td>";
 						html += "<td>无返回</td>";
@@ -908,6 +911,7 @@ function meetAdd(apis, data, url) {
 		'application/json; charset=utf-8',
 		function(res) {
 			if(res["code"] == 0) {
+				location.reload();
 				Toast.Success('成功', res["description"], 'top-center', 'left');
 				GetMessage(1, 999, 1, "nosend", null, true, "/api/sended/message/list");
 				if(url != null && url != "")
@@ -933,6 +937,7 @@ function meetPut(apis, data, url) {
 		'application/json; charset=utf-8',
 		function(res) {
 			if(res["code"] == 0) {
+				location.reload();
 				Toast.Success('成功', res["description"], 'top-center', 'left');
 				if(url != null && url != "")
 					location.href = url;
@@ -1304,7 +1309,7 @@ function getConfig() {
 				return;
 			}
 			//设置用户信息
-			$("#user_info").html("<b>" + data.result.user.userName + "</b>," + data.result.roleList[0].roleName)
+			$("#user_info").html("<b>" + data.result.user.userName + "</b>," + data.result.user.name)
 		},
 		error: function(s) {},
 		complete: function(XHR, TS) {
@@ -1397,7 +1402,7 @@ function getSchedule() {
 function getNoticeList() {
 	var param = {
 		'currentPage': 1,
-		'pageSize': 100000
+		'pageSize': 6
 	}
 
 	$.ajax({
@@ -1417,8 +1422,7 @@ function getNoticeList() {
 				return;
 			var html = ""
 			rows.forEach(function(row, index, arr) {
-
-				html = html + '<li><a href="#"><b>' +
+				html = html + '<li><a href="020201.html?moduleId=4&id=' + row.id + '"><b>' +
 					new Date(row.publishTime).format("yyyy-MM-dd") + '</b><span>' +
 					row.title + '</span></a></li>';
 			})
@@ -1437,7 +1441,7 @@ function getNoticeList() {
 function getProjectNew() {
 	var param = {
 		'currentPage': 1,
-		'pageSize': 100000,
+		'pageSize': 6,
 		needNew: true
 	}
 	$("#new_project").html('')
@@ -1459,8 +1463,12 @@ function getProjectNew() {
 			var html = ""
 			rows.forEach(function(row, index, arr) {
 
-				html = html + '<li><a href="#"><b>' +
-					new Date(row.createTime).format("yyyy-MM-dd") + '</b><span>' +
+				if(row.projectType == "HOUSE") {
+					html += "<li><a href=\"03050101.html?moduleId=16&action=view&id=" + row.id + "&projectType=" + row.projectType + "&projectNo=" + row.projectNo + "&projectName=" + escape(row.name) + "\"><b>";
+				} else {
+					html += "<li><a href=\"03060101.html?moduleId=96&action=view&id=" + row.id + "&projectType=" + row.projectType + "&projectNo=" + row.projectNo + "&projectName=" + escape(row.name) + "\"><b>";
+				}
+				html += new Date(row.createTime).format("yyyy-MM-dd") + '</b><span>' +
 					row.name + '</span></a></li>'
 			})
 			$("#new_project").append(html)
@@ -1628,13 +1636,14 @@ function GetDesignChangeList1(currentpage, pagesize, data, obj, pageobj, isInit,
 						html += "<td>" + (rows[i].visaType == "contact" ? "联系单" : "确认单") + "</td>";
 						var status = rows[i].status;
 						html += "<td>" + (status == 1 ? "保存" : status == 2 ? "审批通过" : status == 3 ? "流程进行中" : status == 4 ? "拒绝" : "未知") + "</td>";
+						html += "<td width=\"12%\"><a href=\"03020004.html?action=view&id=" + rows[i].id + "&projectId=" + rows[i].projectId + "&projectType=" + rows[i].projectType + "\" style=\"background: #4bb2ff ;\">查看</a>";
 						html += "</tr>";
 					}
 					$("#" + obj).append(html);
 				} else {
 					var html = "";
 					html += "<tr>";
-					html += "<td colspan=\"7\">查无数据</td>"
+					html += "<td colspan=\"8\">查无数据</td>"
 					html += "</tr>";
 
 					$("#" + obj).append(html);
@@ -1727,10 +1736,151 @@ function GetRejectList(procTaskId) {
 //********************驳回节点查询结束************************//
 
 //********************项目进度*******************************//
+function CreateProjectStep(data, Type, obj) {
+	//$("#" + obj).html = "";
+	$("#" + obj + " tr").remove();
+	var str = "";
+	str += "<tr>"
+	if(data != null && data.length > 0) {
+		str += "<td>序号</td>";
+		str += "<td>项目名称</td>";
+		$.each(data, function(i, item) {
+			str += "<td>" + item.stageTypeName + "</td>";
+		});
+	} else {
+		if(Type == "HOUSE") {
+			str += "<td>序号</td>";
+			str += "<td>项目名称</td>";
+			str += "<td>会议纪要或抄告单</td>";
+			str += "<td>项目选址意见书</td>";
+			str += "<td>环评、交评</td>";
+			str += "<td>用地预审</td>";
+			str += "<td>用地批准</td>";
+			str += "<td>土地证</td>";
+			str += "<td>用地规划许可证</td>";
+			str += "<td>项目建议书请求</td>";
+			str += "<td>项目建议书、可研批复</td>";
+			str += "<td>地勘</td>";
+			str += "<td>测绘</td>";
+			str += "<td>水土保持评估</td>";
+			str += "<td>地址灾害评估</td>";
+			str += "<td>压覆矿评估</td>";
+			str += "<td>防洪评估</td>";
+			str += "<td>稳定评估</td>";
+			str += "<td>施工图设计</td>";
+			str += "<td>施工图图审</td>";
+			str += "<td>施工图备案</td>";
+			str += "<td>工程规划许可证</td>";
+			str += "<td>初步设计概算批复请求</td>";
+			str += "<td>初步设计概算批复</td>";
+			str += "<td>确定招标代理</td>";
+			str += "<td>预算控制价编制</td>";
+			str += "<td>财政复函、预算控制价审核报告</td>";
+			str += "<td>下浮系数</td>";
+			str += "<td>期望中标价</td>";
+			str += "<td>招标告知</td>";
+			str += "<td>招标核准</td>";
+			str += "<td>项目招标、确定施工单位及监理单位</td>";
+			str += "<td>中标通知书</td>";
+			str += "<td>施工合同</td>";
+			str += "<td>监理合同</td>";
+			str += "<td>质监</td>";
+			str += "<td>安检</td>";
+			str += "<td>施工许可证</td>";
+			str += "<td>征地拆迁交底</td>";
+			str += "<td>征地</td>";
+			str += "<td>拆迁</td>";
+			str += "<td>强弱电改迁</td>";
+			str += "<td>其他附着物清除</td>";
+			str += "<td>施工图会审</td>";
+			str += "<td>施工图交桩手续</td>";
+			str += "<td>原地面复测</td>";
+			str += "<td>工程清表推进</td>";
+			str += "<td>路基工程</td>";
+			str += "<td>排水工程</td>";
+			str += "<td>路面结构工程</td>";
+			str += "<td>非机动车道</td>";
+			str += "<td>人行道及路沿石附属工程</td>";
+			str += "<td>交通工程</td>";
+			str += "<td>绿化工程</td>";
+			str += "<td>亮化工程</td>";
+			str += "<td>工程签证及变更</td>";
+			str += "<td>工程预验收</td>";
+			str += "<td>工程竣工验收</td>";
+			str += "<td>工程移交</td>";
+			str += "<td>工程结算</td>";
+			str += "<td>工程保修</td>";
+		} else {
+			str += "<td>序号</td>";
+			str += "<td>项目名称</td>";
+			str += "<td>会议纪要或抄告单</td>";
+			str += "<td>项目选址意见书</td>";
+			str += "<td>环评、交评</td>";
+			str += "<td>用地预审</td>";
+			str += "<td>用地批准</td>";
+			str += "<td>土地证</td>";
+			str += "<td>用地规划许可证</td>";
+			str += "<td>项目建议书请求</td>";
+			str += "<td>项目建议书、可研批复</td>";
+			str += "<td>地勘</td>";
+			str += "<td>测绘</td>";
+			str += "<td>水土保持评估</td>";
+			str += "<td>地址灾害评估</td>";
+			str += "<td>压覆矿评估</td>";
+			str += "<td>防洪评估</td>";
+			str += "<td>稳定评估</td>";
+			str += "<td>施工图设计</td>";
+			str += "<td>施工图图审</td>";
+			str += "<td>施工图备案</td>";
+			str += "<td>工程规划许可证</td>";
+			str += "<td>初步设计概算批复请求</td>";
+			str += "<td>初步设计概算批复</td>";
+			str += "<td>确定招标代理</td>";
+			str += "<td>预算控制价编制</td>";
+			str += "<td>财政复函、预算控制价审核报告</td>";
+			str += "<td>下浮系数</td>";
+			str += "<td>期望中标价</td>";
+			str += "<td>招标告知</td>";
+			str += "<td>招标核准</td>";
+			str += "<td>项目招标、确定施工单位及监理单位</td>";
+			str += "<td>中标通知书</td>";
+			str += "<td>施工合同</td>";
+			str += "<td>监理合同</td>";
+			str += "<td>质监</td>";
+			str += "<td>安检</td>";
+			str += "<td>施工许可证</td>";
+			str += "<td>征地拆迁交底</td>";
+			str += "<td>征地</td>";
+			str += "<td>拆迁</td>";
+			str += "<td>强弱电改迁</td>";
+			str += "<td>其他附着物清除</td>";
+			str += "<td>施工图会审</td>";
+			str += "<td>施工图交桩手续</td>";
+			str += "<td>原地面复测</td>";
+			str += "<td>工程清表推进</td>";
+			str += "<td>路基工程</td>";
+			str += "<td>排水工程</td>";
+			str += "<td>路面结构工程</td>";
+			str += "<td>非机动车道</td>";
+			str += "<td>人行道及路沿石附属工程</td>";
+			str += "<td>交通工程</td>";
+			str += "<td>绿化工程</td>";
+			str += "<td>亮化工程</td>";
+			str += "<td>工程签证及变更</td>";
+			str += "<td>工程预验收</td>";
+			str += "<td>工程竣工验收</td>";
+			str += "<td>工程移交</td>";
+			str += "<td>工程结算</td>";
+			str += "<td>工程保修</td>";
+		}
+	}
+	str += "</tr>";
+	$("#" + obj).append(str);
+}
+
 function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 	data["currentPage"] = currentpage;
 	data["pageSize"] = pagesize;
-	data["projectType"] = "HOUSE";
 	$.axse(
 		domain + url,
 		JSON.stringify(data),
@@ -1741,30 +1891,25 @@ function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 				if(res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["list"];
-
 					for(i = 0; i < rows.length; i++) {
+						if(i == 0)
+							CreateProjectStep(rows[i]["projectPlanExtensionList"], data["projectType"], obj);
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>";
 						html += "<td>" + rows[i]["projectName"] + "</td>";
-						html += "<td><ul class=\"nav nav-pills nav-justified step step-round\" data-step=\"3\">";
-						var step = 1;
-						var flag = false;
 						$.each(rows[i]["projectPlanExtensionList"], function(i, item) {
-							if(item.done == false) {
-								if(!flag) {
-									step = i;
-									flag = true;
-								}
+							var ClassName = "";
+							if(item.done == true) {
+								ClassName = "selectGreen";
+							} else if(item.delay == true) {
+								ClassName = "selectRed";
 							}
-							if(item.delay == true)
-								html += "<li class=\"active\"><a>" + item.stageTypeName + "</a></li>";
-							else
-								html += "<li><a>" + item.stageTypeName + "</a></li>";
+							html += "<td><span></span>";
+							html += "<b class=\"" + ClassName + "\"></b>";
+							html += "</td>"
 						});
-
-						html += "</ul></td>";
 						html += "</tr>";
-						bsStep(step);
+						//bsStep(step);
 					}
 					$("#" + obj).append(html);
 
@@ -1873,22 +2018,36 @@ function GetXMMenuList(data, obj, url, moduleId) {
 					var rows = res["result"]["moduleList"];
 					if(typeof rows == "undefined")
 						return;
-					html += "<h4 class=\"column\">系统栏目</h4>";
 					for(i = 0; i < rows.length; i++) {
-						if(rows[i]["id"] == moduleId.toString()) {
-							html += "<ul>";
-							$.each(rows[i]["childMenus"], function(i, item) {
-								var url1 = item.url.toString();
-								html += "<a href=\"" + url1.substring(1, url1.length) + "?moduleId=" + item.id + "\" target=\"bodyRight\">";
-								html += "<li>-" + item.name + " </li></a>";
-							});
-							html += "</ul>";
+						if(rows[i]["childMenus"].length > 0) {
+							for(var j = 0; j < rows[i]["childMenus"].length; j++) {
+								if(rows[i]["childMenus"][j].id == moduleId) {
+									var rows1 = rows[i]["childMenus"][j]["childMenus"];
+									for(var t = 0; t < rows1.length; t++) {
+										if(typeof rows1[t]["childMenus"] == "undefined" || rows1[t]["childMenus"].length == 0) {
+											var url = rows1[t]["url"].toString();
+											html += "<a href=\"" + url.substring(1, url.length) + "?moduleId=" + rows1[t]["id"] + "\" target=\"szRight\">";
+											html += "<h6>" + rows1[t]["name"] + "</h6></a>";
+										} else {
+											html += "<div>";
+											html += "<h2><span>" + rows1[t]["name"] + "</span></h2>";
+											html += "<ul>";
+											$.each(rows1[t]["childMenus"], function(i, item) {
+												var url1 = item.url.toString();
+												html += "<a href=\"" + url1.substring(1, url1.length) + "?moduleId=" + item.id + "\" target=\"szRight\">";
+												html += "<li>-" + item.name + " </li></a>";
+											});
+											html += "</ul></div>";
+										}
+									}
+								}
+							}
 						}
 					}
 					$(obj).append(html);
-					$('.content .leftNav div h2').click(function() {
+					$('.szxmTjPage .leftNavSz div h2').click(function() {
 						//$(this).siblings('ul').slideToggle();	
-						$('.content .leftNav div ul').slideUp();
+						$('.szxmTjPage .leftNavSz div ul').slideUp();
 						$('.information h2 span,.integrated h2 span,.system h2 span').css('background-image', 'url(img/leftNavLeft.png)')
 						if($(this).siblings('ul').is(':hidden')) {
 							$(this).siblings('ul').slideDown();
@@ -1896,7 +2055,6 @@ function GetXMMenuList(data, obj, url, moduleId) {
 						} else {
 							$(this).siblings('ul').slideUp();
 						}
-
 					});
 
 				} else {

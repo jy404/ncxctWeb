@@ -33,10 +33,13 @@
 			}
 			
 			.xmbbSerachTitle select {
-				width: 252px;
-				height: 32px;
+				width: 74%;
+				height: 35px;
 				margin-left: 8px;
-				background: #00000000;
+				background: #f1f1f1;
+				border:1px solid #cbcbc;
+				border-radius: 3px;
+				float: right;
 			}
 		</style>
 		<script type="text/javascript">
@@ -72,6 +75,8 @@
 					if(sort == 1) {
 						data = {
 							"name": $("#gcname").val(),
+							"xmname": $("#xmname").val(),
+							"projectType": $("#xmtype option:selected").val(),
 							"amountType": $("#jetype option:selected").val(),
 							"changeType": $("#bgtype option:selected").val(),
 							"visaType": $("#djtype option:selected").val(),
@@ -80,8 +85,8 @@
 						GetDesignChangeList1(currentpage, pagesize, data, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/report/list");
 					} else {
 						data = {
-							"projectType": (sort == 1 || sort == 2) ? "HOUSE" : "CITY",
-							"step": (sort == 1 || sort == 3) ? "prophase" : "construction",
+							"projectType": (sort == 2 || sort == 3) ? "HOUSE" : "CITY",
+							"step": (sort == 2 || sort == 4) ? "prophase" : "construction",
 							"projectName": $("#projectName" + sort).val(),
 							"projectTime": $("#projectTime" + sort).val(),
 							"userName": $("#userName" + sort).val()
@@ -141,6 +146,17 @@
 			<div class="xmbbTab">
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle">
+						<span>项目类型</span>
+						<select id="xmtype">
+							<option value="HOUSE">房建</option>
+							<option value="CITY">市政</option>
+						</select>
+					</div>
+					<div class="xmbbSerachTitle">
+						<span>项目名称</span>
+						<input type="text" class="xmbbSerachTypeSelect" id="xmname" />
+					</div>
+					<div class="xmbbSerachTitle">
 						<span>工程名称</span>
 						<input type="text" class="xmbbSerachTypeSelect" id="gcname" />
 					</div>
@@ -191,6 +207,7 @@
 							<td width="8%">估算金额(万元)</td>
 							<td width="10%">单据业务类型</td>
 							<td width="10%">审批状态</td>
+							<td width="10%">操作</td>
 						</tr>
 
 					</table>
@@ -208,10 +225,12 @@
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" id="projectTime2" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<input type="text" id="projectTime2" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<label style="float: left;">-</label>
+						<input type="text" id="projectTime21" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
-						<span>负责人</span>
+						<span>项目负责人</span>
 						<input type="text" id="userName2" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachBtn">
@@ -254,7 +273,7 @@
 						<input type="text" id="projectTime3" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
-						<span>负责人</span>
+						<span>项目负责人</span>
 						<input type="text" id="userName3" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachBtn">
@@ -297,7 +316,7 @@
 						<input type="text" id="projectTime4" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
-						<span>负责人</span>
+						<span>项目负责人</span>
 						<input type="text" id="userName4" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachBtn">
@@ -340,7 +359,7 @@
 						<input type="text" id="projectTime5" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
 					</div>
 					<div class="xmbbSerachTitle">
-						<span>负责人</span>
+						<span>项目负责人</span>
 						<input type="text" id="userName5" class="xmbbSerachTypeSelect" />
 					</div>
 					<div class="xmbbSerachBtn">

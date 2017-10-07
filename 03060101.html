@@ -9,16 +9,20 @@
 		<script type="text/javascript" src="js/js.js"></script>
 		<script type="text/javascript" src="js/GetData.js"></script>
 		<script type="text/javascript">
+			var moduleId = 0;
 			$(function() {
 				var action = $.getUrlParam("action");
 				var id = $.getUrlParam("id");
+				moduleId = $.getUrlParam("moduleId");
+				var data = [];
+				GetXMMenuList(data, ".leftNavSz", "/api/config",moduleId);
 				var projectNo = $.getUrlParam("projectNo");
 				var projectType = $.getUrlParam("projectType");
 				var projectName = $.getUrlParam("projectName");
-				$("iframe").attr("src", $("iframe").attr("src") + "?action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random())
+				$("iframe").attr("src", $("iframe").attr("src") + "&action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random())
 				$.each($("a"), function() {
 					curUrl = $(this).attr("href");
-					$(this).attr("href", curUrl + "?action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random());
+					$(this).attr("href", curUrl + "&action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random());
 				});
 			});
 		</script>
@@ -36,7 +40,7 @@
 		</div>
 		<div class="szxmTjPage">
 			<div class="leftNavSz">
-				<a href="030601.html" target="szRight"><h6>项目报建</h6></a>
+				<!--<a href="030601.html" target="szRight"><h6>项目报建</h6></a>
 				<a href="030602.html" target="szRight"><h6>项目计划</h6></a>
 				<div>
 					<h2><span>前期</span></h2>
@@ -198,7 +202,7 @@
 						<a href="03060515.html" target="szRight">
 							<li> 49.附件</li>
 						</a>
-						<a href="签证设计变更列表页.html" target="szRight">
+						<a href="07.html" target="szRight">
 							<li> 50.工程签证与变更</li>
 						</a>
 					</ul>
@@ -222,10 +226,10 @@
 							<li> 55.工程保修</li>
 						</a>
 					</ul>
-				</div>
+				</div>-->
 			</div>
 			<div class="szxmTjPageRight">
-				<iframe style="vertical-align:bottom" src="030601.html" name="szRight" width="100%" height="100%" frameborder="0"></iframe>
+				<iframe style="vertical-align:bottom" src="030601.html?moduleId=97" name="szRight" width="100%" height="100%" frameborder="0"></iframe>
 			</div>
 		</div>
 	</body>

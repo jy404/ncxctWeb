@@ -5,291 +5,285 @@
 		<meta charset="UTF-8">
 		<title>房建项目添加</title>
 		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
 		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
 		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
 		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=NvjXWehxrhWlK51T65hyBXzfiOVTFVUV"></script>
+		<style type="text/css">
+			#allmap {
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+				margin: 0;
+				font-family: "微软雅黑";
+			}
+		</style>
+
 		<script type="text/javascript">
+			var action, projectId, projectNo, projectType, id;
 			var moduleId = 0;
 			$(function() {
 				$.ajaxSettings.async = false;
+				//判断编辑或者查看
 				moduleId = $.getUrlParam("moduleId");
-				var action = $.getUrlParam("action");
-				var id = $.getUrlParam("id");
-				var projectNo = $.getUrlParam("projectNo");
-				var projectType = $.getUrlParam("projectType");
-				var projectName = $.getUrlParam("projectName");
-				$("iframe").attr("src", $("iframe").attr("src") + "?action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random())
-				$.each($("a"), function() {
-					curUrl = $(this).attr("href");
-					$(this).attr("href", curUrl + "?action=" + action + "&id=" + id + "&projectNo=" + projectNo + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "&rnd=" + Math.random());
+				var vali = new Validators();
+				action = $.getUrlParam("action");
+				projectId = $.getUrlParam("id");
+				projectNo = $.getUrlParam("projectNo");
+				projectType = $.getUrlParam("projectType");
+				SelectDept("projectOrg");
+				$("#projectOrg").on("change", function() {
+					SelectDeptMember("userId", this.value);
+					SelectDeptMember("prophaseUserName", this.value);
+					SelectDeptMember("landUserName", this.value);
+					SelectDeptMember("contUserName", this.value);
+					SelectDeptMember("compUserName", this.value);
+				});
+				if(action != "" && action != undefined) {
+					SetData(projectId)
+					//if(action == "view") {
+						$("body").find("input,textarea,select").each(function() {
+							$(this).attr("disabled", "disabled");
+						});
+						$(".szBtn").hide();
+						$(".fileinput-button").hide();
+					//}
+				}
+				$('.szxmTjPageRightFormBtn1').click(function() {
+					if(vali.subByJs()) {
+						SubmitData();
+					}
 				});
 			});
+
+			function SetData(projectId) {
+				$.getJSON(
+					domain + "/api/project/" + projectId,
+					function(res) {
+						if(res["code"] == "0") {
+							$('#projectName').val(res["result"]["name"]);
+							$('#projectNo').val(res["result"]["projectNo"]);
+							$('#projectOrg').val(res["result"]["orgId"]);
+							SelectDeptMember("userId", res["result"]["orgId"]);
+							SelectDeptMember("prophaseUserName", res["result"]["orgId"]);
+							SelectDeptMember("landUserName", res["result"]["orgId"]);
+							SelectDeptMember("contUserName", res["result"]["orgId"]);
+							SelectDeptMember("compUserName", res["result"]["orgId"]);
+							$('#startTime').val(res["result"]["createTime"]);
+							$('#userId').val(res["result"]["userId"]);
+							$('#prophaseUserName').val(res["result"]["prophaseUserId"]);
+							$('#landUserName').val(res["result"]["landUserId"]);
+							$('#contUserName').val(res["result"]["contUserId"]);
+							$('#compUserName').val(res["result"]["compUserId"]);
+							$('#address').val(res["result"]["address"]);
+							$('#totalAmount').val(res["result"]["totalAmount"]);
+							$('#comment').val(res["result"]["comment"]);
+							$("#latitude").val(res["result"]["latitude"]);
+							$("#longitude").val(res["result"]["longitude"]);
+							id = res["result"]["id"];
+							//附件加上
+							//upload.show(res["result"]["files"], "files_uploader")
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData() {
+				if(confirm("请认真检查内容是否正确，一旦提交，将不能修改，请谨慎提交!")) {
+					var data = {
+						"name": $("#projectName").val(),
+						"projectType": "HOUSE",
+						"projectTypeName": "房建项目",
+						"userId": "1",
+						"projectNo": $("#projectNo").val(),
+						"orgId": $("#projectOrg").val(),
+						"startTime": $("#startTime").val(),
+						"userId": parseInt($("#userId").val()),
+						"prophaseUserId": parseInt($("#prophaseUserName").val()),
+						"prophaseUserName": $("#prophaseUserName option:selected").text(),
+						"landUserId": parseInt($("#landUserName").val()),
+						"landUserName": $("#landUserName option:selected").text(),
+						"contUserId": parseInt($("#contUserName").val()),
+						"contUserName": $("#contUserName option:selected").text(),
+						"compUserId": parseInt($("#compUserName").val()),
+						"compUserName": $("#compUserName option:selected").text(),
+						"address": $("#address").val(),
+						"totalAmount": $("#totalAmount").val(),
+						"comment": $("#comment").val(),
+						"latitude": $("#latitude").val(),
+						"longitude": $("#longitude").val(),
+						"status": "2"
+					}
+					if(action == "edit")
+						data["id"] = id;
+					meetAdd('/api/project/save', JSON.stringify(data), "0305.html?moduleId=" + moduleId);
+				}
+			}
 		</script>
+		<style type="text/css">
+			select {
+				width: 380px;
+				height: 35px;
+			}
+		</style>
 	</head>
 
 	<body>
-		<div class="title">
-			<div class="page">
-				<b>当前位置：</b>
-				<span>> 首页</span>
-				<span>> 项目综合管理</span>
-				<span>> 房建项目</span>
-				<span>> 新项目添加</span>
+		<h2 class="szTitle">项目报建</h2>
+		<div class="szxmTjPageRightForm">
+			<span>项目名称：</span>
+			<input type="text" id="projectName" valType="required" msg="<font color=red>*</font>项目名称不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>项目编号：</span>
+			<input type="text" id="projectNo" valType="required" msg="<font color=red>*</font>项目编号不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>负责部门：</span>
+			<!--<input type="text" id="projectOrg" />-->
+			<select id="projectOrg">
+				<option value="">请选择部门</option>
+			</select>
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>预计开工时间：</span>
+			<input type="text" id="startTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" valType="required" msg="<font color=red>*</font>预计开工时间不能为空" />
+		</div>
+		<!--<div class="szxmTjPageRightForm">
+					<span>预计竣工时间：</span>
+					<input type="text" id="arttime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"/>
+				</div>-->
+		<div class="szxmTjPageRightForm">
+			<span>项目负责人：</span>
+			<select id="userId">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="prophaseUserName" valType="required" msg="<font color=red>*</font>项目前期负责人不能为空" />-->
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>项目前期负责人：</span>
+			<select id="prophaseUserName">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="prophaseUserName" valType="required" msg="<font color=red>*</font>项目前期负责人不能为空" />-->
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>征地拆迁工作负责人：</span>
+			<select id="landUserName">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="landUserName" valType="required" msg="<font color=red>*</font>征地拆迁工作负责人不能为空" />-->
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>施工工作负责人：</span>
+			<select id="contUserName">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="contUserName" valType="required" msg="<font color=red>*</font>施工工作负责人不能为空" />-->
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>竣工工作负责人：</span>
+			<select id="compUserName">
+				<option value="0">请选择负责人</option>
+			</select>
+			<!--<input type="text" id="compUserName" valType="required" msg="<font color=red>*</font>竣工工作负责人不能为空" />-->
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>项目地址：</span>
+			<input type="text" id="address" valType="required" msg="<font color=red>*</font>项目地址不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>经度：</span>
+			<input type="text" readonly="readonly" id="longitude" valType="required" msg="<font color=red>*</font>经度不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>纬度：</span>
+			<input type="text" readonly="readonly" id="latitude" valType="required" msg="<font color=red>*</font>纬度不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>选取经纬度：</span>
+			<input name="txtAddressName" type="text" id="txtAddressName" class="input normal" placeholder="请输入地点名称" />
+			<input type="button" value="搜索" class="btn yellow" onclick="findaddress();" style="width: 60px;text-align: center;" />
+			<div id="allmap" style="width: 80%; height: 500px;margin: 10px 0 0 85px;">
 			</div>
 		</div>
-		<div class="szxmTjPage">
-			<div class="leftNavSz">
-				<a href="03050101.html" target="szRight">
-					<h6>项目报建</h6></a>
-				<a href="030502.html" target="szRight">
-					<h6>项目计划</h6></a>
-				<div>
-					<h2><span>前期</span></h2>
-					<ul style="display: none;">
-						<a href="03050301.html" target="szRight">
-							<li class="leftNavSzSelect"> 1.会议纪要或抄告单</li>
-						</a>
-						<a href="03050302.html" target="szRight">
-							<li> 2.项目选址意见书、用地红线、国土测绘</li>
-						</a>
-						<a href="03050303.html" target="szRight">
-							<li> 3.规划方案设计评选</li>
-						</a>
-						<a href="03050304.html" target="szRight">
-							<li> 4.规划方案报批</li>
-						</a>
-						<a href="03050305.html" target="szRight">
-							<li> 5.交通影响评估</li>
-						</a>
-						<a href="03050306.html" target="szRight">
-							<li> 6.环境影响评估</li>
-						</a>
-						<a href="03050307.html" target="szRight">
-							<li> 7.项目建议书或可研批复、节能批复</li>
-						</a>
-						<a href="03050308.html" target="szRight">
-							<li> 8.人防方案报批</li>
-						</a>
-						<a href="03050309.html" target="szRight">
-							<li> 9.地勘</li>
-						</a>
-						<a href="03050310.html" target="szRight">
-							<li> 10.用地手续报批</li>
-						</a>
-						<a href="03050311.html" target="szRight">
-							<li> 11.用地规划许可证</li>
-						</a>
-						<a href="03050312.html" target="szRight">
-							<li> 12.初步设计及概算批复</li>
-						</a>
-						<a href="03050313.html" target="szRight">
-							<li> 13.施工图设计及设计审查</li>
-						</a>
-						<a href="03050314.html" target="szRight">
-							<li> 14.工程规划许可证</li>
-						</a>
-						<a href="03050315.html" target="szRight">
-							<li> 15.八家联审</li>
-						</a>
-						<a href="03050316.html" target="szRight">
-							<li> 16.招标代理</li>
-						</a>
-						<a href="03050317.html" target="szRight">
-							<li> 17.预算控制价编制</li>
-						</a>
-						<a href="03050318.html" target="szRight">
-							<li> 18.财政出具预算控制价审核报告、财政复函</li>
-						</a>
-						<a href="03050319.html" target="szRight">
-							<li> 19.招标核准、摸取下浮系数</li>
-						</a>
-						<a href="03050320.html" target="szRight">
-							<li> 20.期望中标价</li>
-						</a>
-						<a href="03050321.html" target="szRight">
-							<li> 21.招标邀请函、发布招标告知、招标文件</li>
-						</a>
-						<a href="03050322.html" target="szRight">
-							<li> 22.项目招标，确定施工单位及监理单位</li>
-						</a>
-						<a href="03050323.html" target="szRight">
-							<li> 23.中标通知书</li>
-						</a>
-						<a href="03050324.html" target="szRight">
-							<li> 24.施工合同</li>
-						</a>
-						<a href="03050325.html" target="szRight">
-							<li> 25.监理合同</li>
-						</a>
-						<a href="03050326.html" target="szRight">
-							<li> 26.质、安监</li>
-						</a>
-						<a href="03050327.html" target="szRight">
-							<li> 27.施工许可证</li>
-						</a>
-						<a href="03050328.html" target="szRight">
-							<li> 28.消防建审</li>
-						</a>
-					</ul>
-				</div>
-				<div>
-					<h2><span>征地拆迁</span></h2>
-					<ul>
-						<a href="03050401.html" target="szRight">
-							<li> 29.征地拆迁交底</li>
-						</a>
-						<a href="03050402.html" target="szRight">
-							<li> 30.征地</li>
-						</a>
-						<a href="03050403.html" target="szRight">
-							<li> 31.拆迁</li>
-						</a>
-						<a href="03050404.html" target="szRight">
-							<li> 32.强弱电改迁</li>
-						</a>
-						<a href="03050405.html" target="szRight">
-							<li> 33.其他附着物清除</li>
-						</a>
-					</ul>
-				</div>
-				<div>
-					<h2><span>施工</span></h2>
-					<ul>
-						<a href="03050501.html" target="szRight">
-							<li> 34.施工图会审</li>
-						</a>
-						<a href="03050502.html" target="szRight">
-							<li> 35.施工单位交桩手续</li>
-						</a>
-						<a href="03050503.html" target="szRight">
-							<li> 36.原地面复测</li>
-						</a>
-						<a href="03050504.html" target="szRight">
-							<li> 37.工程清表推进</li>
-						</a>
-						<a href="03050505.html" target="szRight">
-							<li> 38.桩基工程</li>
-						</a>
-						<a href="03050506.html" target="szRight">
-							<li> 39.地下室工程</li>
-						</a>
-						<a href="03050507.html" target="szRight">
-							<li> 40.主体工程</li>
-						</a>
-						<a href="03050508.html" target="szRight">
-							<li> 41.装修工程</li>
-						</a>
-						<a href="03050509.html" target="szRight">
-							<li> 42.安装工程</li>
-						</a>
-						<a href="03050510.html" target="szRight">
-							<li> 43.室外市政工程</li>
-						</a>
-						<a href="03050511.html" target="szRight">
-							<li> 44.材料及设备询价</li>
-						</a>
-						<a href="03050512.html" target="szRight">
-							<li> 45.基坑支付及降水工程</li>
-						</a>
-						<a href="签证设计变更列表页.html" target="szRight">
-							<li> 46.工程签证及变更</li>
-						</a>
-					</ul>
-				</div>
-				<div>
-					<h2><span>竣工结算</span></h2>
-					<ul>
-						<a href="03050601.html" target="szRight">
-							<li> 47.房屋检测</li>
-						</a>
-						<a href="03050602.html" target="szRight">
-							<li> 48.工程竣工图</li>
-						</a>
-						<a href="03050603.html" target="szRight">
-							<li> 49.配套专业验收</li>
-						</a>
-						<a href="03050604.html" target="szRight">
-							<li> 50.消防验收</li>
-						</a>
-						<a href="03050605.html" target="szRight">
-							<li> 51.人防验收</li>
-						</a>
-						<a href="03050606.html" target="szRight">
-							<li> 52.规划验收</li>
-						</a>
-						<a href="03050607.html" target="szRight">
-							<li> 53.城管验收</li>
-						</a>
-						<a href="03050608.html" target="szRight">
-							<li> 54.环保验收</li>
-						</a>
-						<a href="03050609.html" target="szRight">
-							<li> 55.国土验收</li>
-						</a>
-						<a href="03050610.html" target="szRight">
-							<li> 56.防震减灾局验收</li>
-						</a>
-						<a href="03050611.html" target="szRight">
-							<li> 57.交通验收</li>
-						</a>
-						<a href="03050612.html" target="szRight">
-							<li> 58.卫生验收</li>
-						</a>
-						<a href="03050613.html" target="szRight">
-							<li> 59.园林验收</li>
-						</a>
-						<a href="03050614.html" target="szRight">
-							<li> 60.管线验收</li>
-						</a>
-						<a href="03050615.html" target="szRight">
-							<li> 61.质量终身责任牌（单体外墙）</li>
-						</a>
-						<a href="03050616.html" target="szRight">
-							<li> 62.门牌楼牌号安装</li>
-						</a>
-						<a href="03050617.html" target="szRight">
-							<li> 63.工程预验收</li>
-						</a>
-						<a href="03050618.html" target="szRight">
-							<li> 64.分户验收</li>
-						</a>
-						<a href="03050619.html" target="szRight">
-							<li> 65.工程竣工验收（五方责任主体验收）</li>
-						</a>
-						<a href="03050620.html" target="szRight">
-							<li> 66.质安监验收</li>
-						</a>
-						<a href="03050621.html" target="szRight">
-							<li> 67.安监站验收</li>
-						</a>
-						<a href="03050622.html" target="szRight">
-							<li> 68.城建局抽取专家验收</li>
-						</a>
-						<a href="03050623.html" target="szRight">
-							<li> 69.城建档案馆资料移交</li>
-						</a>
-						<a href="03050624.html" target="szRight">
-							<li> 70.竣工验收备案表</li>
-						</a>
-						<a href="03050625.html" target="szRight">
-							<li> 71.工程移交（工程移交给试用单位）</li>
-						</a>
-						<a href="03050626.html" target="szRight">
-							<li> 72.不动产证</li>
-						</a>
-						<a href="03050627.html" target="szRight">
-							<li> 73.工程结算</li>
-						</a>
-						<a href="03050628.html" target="szRight">
-							<li> 74.工程保修</li>
-						</a>
-					</ul>
-				</div>
-			</div>
-			<div class="szxmTjPageRight">
-				<iframe style="vertical-align:bottom" src="03050101.html" name="szRight" width="100%" height="100%" frameborder="0"></iframe>
-			</div>
+		<div class="szxmTjPageRightForm">
+			<span>总金额(万元)：</span>
+			<input type="text" id="totalAmount" valType="required" msg="<font color=red>*</font>总金额不能为空" />
+		</div>
+		<div class="szxmTjPageRightForm">
+			<span>项目概况：</span>
+			<textarea id="comment" valType="required" msg="<font color=red>*</font>项目概况不能为空"></textarea>
+		</div>
+		<a href="#" class="szxmTjPageRightFormBtn1" id="saveButton" style="margin-left: 27%;">提交</a>
+
 		</div>
 	</body>
+	<script type="text/javascript">
+		// 百度地图API功能
+		var map = new BMap.Map("allmap");
+		map.centerAndZoom("南昌县", 13);
+		//单击获取点击的经纬度
+		map.addEventListener("click", function(e) {
+			var jing_du_value = e.point.lng;
+			var wei_du_value = e.point.lat;
+			$("#longitude").val(jing_du_value);
+			$("#latitude").val(wei_du_value);
+		});
+		var curlocation = $("#longitude").val() + "," + $("#latitude").val();
+		if(curlocation.length > 1) {
+			var point = new BMap.Point(curlocation.split(',')[0], curlocation.split(',')[1]);
+			map.panTo(point);
+			setTimeout(function() {
+				map.panTo(point);
+				map.setZoom(16);
+				//map.centerAndZoom(point, 16);
+			}, 2000); //2秒后放大到14级
+			var marker = new BMap.Marker(point); // 创建标注
+			map.addOverlay(marker); // 将标注添加到地图中
+			marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+		}
+		map.enableScrollWheelZoom(true);
+		var local = new BMap.LocalSearch(map, {
+			renderOptions: {
+				map: map
+			}
+		});
+
+		function findaddress() {
+			var address = $("#txtAddressName").val();
+			if(address != "")
+				local.search(address);
+		}
+	</script>
 
 </html>
