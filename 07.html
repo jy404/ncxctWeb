@@ -42,6 +42,9 @@
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = $.getUrlParam("projectName");
+				if(projectId>0){
+					$(".gctitle").hide();
+				}
 				$('.xmbbSerachreset').click(function() {
 					$(this).parent().parent().find(".xmbbSerachTypeSelect").val("");
 					GetDesignChangeList1(currentpage, pagesize, data1, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/list");
@@ -90,14 +93,14 @@
 			<div class="xmbbTab" style="display: block;">
 				<a class="addBb">新增变更</a>
 				<div class="xmbbSerach">
-					<div class="xmbbSerachTitle">
+					<div class="xmbbSerachTitle gctitle">
 						<span>项目类型</span>
 						<select id="xmtype">
 							<option value="HOUSE">房建</option>
 							<option value="CITY">市政</option>
 						</select>
 					</div>
-					<div class="xmbbSerachTitle">
+					<div class="xmbbSerachTitle gctitle">
 						<span>项目名称</span>
 						<input type="text" class="xmbbSerachTypeSelect" id="xmname" />
 					</div>

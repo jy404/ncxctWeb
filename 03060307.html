@@ -106,9 +106,9 @@
 				}
 				if (action == "edit") {
 					data["id"] = id;
-					meetPut("/api/proposal", JSON.stringify(data));
-				} else {
 					meetAdd('/api/proposal/submit', JSON.stringify(data));
+				} else {
+					meetPut("/api/proposal", JSON.stringify(data));
 				}
 			}
 		</script>

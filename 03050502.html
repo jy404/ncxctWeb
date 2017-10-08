@@ -49,7 +49,8 @@
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
-				SelectUnitList("txtresponsibilityUnit", "A0004", projectType);
+				//SelectUnitList("txtresponsibilityUnit", "A0004", projectType);
+				SelectUnit("txtresponsibilityUnit", "A0004", projectType);
 				if(action != "" && action != undefined) {
 					SetData(projectId)
 					if(action == "view") {
@@ -107,6 +108,7 @@
 				var deliveryTime = $('#txtdeliveryTime').val();
 				var artfu = $('#fileurl_uploader').val();
 				var comment = $('#txtcomment').val();
+
 				var data = {
 					"projectId": projectId,
 					"projectNo": projectNo,
@@ -127,6 +129,13 @@
 				meetAdd('/api/construction/deliver/save', JSON.stringify(data));
 			}
 		</script>
+		<style type="text/css">
+			select {
+				width: 380px;
+				height: 35px;
+				margin-left: 5px;
+			}
+		</style>
 	</head>
 
 	<body>
@@ -138,7 +147,9 @@
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>责任单位：</span>
-				<div id="txtresponsibilityUnit" valType="required" msg="<font color=red>*</font>责任单位不能为空"></div>
+				<!--<div id="txtresponsibilityUnit"></div>-->
+				<select id="txtresponsibilityUnit">
+				</select>
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>责任单位负责人：</span>

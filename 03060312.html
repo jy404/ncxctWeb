@@ -104,7 +104,7 @@
 					"projectId": projectId,
 					"projectName": projectName
 				}
-				if (status==1) {
+				if (action=="edit") {
 					data["id"] = id
 				}
 				meetAdd('/api/prophase/evaluation/order', JSON.stringify(data));

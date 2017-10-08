@@ -119,7 +119,7 @@
 				var betime = $('#betime').val();
 				var befile = $('#fileurl_uploader2').val();
 				var data;
-				if (action == "edit") {
+				if (action != "edit") {
 					data = {
 						"cdrList": [{
 							"dispatchTime": shitime,

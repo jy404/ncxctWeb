@@ -53,9 +53,9 @@
 				projectName = $.getUrlParam("projectName");
 				SelectUnitList("sgdw", "A0004", projectType);
 				SelectUnitList("jldw", "A0005", projectType);
-				if (action != "" && action != undefined) {
+				if(action != "" && action != undefined) {
 					SetData(projectId)
-					if (action == "view") {
+					if(action == "view") {
 						$("body").find("input,textarea").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
@@ -78,7 +78,7 @@
 				$.getJSON(
 					domain + "/api/prophase/invitetender/orders/" + projectId,
 					function(res) {
-						if (res["code"] == "0") {
+						if(res["code"] == "0") {
 							$('#docNo').val(res["result"]["docNo"]);
 							$('#dispatchTime').val(res["result"]["dispatchTime"]);
 							id = res["result"]["id"];
@@ -102,7 +102,7 @@
 			function SubmitData(status) {
 				var docNo = $("#docNo").val();
 				var dispatchTime = $("#dispatchTime").val();
-				if ($("#sgdw").attr("data-id") != "" || $("#sgdw").attr("data-id") != undefined) {
+				if($("#sgdw").attr("data-id") != "" || $("#sgdw").attr("data-id") != undefined) {
 					var constructionUnitArr = [];
 					var constructionUnitList = $("#sgdw").attr("data-id").split("-");
 					constructionUnitArr = constructionUnitList.map(function(data) {
@@ -111,7 +111,7 @@
 				} else {
 					Toast.Err("错误", "请选择施工单位~", 'top-center', 'left')
 				}
-				if ($("#jldw").attr("data-id") != "" || $("#jldw").attr("data-id") != undefined) {
+				if($("#jldw").attr("data-id") != "" || $("#jldw").attr("data-id") != undefined) {
 					var supervisionUnitArr = [];
 					var supervisionUnitList = $("#jldw").attr("data-id").split("-");
 					supervisionUnitArr = supervisionUnitList.map(function(data) {
@@ -129,9 +129,10 @@
 					"projectId": projectId,
 					"projectName": projectName,
 					"projectType": projectType,
+					"status": status,
 					"supervisionUnitList": supervisionUnitArr
 				};
-				if (action == "edit") {
+				if(action == "edit") {
 					data["id"] = id
 				}
 				meetAdd('/api/prophase/invitetender/order', JSON.stringify(data));
@@ -146,11 +147,11 @@
 		<h3 class="ydsxHead">施工单位、监理单位</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="dispatchTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
+			<input type="text" id="dispatchTime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:MM:ss'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>施工单位：</span>

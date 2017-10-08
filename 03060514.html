@@ -35,12 +35,13 @@
 		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
 		<!--表单验证-->
 		<script type="text/javascript">
-			var action, projectId, projectNo, projectType, id;
+			var action, projectId, projectNo, projectType, id,situationType;
 			var completion,fileUrl,exsitProblem;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				situationType = "rectification";
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -69,7 +70,7 @@
 
 			function SetData(projectId) {
 				$.getJSON(
-					domain + "/api/construction/schedule/situation/" + projectId,
+					domain + "/api/construction/schedule/situation/" + situationType + "/" + projectId,
 					function(res) {
 						if(res["code"] == "0") {
 							$('#txtrectification').val(res["result"]["rectification"]);
@@ -99,6 +100,7 @@
 					"projectId": projectId,
 					"projectNo": projectNo,
 					"projectType": projectType,
+					"situationType": situationType,
 					
 					"completion": completion,
 					"rectification": rectification,

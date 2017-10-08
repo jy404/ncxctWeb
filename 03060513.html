@@ -37,12 +37,13 @@
 		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
 		<!--表单验证-->
 		<script type="text/javascript">
-			var action, projectId, projectNo, projectType, id;
-			var completion,fileUrl,rectification;
+			var action, projectId, projectNo, projectType, id, situationType;
+			var completion, fileUrl, rectification;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				situationType = "problem";
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -71,11 +72,11 @@
 
 			function SetData(projectId) {
 				$.getJSON(
-					domain + "/api/construction/schedule/situation/" + projectId,
+					domain + "/api/construction/schedule/situation/" + situationType + "/" + projectId,
 					function(res) {
 						if(res["code"] == "0") {
 							$('#txtexsitProblem').val(res["result"]["exsitProblem"]);
-							
+
 							completion = res["result"]["completion"];
 							rectification = res["result"]["rectification"];
 							fileUrl = res["result"]["fileUrl"];
@@ -99,7 +100,8 @@
 					"projectId": projectId,
 					"projectNo": projectNo,
 					"projectType": projectType,
-					
+					"situationType": situationType,
+
 					"completion": completion,
 					"rectification": rectification,
 					"exsitProblem": exsitProblem,
@@ -109,7 +111,7 @@
 				}
 				if(action == "edit")
 					data["id"] = id;
-				meetAdd('/api/construction/schedule/lighting/save', JSON.stringify(data));
+				meetAdd('/api/construction/schedule/situation/save', JSON.stringify(data));
 			}
 		</script>
 	</head>

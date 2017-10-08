@@ -123,9 +123,9 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 							html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
 						if(data["status"] != 2 && data["status"] != 1) {
 							html += "<td>" + (rows[i]["publishUserName"] == "" ? "未知" : rows[i]["publishUserName"]) + "</td>";
-							html += "<td>" + new Date(rows[i]["publishTime"]).Format("yyyy/MM/dd hh:mm:ss") + "</td>";
+							html += "<td>" + new Date(rows[i]["publishTime"]).format("yyyy/MM/dd hh:mm:ss") + "</td>";
 						} else {
-							html += "<td>" + new Date(rows[i]["createTime"]).Format("yyyy/MM/dd hh:mm:ss") + "</td>";
+							html += "<td>" + new Date(rows[i]["createTime"]).format("yyyy/MM/dd hh:mm:ss") + "</td>";
 						}
 						html += "</tr>";
 					}
@@ -301,7 +301,7 @@ function GetRole1(obj) {
 function GetOrgList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 	data["currentPage"] = currentpage;
 	data["pageSize"] = pagesize;
-	$.getJSON(
+	$.axse(
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
@@ -686,8 +686,8 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["projectNo"] + "</td>";
-						html += "<td>" + rows[i]["name"] + "</td>";
-						html += "<td>" + rows[i]["address"] + "</td>";
+						html += "<td title=\"" + rows[i]["name"] + "\">" + subString(rows[i]["name"].toString(), 6) + "</td>";
+						html += "<td title=\"" + rows[i]["address"] + "\">" + subString(rows[i]["address"].toString(), 6) + "</td>";
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + rows[i]["totalAmount"] + "</td>";
 						if(typeof rows[i]["startTime"] == "undefined")

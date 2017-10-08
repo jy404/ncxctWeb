@@ -68,11 +68,11 @@
 				if(action != "" && action != undefined) {
 					SetData(projectId)
 					//if(action == "view") {
-						$("body").find("input,textarea,select").each(function() {
-							$(this).attr("disabled", "disabled");
-						});
-						$(".szBtn").hide();
-						$(".fileinput-button").hide();
+					$("body").find("input,textarea,select").each(function() {
+						$(this).attr("disabled", "disabled");
+					});
+					$(".szBtn").hide();
+					$(".fileinput-button").hide();
 					//}
 				}
 				$('.szxmTjPageRightFormBtn1').click(function() {
@@ -222,6 +222,11 @@
 			<input type="text" id="address" valType="required" msg="<font color=red>*</font>项目地址不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
+			<span>选取经纬度：</span>
+			<input name="txtAddressName" type="text" id="txtAddressName" class="input normal" placeholder="请输入地点名称" />
+			<input type="button" value="搜索" class="btn yellow" onclick="findaddress();" style="width: 60px;text-align: center;" />
+		</div>
+		<div class="szxmTjPageRightForm">
 			<span>经度：</span>
 			<input type="text" readonly="readonly" id="longitude" valType="required" msg="<font color=red>*</font>经度不能为空" />
 		</div>
@@ -230,9 +235,6 @@
 			<input type="text" readonly="readonly" id="latitude" valType="required" msg="<font color=red>*</font>纬度不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
-			<span>选取经纬度：</span>
-			<input name="txtAddressName" type="text" id="txtAddressName" class="input normal" placeholder="请输入地点名称" />
-			<input type="button" value="搜索" class="btn yellow" onclick="findaddress();" style="width: 60px;text-align: center;" />
 			<div id="allmap" style="width: 80%; height: 500px;margin: 10px 0 0 85px;">
 			</div>
 		</div>

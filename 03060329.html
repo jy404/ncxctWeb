@@ -46,16 +46,16 @@
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = unescape($.getUrlParam("projectName"));
-				if (action != "" && action != undefined) {
+				if(action != "" && action != undefined) {
 					SetData(projectId)
-					if (action == "view") {
+					if(action == "view") {
 						$("body").find("input").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
 					}
 				}
-				
+
 				$('.szxmTjPageRightFormBc').click(function() {
 					if(vali.subByJs()) {
 						SubmitData(1);
@@ -72,7 +72,7 @@
 				$.getJSON(
 					domain + "/api/prophase/conspermit/orders/" + projectId,
 					function(res) {
-						if (res["code"] == "0") {
+						if(res["code"] == "0") {
 							$("#docNo").val(res["result"]["docNo"]);
 							$("#stime").val(res["result"]["dispatchTime"]);
 							$("#dpriace").val(res["result"]["amount"]);
@@ -99,15 +99,16 @@
 					"dispatchTime": stime,
 					"docNo": docNo,
 					"fileUrl": shifile,
+					"status": status,
 					"projectId": projectId,
 					"projectNo": projectNo,
 					"projectName": projectName,
 					"projectType": projectType
 				}
-				if (action == "edit") {
+				if(action == "edit") {
 					data["id"] = id
 				}
-				meetAdd('/api/expectedPrice/submit', JSON.stringify(data));
+				meetAdd('/api/prophase/conspermit/order', JSON.stringify(data));
 			}
 		</script>
 	</head>
@@ -117,15 +118,15 @@
 		<h2 class="szTitle">施工许可证</h2>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>时间：</span>
-			<input type="text" id="stime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" valType="required" msg="<font color=red>*</font>时间不能为空"/>
+			<input type="text" id="stime" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" valType="required" msg="<font color=red>*</font>时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>需缴纳农民工保证金：</span>
-			<input type="text" id="dpriace" valType="required" msg="<font color=red>*</font>保证金不能为空"/>
+			<input type="text" id="dpriace" valType="required" msg="<font color=red>*</font>保证金不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>

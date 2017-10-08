@@ -43,15 +43,17 @@
 				UploadProcess("uploader1");
 				upload.init("uploader2", "添加附件...");
 				UploadProcess("uploader2");
+				$("#xmjy1 .szxmTjPageRightForm input").attr("valType", "required");
+				$("#xmjy1 .szxmTjPageRightForm input").attr("msg", "<font color=red>*</font>不能为空");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = unescape($.getUrlParam("projectName"));
-				if (action != "" && action != undefined) {
+				if(action != "" && action != undefined) {
 					SetData(projectId)
-					if (action == "view") {
+					if(action == "view") {
 						$("body").find("input,textarea").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
@@ -61,8 +63,26 @@
 				$('.xmjyshkypfList li').click(function() {
 					$(this).addClass('xmjyshkypfListSelect').siblings('li').removeClass('xmjyshkypfListSelect');
 					$('.xmjyshkypfTab').eq($(this).index()).show().siblings('.xmjyshkypfTab').hide();
+					var index = $('.xmjyshkypfList li').index(this) + 1;
+					if(index == 1) {
+						$("#xmjy1 .szxmTjPageRightForm input").attr("valType", "required");
+						$("#xmjy1 .szxmTjPageRightForm input").attr("msg", "<font color=red>*</font>不能为空");
+						$("#xmjy2 .szxmTjPageRightForm input").removeAttr("valType");
+						$("#xmjy2 .szxmTjPageRightForm input").removeAttr("msg");
+						$(".tip-yellowsimple").remove();
+						$('#xmjy2 .szxmTjPageRightForm input').unbind("blur");
+						vali = new Validators();
+					} else {
+						$("#xmjy2 .szxmTjPageRightForm input").attr("valType", "required");
+						$("#xmjy2 .szxmTjPageRightForm input").attr("msg", "<font color=red>*</font>不能为空");
+						$("#xmjy1 .szxmTjPageRightForm input").removeAttr("valType");
+						$("#xmjy1 .szxmTjPageRightForm input").removeAttr("msg");
+						$(".tip-yellowsimple").remove();
+						$('#xmjy1 .szxmTjPageRightForm input').unbind("blur");
+						vali = new Validators();
+					}
 				});
-				
+
 				$('#saveButton').click(function() {
 					if(vali.subByJs()) {
 						SubmitData(1);
@@ -91,8 +111,8 @@
 				var gtime = $("#gtime").val();
 				var gprice = $("#gprice").val();
 				var gfile = $("#fileurl_uploader2").val();
-				if ($(".xmjyshkypfList").find("li:first").hasClass("xmjyshkypfListSelect")) {
-					if (bprice < 5000000) {
+				if($(".xmjyshkypfList").find("li:first").hasClass("xmjyshkypfListSelect")) {
+					if(bprice < 5000000) {
 						Toast.Err("错误", "金额<5000000", 'top-center', 'left');
 						$("#xmjy1").hide();
 						$("#xmjy2").show();
@@ -130,7 +150,7 @@
 						}]
 					}
 				} else {
-					if (gprice >= 5000000) {
+					if(gprice >= 5000000) {
 						Toast.Err("错误", "金额>=5000000", 'top-center', 'left');
 						$("#xmjy1").show();
 						$("#xmjy2").hide();
@@ -158,8 +178,8 @@
 						}]
 					}
 				}
-				if (id != undefined && id != "") {
-					if (id.indexOf(",") != -1) {
+				if(id != undefined && id != "") {
+					if(id.indexOf(",") != -1) {
 						data["list"][0]["id"] = id.split(",")[0];
 						data["list"][1]["id"] = id.split(",")[1];
 					} else {
@@ -167,7 +187,7 @@
 					}
 				}
 				data["list"][0]["status"] = status;
-				if (data["list"].length > 1) {
+				if(data["list"].length > 1) {
 					data["list"][1]["status"] = status;
 				}
 				meetAdd('/api/pdba/approval/save', JSON.stringify(data));
@@ -177,9 +197,9 @@
 				$.getJSON(
 					domain + "/api/pdba/approval/" + projectId,
 					function(res) {
-						if (res["code"] == "0") {
+						if(res["code"] == "0") {
 							var rows = res["result"];
-							if (rows.length == 1) { //&& parseFloat(rows[0]["amount"]) <= 5000000
+							if(rows.length == 1) { //&& parseFloat(rows[0]["amount"]) <= 5000000
 								$('#gNo').val(rows[0]["docNo"]);
 								$('#gtime').val(rows[0]["createTime"]);
 								$('#gprice').val(rows[0]["price"]);
@@ -233,15 +253,15 @@
 			<h3 class="ydsxHead ">编制初步设计</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
-				<input type="text" id="bNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+				<input type="text" id="bNo" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="btime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
+				<input type="text" id="btime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
-				<input type="text" id="bprice" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+				<input type="text" id="bprice" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>
@@ -251,15 +271,15 @@
 			<h3 class="ydsxHead ">专家评审会</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
-				<input type="text" id="zNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+				<input type="text" id="zNo" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="ztime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
+				<input type="text" id="ztime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
-				<input type="text" id="zprice" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+				<input type="text" id="zprice" />
 			</div>
 
 			<div class="szxmTjPageRightForm">
@@ -272,15 +292,15 @@
 			<h3 class="ydsxHead ">概算批复</h3>
 			<div class="szxmTjPageRightForm">
 				<span>文号：</span>
-				<input type="text" id="gNo" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+				<input type="text" id="gNo" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>时间：</span>
-				<input type="text" id="gtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" valType="required" msg="<font color=red>*</font>时间不能为空"/>
+				<input type="text" id="gtime" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" readonly="readonly" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>金额：</span>
-				<input type="text" id="gprice" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+				<input type="text" id="gprice" />
 			</div>
 			<div class="szxmTjPageRightForm">
 				<span>附件：</span>

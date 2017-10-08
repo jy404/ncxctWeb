@@ -36,12 +36,12 @@
 					var projectName = $("#txtProjectName").val();
 					var startTime = $("#txtstartTime").val();
 					var projectNo = $("#txtProjectNo").val();
-					if(projectName != undefined && projectName != "")
-						data["name"] = projectName;
-					if(startTime != undefined && startTime != "")
-						data["startTime"] = startTime;
-					if(projectNo != undefined && projectNo != "")
-						data["projectNo"] = projectNo;
+					//if(projectName != undefined && projectName != "")
+					data["name"] = projectName;
+					//if(startTime != undefined && startTime != "")
+					data["startTime"] = startTime;
+					//if(projectNo != undefined && projectNo != "")
+					data["projectNo"] = projectNo;
 					GetProjectList(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
 				})
 				$("#resetBtn").click(function() {

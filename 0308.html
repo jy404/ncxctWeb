@@ -29,10 +29,29 @@
 				$('.window .windowBox h2 b').click(function() {
 					$('.window').hide();
 				});
+				$("#zjdwSerachBtn1").click(function() {
+					data["name"] = $("#txtProjectName").val();
+					data["startTime"] = $("#txtstartTime").val();
+					data["projectNo"] = $("#txtProjectNo").val();
+					GetUnitList(currentpage, pagesize, data, "unitList", $("#unitList_page"), true, "/api/proorg/page/list")
+				})
+				$("#zjdwSerachreset").click(function() {
+					$("#txtProjectName").val('');
+					$("#txtStartTime").val('');
+					$("#txtProjectNo").val('');
+					$("#txtOrgName").val('');
+					$("#txtPersonName").val('');
+					data = {
+						"projectType": projecttype
+					};
+					GetUnitList(currentpage, pagesize, data, "unitList", $("#unitList_page"), true, "/api/proorg/page/list")
+				})
 				var currentpage = 1;
 				var pagesize = 10;
-				var data={"orgType":"AGENT"};
-				GetUnitList(currentpage,pagesize,data,"unitList",$("#unitList_page"),true,"/api/proorg/page/list")
+				var data = {
+					"orgType": "AGENT"
+				};
+				GetUnitList(currentpage, pagesize, data, "unitList", $("#unitList_page"), true, "/api/proorg/page/list")
 			});
 		</script>
 	</head>
@@ -222,122 +241,122 @@
 						<li>消防检测单位</li>
 					</a>
 				</ul>
-					<a href="030801.html?orgCategory=A0001">
-						<li>业主单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0002">
-						<li>地勘单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0003">
-						<li>设计单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0004">
-						<li>施工单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0005">
-						<li>监理单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0006">
-						<li>监督单位</li>
-					</a>
-					<!--<a href="030801.html?orgCategory=A0007"><li>测绘单位</li></a>-->
-					<a href="030801.html?orgCategory=A0007">
-						<li>可研及初设评审单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0008">
-						<li>可研编制单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0009">
-						<li>初设单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0010">
-						<li>土建设计单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0011">
-						<li>强电设计单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0012">
-						<li>检测单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0013">
-						<li>图审单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0014">
-						<li>水保咨询单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0015">
-						<li>环评咨询单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0016">
-						<li>交评咨询单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0017">
-						<li>地质灾害、压覆矿评估单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0018">
-						<li>防洪咨询单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0019">
-						<li>稳定咨询单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0020">
-						<li>招标代理单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0021">
-						<li>清单编制单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0022">
-						<li>监督单位</li>
-					</a>
-					<a href="030801.html?orgCategory=A0023">
-						<li>行业主管部门</li>
-					</a>
+				<a href="030801.html?orgCategory=A0001">
+					<li>业主单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0002">
+					<li>地勘单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0003">
+					<li>设计单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0004">
+					<li>施工单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0005">
+					<li>监理单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0006">
+					<li>监督单位</li>
+				</a>
+				<!--<a href="030801.html?orgCategory=A0007"><li>测绘单位</li></a>-->
+				<a href="030801.html?orgCategory=A0007">
+					<li>可研及初设评审单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0008">
+					<li>可研编制单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0009">
+					<li>初设单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0010">
+					<li>土建设计单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0011">
+					<li>强电设计单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0012">
+					<li>检测单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0013">
+					<li>图审单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0014">
+					<li>水保咨询单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0015">
+					<li>环评咨询单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0016">
+					<li>交评咨询单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0017">
+					<li>地质灾害、压覆矿评估单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0018">
+					<li>防洪咨询单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0019">
+					<li>稳定咨询单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0020">
+					<li>招标代理单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0021">
+					<li>清单编制单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0022">
+					<li>监督单位</li>
+				</a>
+				<a href="030801.html?orgCategory=A0023">
+					<li>行业主管部门</li>
+				</a>
 
-					<a href="030801.html?orgCategory=B0024">
-						<li>交评单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0025">
-						<li>环评单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0026">
-						<li>可研编制、评估单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0027">
-						<li>地勘见证单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0028">
-						<li>初设评估单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0029">
-						<li>设计审查单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0030">
-						<li>招标代理单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0031">
-						<li>预算编制单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0032">
-						<li>测量测绘单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0033">
-						<li>桩基检测单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0034">
-						<li>房屋检测单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0035">
-						<li>防雷检测单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0036">
-						<li>室内环境及节能检测单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0037">
-						<li>沉降观测单位</li>
-					</a>
-					<a href="030801.html?orgCategory=B0038">
-						<li>消防检测单位</li>
-					</a>
+				<a href="030801.html?orgCategory=B0024">
+					<li>交评单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0025">
+					<li>环评单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0026">
+					<li>可研编制、评估单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0027">
+					<li>地勘见证单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0028">
+					<li>初设评估单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0029">
+					<li>设计审查单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0030">
+					<li>招标代理单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0031">
+					<li>预算编制单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0032">
+					<li>测量测绘单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0033">
+					<li>桩基检测单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0034">
+					<li>房屋检测单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0035">
+					<li>防雷检测单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0036">
+					<li>室内环境及节能检测单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0037">
+					<li>沉降观测单位</li>
+				</a>
+				<a href="030801.html?orgCategory=B0038">
+					<li>消防检测单位</li>
+				</a>
 				</ul>
 			</div>
 		</div>

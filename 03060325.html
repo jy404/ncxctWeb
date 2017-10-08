@@ -78,20 +78,20 @@
 						domain + "/api/prophase/wonbid/orders/" + projectId,
 						function(res) {
 							if (res["code"] == "0") {
-								$('#sNo').val(res["result"][0]["docNo"]);
-								$('#stime').val(res["result"][0]["dispatchTime"]);
+								$('#sNo').val(res["result"]["details"][0]["docNo"]);
+								$('#stime').val(res["result"]["details"][0]["dispatchTime"]);
 								//$('#sjing').val(res["result"][0]["createTime"]); 接口没提供金额字段
-								$("#swei").val(res["result"][0]["wonBidUnitId"]);
-								$('#fileurl_uploader').val(res["result"][0]["fileUrl"]);
-								sid = res["result"][0]["id"];
-								upload.show(res["result"][0]["fileUrl"], "files_uploader")
-								$('#bNo').val(res["result"][1]["docNo"]);
-								$('#btime').val(res["result"][1]["dispatchTime"]);
+								$("#swei").val(res["result"]["details"][0]["wonBidUnitId"]);
+								$('#fileurl_uploader').val(res["result"]["details"][0]["fileUrl"]);
+								sid = res["result"]["details"][0]["id"];
+								upload.show(res["result"]["details"][0]["fileUrl"], "files_uploader")
+								$('#jNo').val(res["result"]["details"][1]["docNo"]);
+								$('#jtime').val(res["result"]["details"][1]["dispatchTime"]);
 								//$('#jjing').val(res["result"][0]["createTime"]); 接口没提供金额字段
-								$("#swei").val(res["result"][1]["wonBidUnitId"]);
-								$('#fileurl_uploader1').val(res["result"][1]["fileUrl"]);
-								upload.show(res["result"][1]["fileUrl"], "files_uploader1")
-								jid = res["result"][1]["id"];
+								$("#jwei").val(res["result"]["details"][1]["wonBidUnitId"]);
+								$('#fileurl_uploader1').val(res["result"]["details"][1]["fileUrl"]);
+								upload.show(res["result"]["details"][1]["fileUrl"], "files_uploader1")
+								jid = res["result"]["details"][1]["id"];
 							}
 						},
 						function() {

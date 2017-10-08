@@ -85,8 +85,10 @@
 							$('#txtinoutAmount').val(res["result"]["inoutAmount"]);
 							$('#txtreviewingTime').val(res["result"]["reviewingTime"]);
 							$('#txtcomment').val(res["result"]["comment"]);
+							
 							var constructionUnit = res["result"]["participatoryUnitList"];
 							SetUnitList(constructionUnit, "txtUnitName");
+							
 							id = res["result"]["id"];
 							//附件加上
 							upload.show(res["result"]["fileUrl"], "files_uploader")
@@ -102,14 +104,13 @@
 
 			function SubmitData(status) {
 				var docNo = $('#txtdocNo').val();
-				var name = $('#txtUnitName').val();
 				var artfu = $('#fileurl_uploader').val();
 				var inoutAmount = $('#txtinoutAmount').val();
 				var reviewingTime = $('#txtreviewingTime').val();
-				var UnitIdList = [];
 				var comment = $('#txtcomment').val();
+				
+				var UnitIdList = [];
 				var UnitList = $("#txtUnitName").attr("data-id");
-
 				if(UnitList != "" || UnitList != undefined) {
 					var constructionUnitList = UnitList.split("-");
 					UnitIdList = constructionUnitList.map(function(data) {
@@ -146,7 +147,7 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
-			<div id="txtUnitName" valType="required" msg="<font color=red>*</font>参与单位不能为空" ></div>
+			<div id="txtUnitName"></div>
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>增减金额：</span>
