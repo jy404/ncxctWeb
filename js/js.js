@@ -8,7 +8,7 @@ $(function() {
 
 	$('.szxmTjPageRight').css('min-width', $(window).width() - 321);
 	$('.szxmTjPageRight').css('min-height', $(window).height() - 45);
-	$('.szxmTjPageRight iframe').css('min-height', $(window).height() - 45);
+	$('.szxmTjPageRight iframe').css('min-height', $('.szxmTjPageRight').height() - 45);
 
 	$('.content .leftNav div h2').click(function() {
 		//$(this).siblings('ul').slideToggle();	

@@ -1701,7 +1701,7 @@ header .headNav span.myUrse b{
 .gcqzsj {
 	width: 95%;
 	margin: 0 auto;
-	overflow: hidden;
+	
 }
 
 .gcqzsj .gcqzsjTitle {
@@ -3954,7 +3954,20 @@ header .headNav span.myUrse b{
 	border: 1px solid #cbcbcb;
 	border-radius: 3px;
 }
-
+#changetype{
+	width: 300px;
+	height: 35px;
+	border: 1px solid #cbcbcb;
+	border-radius: 3px;
+	margin-left: 5px;
+}
+.jgjsSelect{
+	width: 380px;
+	height: 35px;
+	float: left;
+	margin-left: 5px;
+	
+}
 
 
 
