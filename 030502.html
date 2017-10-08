@@ -26,6 +26,13 @@
 		<link rel="stylesheet" href="js/lib/reset.css" />
 		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
 		<!--表单验证-->
+		<style type="text/css">
+			select {
+				width: 395px;
+				height: 30px;
+				margin-left: 20px;
+			}
+		</style>
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id, procTaskId, stage = [];
 			$(function() {
@@ -38,6 +45,7 @@
 				projectName = unescape($.getUrlParam("projectName"));
 				$("#projectName").val(projectName);
 				GetDirection(projectType + "_PLAN_STAGE_TYPE", CreateHTML);
+				//SelectUser("spry");
 				if(action != "" && action != undefined) {
 					SetData(projectId)
 					if(action == "view") {
@@ -46,9 +54,10 @@
 						});
 						$("#saveBtn,#submitBtn,#agreeBtn,#rejectBtn,#refuseBtn").hide();
 					}
-					if(action != "sp")
-						$("#agreeBtn,#refuseBtn,#rejectBtn,#comment").hide();
-					else
+					if(action != "sp") {
+						$("#agreeBtn,#refuseBtn,#rejectBtn,#comment,#spyj,#bhjd").hide();
+
+					} else
 						$("#saveBtn,#submitBtn").hide();
 				}
 				$("#saveBtn").click(function() {
@@ -75,13 +84,13 @@
 			function CreateHTML(res) {
 				var html = "";
 				$.each(res.result, function(i, item) {
-					stage.push(item.wordValue);
+					stage.push(item.wordValue.Trim());
 					html += "<div class='szxmTjPageRightJh'>";
 					html += "<span>" + item.wordDisplay + "：</span>";
 					html += "<b>计划时间：</b>";
-					html += "<input type='text' id='" + item.wordValue + "_st' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" readonly='readonly' />";
+					html += "<input type='text' id='" + item.wordValue.Trim() + "_st' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" readonly='readonly' />";
 					html += "<i>至</i>";
-					html += "<input type='text' id='" + item.wordValue + "_et' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" readonly='readonly' />";
+					html += "<input type='text' id='" + item.wordValue.Trim() + "_et' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" readonly='readonly' />";
 					html += "</div>";
 				});
 				$("#saveBtn").before(html);
@@ -96,6 +105,21 @@
 							procTaskId = res.result.procTaskId;
 							$("#sequence").val(res.result.sequence);
 							$("#survey").val(res.result.survey);
+
+							if(action == "edit") {
+								//$("#spry").val(res["result"]["assessors"][1]["assessorId"]);
+								var users = "";
+								$("#RegionJobBusinessTag").html = "";
+								$.each(res["result"]["assessors"], function(i, user) {
+									if(i != 0) {
+										var html = "<span ty='r' id='" + user.assessorId + "_ed'><a href='#'>" + user.assessor + "</a><input type='button' onclick='del(" + user.assessorId + ")' name='selectedCity' id='" + user.assessorId + "_ch' class='city_det'></span>"
+										$("#RegionJobBusinessTag").append(html);
+										users += user.assessor + " ";
+									}
+								});
+								$("#ApplicationDirection").val(users);
+							}
+
 							$.each(res.result.projectPlanExtensionList, function(i, item) {
 								if(typeof item.planStartTime != "undefined")
 									$("#" + item.stageType + "_st").val(new Date(item.planStartTime).format("yyyy-MM-dd"));
@@ -140,6 +164,11 @@
 						users.push(user);
 					});
 				}
+				//				var user = {
+				//					"userid": $("#spry option:selected").val(),
+				//					"username": $("#spry option:selected").text()
+				//				};
+				//				users.push(user);
 				if(status == 3 && users.length == 0) {
 					Toast.Err('错误', '请指定下一环节审批人~', 'top-center', 'left');
 					return;
@@ -204,6 +233,11 @@
 						users.push(user);
 					});
 				}
+				//				var user = {
+				//					"userid": $("#spry option:selected").val(),
+				//					"username": $("#spry option:selected").text()
+				//				};
+				//				users.push(user);
 				var assessor = null;
 				var assessorSubList = [];
 				if(CheckLastPerson(procTaskId) == true) {
@@ -285,20 +319,23 @@
 		</div>
 		<div class="szxmTjPageRightJh">
 			<span>项目名称：</span>
-			<input type="text" id="projectName" readonly="readonly" style="width: 388px; margin-left: 18px; background: none;" valType="required" msg="<font color=red>*</font>项目名称不能为空" />
+			<input type="text" id="projectName" readonly="readonly" style="width: 388px; margin-left: 18px; background: none;" />
 		</div>
 		<div class="szxmTjPageRightJh">
 			<span>项目概况：</span>
 			<input type="text" id="survey" style="width: 388px; margin-left: 20px; background: none;" valType="required" msg="<font color=red>*</font>项目概况不能为空" />
 		</div>
-		<div class="szxmTjPageRightJh">
+		<div class="szxmTjPageRightJh" id="spyj">
 			<span>审批意见：</span>
-			<input type="text" id="comment" style="width: 388px; margin-left: 20px; background: none;" valType="required" msg="<font color=red>*</font>审批意见不能为空" />
+			<input type="text" id="comment" style="width: 388px; margin-left: 20px; background: none;" />
 		</div>
 		<div class="szxmTjPageRightJh" id="nextperson">
 			<span>审批人：</span>
-			<div id="RegionJobBusinessTag"></div>
-			<input id="ApplicationDirection" readonly="readonly" type="text" onkeypress="javascript:return false;" onclick="selectJobBusinessTag()" />
+			<!--<select id="spry">
+				<option value="0">请选择审批人</option>
+			</select>-->
+			<div id="RegionJobBusinessTag" style="display:none"></div>
+			<input style="background: #fff; width: 389px; margin-left: 19px;" id="ApplicationDirection" style="margin-left: 20px;" readonly="readonly" type="text" onkeypress="javascript:return false;" onclick="selectJobBusinessTag()" />
 			<script type="text/javascript">
 				function selectJobBusinessTag() {
 					window.m = new MessageBox(null, "");
@@ -310,7 +347,7 @@
 				}
 			</script>
 		</div>
-		<div class="szxmTjPageRightJh">
+		<div class="szxmTjPageRightJh" id="bhjd">
 			<span>驳回节点：</span>
 			<select id="rejectStepId">
 				<option value="">--请选择驳回节点--</option>
@@ -321,7 +358,7 @@
 		<a href="#" id="saveBtn" class="szxmTjPageRightFormBtn1">保存</a>
 		<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn1">保存并发起流程</a>
 		<a href="#" id="agreeBtn" class="szxmTjPageRightFormBtn1">同意</a>
-		<a href="#" id="refuseBtn" class="szxmTjPageRightFormBtn1">拒绝</a>
+		<!--<a href="#" id="refuseBtn" class="szxmTjPageRightFormBtn1">拒绝</a>-->
 		<a href="#" id="rejectBtn" class="szxmTjPageRightFormBtn1">驳回</a>
 	</body>
 

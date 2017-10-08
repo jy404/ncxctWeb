@@ -46,7 +46,7 @@ function getUnreadMessage() {
 		JSON.stringify(param), "json",
 		function(data) {
 			if(data.code === '0') {
-				$('.xxIndexList').append('')
+				$('.xxIndexList').html('');
 				var list = data.result.list;
 				var count = data.result.totalCount;
 				//$('.indexXx i').text(count)
