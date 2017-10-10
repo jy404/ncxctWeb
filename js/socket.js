@@ -58,9 +58,24 @@ function getUnreadMessage() {
 				//加载列表
 				var html = ''
 				for(index in list) {
-					html += '<li><a href="020201.html?moduleId=4&id=' + list[index].id + '">' +
-						list[index].title +
-						'</a></li>'
+					if(list[index].type == "NOTIFY") //消息
+					{
+						html += '<li><a target="bodyRight" href="020201.html?msgtype=msg&moduleId=3&id=' + list[index].id + '">' +
+							list[index].title +
+							'</a></li>';
+					} else if(list[index].type == "PROJECT_PLAN_ORDER") //计划
+					{
+						html += '<li><a target="bodyRight" href="020201.html?moduleId=4&id=' + list[index].id + '">' +
+							list[index].title +
+							'</a></li>';
+						
+//						html += "<li><a href=\"030502.html?action=sp&id=" + 
+//						list[index].id + 
+//						"&projectType=" + row.projectType + 
+//						"&projectName=" + escape(row.projectName)+
+//						"\"></a></li>";
+							
+					}
 				}
 				$('.xxIndexList').append(html)
 

@@ -84,7 +84,6 @@ $(function() {
 
 	$('.leftNav li').removeClass('leftNavSelect');
 	$('.leftNav li').click(function() {
-		alert(123)
 		$('.leftNav li').removeClass('leftNavSelect');
 		
 		$(this).addClass('leftNavSelect');

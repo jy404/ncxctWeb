@@ -164,9 +164,7 @@
 						}]
 					}
 				}
-				if (status == 1) {
-					meetAdd('/api/proposalReply', JSON.stringify(data));
-				} else if (status == 2) {
+				if (status == 2) {
 					if (id.indexOf(",") != -1) {
 						data["proposalReplyList"][0]["id"] = id.split(",")[0];
 						data["proposalReplyList"][1]["id"] = id.split(",")[0];
@@ -297,9 +295,9 @@
 			</div>
 			<div id="uploader2" class="fjStyle"></div>
 		</div>
-		<div class="szBtn1">
+		<div class="szBtn">
 			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<!--<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>-->
 			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>

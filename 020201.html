@@ -30,13 +30,15 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript" src="js/socket.js"></script>
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
 		<script type="text/javascript">
-			var Id, api, msgtype;
+			var Id, api, msgtype, read;
 			$(function() {
 				$.ajaxSettings.async = false;
 				Id = $.getUrlParam("id");
+				read = $.getUrlParam("read");
 				msgtype = $.getUrlParam("msgtype");
 				if(msgtype == "msg")
 					api = "/api/message/";
@@ -45,7 +47,23 @@
 				else
 					api = "/api/noticeTmp/";
 				SetData(Id, api);
+
+				readData(Id);
 			});
+
+			function readData(Id) {
+				$.getJSON(
+					domain + "/api/message/set/read/" + Id,
+					function(res) {
+						if(res["code"] == "0") {
+							getUnreadMessageNum();
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
 
 			function SetData(Id, api) {
 				$.getJSON(

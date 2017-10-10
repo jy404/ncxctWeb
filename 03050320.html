@@ -110,9 +110,7 @@
 					"projectName": projectName,
 					"projectType": projectType
 				}
-				if (status == 1) {
-					meetAdd("/api/expectedPrice", JSON.stringify(data));
-				} else if (status == 2) {
+				if (status == 2) {
 					meetAdd('/api/expectedPrice/submit', JSON.stringify(data));
 				} else {
 					data["id"]=id;
@@ -141,9 +139,9 @@
 			<span>金额：</span>
 			<input type="text" id="price" valType="required" msg="<font color=red>*</font>金额不能为空"/>
 		</div>
-		<div class="szBtn1">
+		<div class="szBtn">
 			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<!--<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>-->
 			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>

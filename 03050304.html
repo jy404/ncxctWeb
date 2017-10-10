@@ -167,15 +167,13 @@
 						"unitName": gwei
 					}]
 				}
-				if (status == 1)
-					meetAdd('/api/programmeApproval', JSON.stringify(data));
-				else if (status == 3) {
+				if (status == 2) {
+					meetAdd('/api/programmeApproval/submit', JSON.stringify(data));
+				} else {
 					data["programmeApprovalList"][0]["id"] = cid;
 					data["programmeApprovalList"][1]["id"] = zid;
 					data["programmeApprovalList"][2]["id"] = gid;
 					meetPut('/api/programmeApproval', JSON.stringify(data));
-				} else {
-					meetAdd('/api/programmeApproval/submit', JSON.stringify(data));
 				}
 			}
 
@@ -275,9 +273,9 @@
 			<span>附件：</span>
 		</div>
 		<div id="uploader2" class="fjStyle"></div>
-		<div class="szBtn1">
+		<div class="szBtn">
 			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<!--<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>-->
 			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>

@@ -106,10 +106,7 @@
 					"projectNo": "677sd67sf67",
 					"projectName": "nct0001"
 				}
-				if (status == 1) {
-					//data["id"] = id;
-					meetAdd('/api/eightLeagueReview', JSON.stringify(data));
-				} else if (status == 2) {
+				if (status == 2) {
 					meetAdd('/api/eightLeagueReview/submit', JSON.stringify(data));
 				} else {
 					data["id"] = id;
@@ -133,9 +130,9 @@
 			<span>附件：</span>
 		</div>
 		<div id="uploader" class="fjStyle"></div>
-		<div class="szBtn1">
+		<div class="szBtn">
 			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<!--<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>-->
 			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>

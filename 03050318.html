@@ -141,11 +141,7 @@
 						"stepType": 'FISCALREPLY'
 					}]
 				}
-				if (status == 1) {
-					data["fiscalReplyList"][0]["id"] = cid;
-					data["fiscalReplyList"][1]["id"] = fid;
-					meetAdd('/api/fiscalReply/submit', JSON.stringify(data));
-				} else if (status == 2) {
+				if (status == 2) {
 					meetAdd('/api/fiscalReply/submit', JSON.stringify(data));
 				} else {
 					data["fiscalReplyList"][0]["id"] = cid;
@@ -194,9 +190,9 @@
 		</div>
 		<div id="uploader" class="fjStyle"></div>
 
-		<div class="szBtn1">
+		<div class="szBtn">
 			<a href="#" id="saveButton" class="szxmTjPageRightFormBc">保存</a>
-			<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>
+			<!--<a href="#" id="updateBtn" class="szxmTjPageRightFormBc">修改</a>-->
 			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn">提交</a>
 		</div>
 	</body>

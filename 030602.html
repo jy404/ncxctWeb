@@ -34,9 +34,10 @@
 			}
 		</style>
 		<script type="text/javascript">
-			var action, projectId, projectNo, projectType, projectName, id, stage = [];
+			var action, moduleId, projectId, projectNo, projectType, projectName, id, stage = [];
 			$(function() {
 				$.ajaxSettings.async = false;
+				moduleId = $.getUrlParam("moduleId");
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
 				projectNo = $.getUrlParam("projectNo");
@@ -193,7 +194,7 @@
 				};
 				if(status == 2)
 					data["id"] = id
-				meetAdd("/api/projectPlan", JSON.stringify(data));
+				meetAdd("/api/projectPlan", JSON.stringify(data), "0306.html?moduleId=" + moduleId);
 			}
 
 			function Agree() {
@@ -250,7 +251,7 @@
 					"nextProcessAssessor": assessor,
 					"procForeignId": id
 				};
-				meetAdd("/api/projectPlan/check", JSON.stringify(data));
+				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId);
 			}
 
 			function Refuse() {
@@ -259,7 +260,7 @@
 					"comment": $("#comment").val(),
 					"procForeignId": id
 				};
-				meetAdd("/api/projectPlan/check", JSON.stringify(data));
+				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId);
 			}
 
 			function Reject() {
@@ -282,7 +283,7 @@
 					"returnId": returnId,
 					"returnSubId": returnSubId
 				};
-				meetAdd("/api/projectPlan/check", JSON.stringify(data));
+				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId);
 			}
 		</script>
 	</head>

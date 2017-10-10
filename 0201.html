@@ -51,6 +51,7 @@
 			var pagesize = 10;
 			var read = false;
 			$(function() {
+				moduleId = $.getUrlParam("moduleId");
 				GetMessage(1, pagesize, false, "unread", $("#unread_page"), true, "/api/message/list");
 				GetMessage(1, pagesize, true, "hasread", $("#hasread_page"), true, "/api/message/list");
 				GetMessage(1, pagesize, 2, "hassend", $("#hassend_page"), true, "/api/sended/message/list");

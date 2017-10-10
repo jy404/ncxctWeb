@@ -116,9 +116,9 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						if(data["status"] == 2)
-							html += "<td><a href='020201.html?id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+							html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 						else if(data["status"] != 1)
-							html += "<td><a href='020201.html?id=" + rows[i]["id"] + "&msgtype=msg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+							html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=msg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 						else
 							html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
 						if(data["status"] != 2 && data["status"] != 1) {
@@ -816,8 +816,8 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 							html += "<a href=\"03060101.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
 							html += "<a href=\"03060101.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
 						} else if(rows[i]["projectType"] == "HOUSE") {
-							html += "<a href=\"030501.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
-							html += "<a href=\"030501.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
+							html += "<a href=\"03050101.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
+							html += "<a href=\"03050101.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
 						}
 						html += "</td>";
 						html += "</tr>";

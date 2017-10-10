@@ -55,10 +55,17 @@
 		</style>
 		<script type="text/javascript">
 			$(function() {
-				$('.indexXx').click(function() {
-					$('.xxIndexList').slideToggle(function() {
+				$('.indexXx').mousemove(function() {
+					$('.xxIndexList').slideDown(function() {
 						if($(this).is(":visible")) {
 							getUnreadMessage()
+						}
+					});
+				})
+				$('.xxIndexList').mouseleave(function() {
+					$('.xxIndexList').slideUp(function() {
+						if($(this).is(":visible")) {
+							//getUnreadMessage()
 						}
 					});
 				})
