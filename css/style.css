@@ -2974,7 +2974,7 @@ header .headNav span.myUrse b{
 .window .windowBox ul {
 	width: 700px;
 	margin: 15px auto;
-	overflow: scroll;
+	overflow: auto;
     height: 400px;
 }
 .window .windowBox ul li {
@@ -3896,6 +3896,11 @@ header .headNav span.myUrse b{
 /****************附件样式************************/
 .fjStyle{
 	margin-left: 190px;
+	margin-top: -57px;
+	overflow: hidden;
+}
+.fjStyle1{
+	margin-left: 10.8%;
 	margin-top: -57px;
 	overflow: hidden;
 }
