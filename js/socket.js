@@ -51,7 +51,7 @@ function getUnreadMessage() {
 				var count = data.result.totalCount;
 				//$('.indexXx i').text(count)
 				if(count != 0)
-					$('.indexXx')[0].innerHTML = "<i>" + count + "</i>";
+					$('.indexXx')[0].innerHTML = "<i id='XxNum'>" + count + "</i>";
 				if(typeof list == 'undefined' || list.size == 0) {
 					$('.xxIndexList').append("<li><a href='javascript:void(0)'>无消息</a></li>")
 				}
@@ -60,25 +60,61 @@ function getUnreadMessage() {
 				for(index in list) {
 					if(list[index].type == "NOTIFY") //消息
 					{
-						html += '<li><a target="bodyRight" href="020201.html?msgtype=msg&moduleId=3&id=' + list[index].id + '">' +
-							list[index].title +
+						var XXtitle = list[index]["title"];
+						XXtitle = subString(XXtitle, 26);
+						html += '<li id="Xxli' + index + '"><a target="bodyRight" href="020201.html?msgtype=msg&read=777&moduleId=3&id=' + list[index].id +
+							"&Index=" + index + +'">' +
+							XXtitle +
 							'</a></li>';
 					} else if(list[index].type == "PROJECT_PLAN_ORDER") //计划
 					{
-						html += '<li><a target="bodyRight" href="020201.html?moduleId=4&id=' + list[index].id + '">' +
-							list[index].title +
+						var content = JSON.parse(list[index].content);
+						var projectId = content.projectId;
+						var projectType = content.projectType;
+						var projectName = content.projectName;
+						var XXtitle = list[index]["title"];
+						XXtitle = subString(XXtitle, 26);
+						//html += '<li><a target="bodyRight" href="020201.html?moduleId=4&id=' + list[index].id + '">' +
+						//list[index].title +
+						//'</a></li>';
+						html += "<li id=\"Xxli" + index + "\"><a target=\"bodyRight\" href=\"030502.html?action=sp&read=777&id=" +
+							projectId +
+							"&Index=" + index +
+							'&noticeId=' + list[index].id +
+							"&projectType=" + projectType +
+							"&projectName=" + escape(projectName) +
+							"\">" + XXtitle + "</a></li>";
+					} else if(list[index].type == "NOTICE") //通告
+					{
+						var content = JSON.parse(list[index].content);
+						var noticeId = content.noticeId;
+						var XXtitle = list[index]["title"];
+						XXtitle = subString(XXtitle, 26);
+						html += '<li id="Xxli' + index + '"><a target="bodyRight" href="020201.html?moduleId=4&read=777&id=' +
+							noticeId +
+							"&Index=" + index +
+							'&noticeId=' + list[index].id + '">' +
+							XXtitle +
 							'</a></li>';
-						
-//						html += "<li><a href=\"030502.html?action=sp&id=" + 
-//						list[index].id + 
-//						"&projectType=" + row.projectType + 
-//						"&projectName=" + escape(row.projectName)+
-//						"\"></a></li>";
-							
+					} else if(list[index].type == "VISA_CHANGE_ORDER") //签证
+					{
+						var content = JSON.parse(list[index].content);
+						var QZId = content.id;
+						var projectId = content.projectId;
+						var projectType = content.projectType;
+						var XXtitle = list[index]["title"];
+						XXtitle = subString(XXtitle, 26);
+						html += "<li id=\"Xxli" + index + "\"><a target=\"bodyRight\" href=\"03020004.html?action=sp&read=777&id=" +
+							QZId +
+							"&Index=" + index +
+							'&noticeId=' + list[index].id +
+							"&projectId=" + projectId +
+							"&projectType=" + projectType +
+							"\" target='bodyRight'>" +
+							XXtitle + "</a></li>";
 					}
 				}
 				$('.xxIndexList').append(html)
-
 			}
 		})
 }
@@ -97,7 +133,7 @@ function getUnreadMessageNum() {
 				var list = data.result.list;
 				var count = data.result.totalCount;
 				if(count != 0)
-					$('.indexXx')[0].innerHTML = "<i>" + count + "</i>";
+					$('.indexXx')[0].innerHTML = "<i id='XxNum'>" + count + "</i>";
 			}
 		})
 }

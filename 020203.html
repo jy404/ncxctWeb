@@ -45,8 +45,10 @@
 		<script type="text/javascript">
 			var Id, file = [],
 				action;
+			var moduleId = 0;
 			$(function() {
 				$.ajaxSettings.async = false;
+				moduleId = $.getUrlParam("moduleId");
 				upload.init("uploader1", "添加附件...");
 				UploadProcess("uploader1");
 				//upload.init("uploader2", "添加附件...");
@@ -191,9 +193,9 @@
 					data["id"] = Id;
 				}
 				if(status == 2)
-					meetAdd('/api/notice/send', JSON.stringify(data), "0202.html");
+					meetAdd('/api/notice/send', JSON.stringify(data), "0202.html?moduleId=" + moduleId);
 				else
-					meetAdd('/api/notice/save', JSON.stringify(data), "0202.html");
+					meetAdd('/api/notice/save', JSON.stringify(data), "0202.html?moduleId=" + moduleId);
 			}
 		</script>
 		<style type="text/css">

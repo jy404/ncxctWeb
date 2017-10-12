@@ -114,13 +114,36 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 					var rows = res["result"]["list"];
 					for(i = 0; i < rows.length; i++) {
 						html += "<tr>";
-						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
-						if(data["status"] == 2)
-							html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
-						else if(data["status"] != 1)
-							html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=msg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
-						else
-							html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
+						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>";
+
+						if(rows[i]["type"] == "NOTIFY") //普通消息
+						{
+							if(data["status"] == 2)
+								html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+							else if(data["status"] != 1)
+								html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=msg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+							else
+								html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
+						} else if(rows[i]["type"] == "NOTICE") //通知公告
+						{
+							html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + JSON.parse(rows[i].content).noticeId + "' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+						} else if(rows[i]["type"] == "PROJECT_PLAN_ORDER") //计划表
+						{
+							var content = JSON.parse(rows[i].content);
+							var projectId = content.projectId;
+							var projectType = content.projectType;
+							var projectName = content.projectName;
+							html += "<td><a href='030502.html?action=sp&id=" + projectId + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+							//html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+						} else if(rows[i]["type"] == "VISA_CHANGE_ORDER") //签证
+						{
+							var content = JSON.parse(rows[i].content);
+							var QZId = content.id;
+							var projectId = content.projectId;
+							var projectType = content.projectType;
+							html += "<td><a href=\"03020004.html?action=edit&id=" + QZId + "&projectId=" + projectId + "&projectType=" + projectType + "\" target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+							//html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+						}
 						if(data["status"] != 2 && data["status"] != 1) {
 							html += "<td>" + (rows[i]["publishUserName"] == "" ? "未知" : rows[i]["publishUserName"]) + "</td>";
 							html += "<td>" + new Date(rows[i]["publishTime"]).format("yyyy/MM/dd hh:mm:ss") + "</td>";

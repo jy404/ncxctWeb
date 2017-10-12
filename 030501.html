@@ -49,6 +49,9 @@
 			var action, projectId, projectNo, projectType, id;
 			var moduleId = 0;
 			$(function() {
+				$('.qujg').click(function(){
+					$('.window').hide();
+				});
 				$.ajaxSettings.async = false;
 				//判断编辑或者查看
 				moduleId = $.getUrlParam("moduleId");
@@ -73,11 +76,15 @@
 					});
 					$(".szBtn").hide();
 					$(".fileinput-button").hide();
+					$("#allmap").hide();
+					$(".szxmTjPageRightFormBtn1").hide();
+					$("#xqdiv").hide();
 					//}
 				}
 				$('.szxmTjPageRightFormBtn1').click(function() {
 					if(vali.subByJs()) {
-						SubmitData();
+						$(".window").show();
+						//SubmitData();
 					}
 				});
 			});
@@ -118,7 +125,7 @@
 			}
 
 			function SubmitData() {
-				if(confirm("请认真检查内容是否正确，一旦提交，将不能修改，请谨慎提交!")) {
+				//if(confirm("请认真检查内容是否正确，一旦提交，将不能修改，请谨慎提交!")) {
 					var data = {
 						"name": $("#projectName").val(),
 						"projectType": "HOUSE",
@@ -146,13 +153,58 @@
 					if(action == "edit")
 						data["id"] = id;
 					meetAdd('/api/project/save', JSON.stringify(data), "0305.html?moduleId=" + moduleId);
-				}
+				//}
+				
 			}
 		</script>
-		<style type="text/css">
-			select {
-				width: 380px;
-				height: 35px;
+		<style type="text/css">				
+			select{
+				    display: block;
+				    width: 380px;
+				    height: 35px;
+				    line-height: 35px;
+				    font-family: "微软雅黑";
+				    font-size: 14px;
+				    color: #333333;
+				    padding: 0 5px;
+				    outline: none;
+				    float: left;
+				    margin-left: 5px;
+				    border: 1px solid #CBCBCB;
+				    border-radius: 3px;
+			}
+			.alert{
+				width: 600px;
+				height: 200px;
+				background: #ffffff;
+				border-radius: 10px;
+				position: absolute;
+				left: 50%;
+				margin-left: -300px;
+				top: 50%;
+				margin-top: -100px;
+				text-align: center;
+				font-family: "微软雅黑";
+			}
+			.alert span,.alert h3{
+				display: block;
+				height: 60px;
+				line-height: 60px;
+				text-align: center;
+				color: #111111;
+				font-size: 20px;
+				font-weight: bold;
+			}
+			.alert a{
+				padding: 10px 30px;
+				background: #4bb2ff;
+				margin-right: 10px;
+				margin-top: 40px;
+				color: #ffffff;
+				border-radius: 5px;
+				font-size: 16px;
+				font-family: "微软雅黑";
+				text-decoration: none;
 			}
 		</style>
 	</head>
@@ -221,10 +273,10 @@
 			<span>项目地址：</span>
 			<input type="text" id="address" valType="required" msg="<font color=red>*</font>项目地址不能为空" />
 		</div>
-		<div class="szxmTjPageRightForm">
+		<div id="xqdiv" class="szxmTjPageRightForm">
 			<span>选取经纬度：</span>
 			<input name="txtAddressName" type="text" id="txtAddressName" class="input normal" placeholder="请输入地点名称" />
-			<input type="button" value="搜索" class="btn yellow" onclick="findaddress();" style="width: 60px;text-align: center;" />
+			<input type="button" value="搜索" class="btn yellow" onclick="findaddress();" style="color: #ffffff; background: #4bb2ff ; width: 60px;text-align: center; margin-left: 5px;" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>经度：</span>
@@ -248,6 +300,14 @@
 		</div>
 		<a href="#" class="szxmTjPageRightFormBtn1" id="saveButton" style="margin-left: 27%;">提交</a>
 
+		</div>
+		<div class="window">
+			<div class="alert">
+				<h3 style="color: red; font-size: 28px;">提示！！！</h3>
+				<span style="line-height: 40px;">请确定您是否提交，提交后将无法修改！</span>				
+				<a href="#" onclick="SubmitData()">确定</a>
+				<a href="#" class="qujg">取消</a>				
+			</div>
 		</div>
 	</body>
 	<script type="text/javascript">

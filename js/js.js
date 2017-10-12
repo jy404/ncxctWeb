@@ -85,7 +85,7 @@ $(function() {
 	$('.leftNav li').removeClass('leftNavSelect');
 	$('.leftNav li').click(function() {
 		$('.leftNav li').removeClass('leftNavSelect');
-		
+
 		$(this).addClass('leftNavSelect');
 	});
 	$('.leftNavSz ul li').removeClass('leftNavSzSelect');
@@ -93,5 +93,11 @@ $(function() {
 		$('.leftNavSz ul li').removeClass('leftNavSzSelect');
 		$(this).addClass('leftNavSzSelect');
 	})
+	$(function() {
+		if($('select').prop("disabled")) {
+			$('select').css('background', '#ebebe4')
+		}
+	});
+	//	
 
 });

@@ -47,7 +47,7 @@
 					data = {
 						"name": $("#name").val(),
 						//"orgName": $("#orgName").val(),
-						"projectType": $("#projectType").val(),
+						"projectType": $("#projectType").val() == "" ? null : $("#projectType").val(),
 						//"status": $("#status").val(),
 						"startTime": $("#startTime").val()
 						//"endTime": $("#endTime").val()
@@ -123,9 +123,10 @@
 				<div class="xmcxSerachTitle">
 					<span>项目类型</span>
 					<div class="tzggSerachTypeSelect">
-						<h2 id="noticeType">房建项目</h2>
-						<input id="projectType" value="HOUSE" style="display: none;" />
+						<h2 id="noticeType">全部</h2>
+						<input id="projectType" value="" style="display: none;" />
 						<ul id="noticeUl" class="noticeUl">
+							<li title="">全部</li>
 							<li title="HOUSE">房建项目</li>
 							<li title="CITY">市政项目</li>
 						</ul>

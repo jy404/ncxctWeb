@@ -31,9 +31,9 @@
 				$('.fjxmSerachBtn1').click(function() {
 					currentpage = 1;
 					pagesize = 10;
-					var state = $("#activation option:selected").val();
+					var state = $("#activation option:selected").val() == "" ? null : $("#activation option:selected").val();
 					data = {
-						"activation": state == "true" ? true : false,
+						"activation": state == "true" ? true : state == "false" ? false : null,
 						"orgName": $("#orgName").val()
 					};
 					GetOrgList(currentpage, pagesize, data, "projectList", $("#fj_page"), false, "/api/system/org/list");
@@ -69,6 +69,7 @@
 					<div class="fjxmSerachTitle">
 						<span>状态</span>
 						<select id="activation">
+							<option value="">全部</option>
 							<option value="true">启用</option>
 							<option value="false">停用</option>
 						</select>

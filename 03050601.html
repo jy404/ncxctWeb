@@ -38,6 +38,16 @@
 		<link rel="stylesheet" href="js/lib/reset.css" />
 		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
 		<!--表单验证-->
+		<style type="text/css">
+			select {
+				width: 380px;
+				height: 35px;
+				border: 1px solid #cfcfcf;
+				border-radius: 3px;
+				background: #f1f1f1;
+				margin-left: 5px;
+			}
+		</style>
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
 			var id1, id2, id3, id4, id5, id6, id7;
@@ -73,7 +83,7 @@
 				if(action != "" && action != undefined) {
 					SetData(projectId)
 					if(action == "view") {
-						$("body").find("input,textarea").each(function() {
+						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
@@ -279,7 +289,7 @@
 		<h3 class="ydsxHead">房屋面积测绘</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo1" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo1" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
@@ -331,15 +341,15 @@
 		</div>-->
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="amount1" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+			<input type="text" id="amount1" valType="required" msg="<font color=red>*</font>金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预验收时间：</span>
-			<input type="text" id="preAcceptanceTime1" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空"/>
+			<input type="text" id="preAcceptanceTime1" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="finishTime1" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
+			<input type="text" id="finishTime1" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -358,7 +368,7 @@
 		<h3 class="ydsxHead">防雷检测</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo2" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo2" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
@@ -410,15 +420,15 @@
 		</div>-->
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="amount2" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+			<input type="text" id="amount2" valType="required" msg="<font color=red>*</font>金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预验收时间：</span>
-			<input type="text" id="preAcceptanceTime2" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空"/>
+			<input type="text" id="preAcceptanceTime2" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="finishTime2" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
+			<input type="text" id="finishTime2" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -437,7 +447,7 @@
 		<h3 class="ydsxHead">节能检测</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo3" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo3" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
@@ -489,15 +499,15 @@
 		</div>-->
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="amount3" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+			<input type="text" id="amount3" valType="required" msg="<font color=red>*</font>金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预验收时间：</span>
-			<input type="text" id="preAcceptanceTime3" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空"/>
+			<input type="text" id="preAcceptanceTime3" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="finishTime3" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
+			<input type="text" id="finishTime3" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -516,7 +526,7 @@
 		<h3 class="ydsxHead">室内环境检测</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo4" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo4" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
@@ -572,11 +582,11 @@
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预验收时间：</span>
-			<input type="text" id="preAcceptanceTime4" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空"/>
+			<input type="text" id="preAcceptanceTime4" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="finishTime4" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
+			<input type="text" id="finishTime4" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -595,7 +605,7 @@
 		<h3 class="ydsxHead">沉降检测</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo5" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo5" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
@@ -647,15 +657,15 @@
 		</div>-->
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="amount5" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+			<input type="text" id="amount5" valType="required" msg="<font color=red>*</font>金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预验收时间：</span>
-			<input type="text" id="preAcceptanceTime5" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空"/>
+			<input type="text" id="preAcceptanceTime5" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="finishTime5" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
+			<input type="text" id="finishTime5" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -674,7 +684,7 @@
 		<h3 class="ydsxHead">消防检测</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo6" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo6" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
@@ -726,15 +736,15 @@
 		</div>-->
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="amount6" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+			<input type="text" id="amount6" valType="required" msg="<font color=red>*</font>金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预验收时间：</span>
-			<input type="text" id="preAcceptanceTime6" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空"/>
+			<input type="text" id="preAcceptanceTime6" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="finishTime6" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
+			<input type="text" id="finishTime6" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>
@@ -753,7 +763,7 @@
 		<h3 class="ydsxHead">门窗及幕墙检测</h3>
 		<div class="szxmTjPageRightForm">
 			<span>文号：</span>
-			<input type="text" id="docNo7" valType="required" msg="<font color=red>*</font>文号不能为空"/>
+			<input type="text" id="docNo7" valType="required" msg="<font color=red>*</font>文号不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>参与单位：</span>
@@ -805,15 +815,15 @@
 		</div>-->
 		<div class="szxmTjPageRightForm">
 			<span>金额：</span>
-			<input type="text" id="amount7" valType="required" msg="<font color=red>*</font>金额不能为空"/>
+			<input type="text" id="amount7" valType="required" msg="<font color=red>*</font>金额不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>预验收时间：</span>
-			<input type="text" id="preAcceptanceTime7" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空"/>
+			<input type="text" id="preAcceptanceTime7" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>预验收时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>完成时间：</span>
-			<input type="text" id="finishTime7" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空"/>
+			<input type="text" id="finishTime7" readonly="readonly" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" valType="required" msg="<font color=red>*</font>完成时间不能为空" />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>附件：</span>

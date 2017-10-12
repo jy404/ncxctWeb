@@ -31,7 +31,6 @@
 				margin-bottom: -45px;
 				line-height: 20px;
 			}
-			
 		</style>
 		<script type="text/javascript">
 			var projectId, projectName, projectType, projectNo;
@@ -43,7 +42,7 @@
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = $.getUrlParam("projectName");
-				if(projectId>0){
+				if(projectId > 0) {
 					$(".gctitle").hide();
 				}
 				$('.xmbbSerachreset').click(function() {
@@ -60,11 +59,11 @@
 						"projectId": projectId,
 						"name": $("#gcname").val(),
 						"xmname": $("#xmname").val(),
-						"projectType": $("#xmtype option:selected").val(),
-						"amountType": $("#jetype option:selected").val(),
-						"changeType": $("#bgtype option:selected").val(),
-						"visaType": $("#djtype option:selected").val(),
-						"status": $("#spstate option:selected").val()
+						"projectType": $("#xmtype option:selected").val() == "" ? null : $("#xmtype option:selected").val(),
+						"amountType": $("#jetype option:selected").val() == "" ? null : $("#jetype option:selected").val(),
+						"changeType": $("#bgtype option:selected").val() == "" ? null : $("#bgtype option:selected").val(),
+						"visaType": $("#djtype option:selected").val() == "" ? null : $("#djtype option:selected").val(),
+						"status": $("#spstate option:selected").val() == "" ? null : $("#spstate option:selected").val()
 					};
 					GetDesignChangeList(currentpage, pagesize, data, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/list");
 				});
@@ -92,13 +91,14 @@
 
 	<body>
 		<div class="xmbb">
-			<h2 class="xmbbTitle">工程签证与变更列表</h2>
+			<h2 class="xmbbTitle">工程签证与设计变更</h2>
 			<div class="xmbbTab" style="display: block;">
-				<a class="addBb">新增变更</a>
+				<a class="addBb" style="width: 200px;">新增工程签证或设计变更</a>
 				<div class="xmbbSerach">
 					<div class="xmbbSerachTitle gctitle">
 						<span>项目类型</span>
 						<select id="xmtype">
+							<option value="">全部</option>
 							<option value="HOUSE">房建</option>
 							<option value="CITY">市政</option>
 						</select>
@@ -114,6 +114,7 @@
 					<div class="xmbbSerachTitle">
 						<span>金额类型</span>
 						<select id="jetype">
+							<option value="">全部</option>
 							<option value="gt_five">大于5万</option>
 							<option value="lt_five">小于5万</option>
 							<option value="gteq_five">大于等于5万</option>
@@ -123,6 +124,7 @@
 					<div class="xmbbSerachTitle">
 						<span>变更类型</span>
 						<select id="bgtype">
+							<option value="">全部</option>
 							<option value="project_visa">工程签证</option>
 							<option value="design_change">设计变更</option>
 						</select>
@@ -130,6 +132,7 @@
 					<div class="xmbbSerachTitle">
 						<span style="text-align: center;">单据业务类型</span>
 						<select id="djtype">
+							<option value="">全部</option>
 							<option value="contact">联系单</option>
 							<option value="confirm">确认单</option>
 						</select>
@@ -137,6 +140,7 @@
 					<div class="xmbbSerachTitle">
 						<span>审批状态</span>
 						<select id="spstate">
+							<option value="">全部</option>
 							<option value="1">保存</option>
 							<option value="2">审批通过</option>
 							<option value="3">流程进行中</option>

@@ -31,6 +31,16 @@
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
 		<!--表单验证-->
+		<style type="text/css">
+			select {
+				width: 380px;
+				height: 35px;
+				border: 1px solid #cfcfcf;
+				border-radius: 3px;
+				background: #f1f1f1;
+				margin-left: 5px;
+			}
+		</style>
 		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
 		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
 		<link rel="stylesheet" href="js/lib/reset.css" />
@@ -58,7 +68,7 @@
 				if(action != "" && action != undefined) {
 					SetData(projectId)
 					if(action == "view") {
-						$("body").find("input,textarea").each(function() {
+						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();

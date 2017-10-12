@@ -30,15 +30,16 @@
 		<script src="js/jquery.fileupload-video.js"></script>
 		<script src="js/jquery.fileupload-validate.js"></script>
 		<script type="text/javascript" src="js/upload.js"></script>
-		<script type="text/javascript" src="js/socket.js"></script>
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
 		<script type="text/javascript">
-			var Id, api, msgtype, read;
+			var Id, api, msgtype, read,noticeId,Index;
 			$(function() {
 				$.ajaxSettings.async = false;
 				Id = $.getUrlParam("id");
 				read = $.getUrlParam("read");
+				Index = $.getUrlParam("Index");
+				noticeId = $.getUrlParam("noticeId");
 				msgtype = $.getUrlParam("msgtype");
 				if(msgtype == "msg")
 					api = "/api/message/";
@@ -47,8 +48,8 @@
 				else
 					api = "/api/noticeTmp/";
 				SetData(Id, api);
-
-				readData(Id);
+				if(read == "777")
+					readData(noticeId);
 			});
 
 			function readData(Id) {
@@ -56,7 +57,9 @@
 					domain + "/api/message/set/read/" + Id,
 					function(res) {
 						if(res["code"] == "0") {
-							getUnreadMessageNum();
+							window.parent.xxIndexList.children[Index].remove();
+							var INum = window.parent.XxNum.innerText;
+							window.parent.XxNum.innerText = parseInt(INum) - 1;
 						}
 					},
 					function() {

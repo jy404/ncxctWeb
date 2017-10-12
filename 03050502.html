@@ -54,11 +54,11 @@
 				if(action != "" && action != undefined) {
 					SetData(projectId)
 					if(action == "view") {
-						$("body").find("input,textarea").each(function() {
+						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$(".szBtn").hide();
-						$(".fileinput-button").hide();
+						//$(".fileinput-button").hide();
 					}
 				}
 				$('.szxmTjPageRightFormBc').click(function() {

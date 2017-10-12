@@ -37,8 +37,8 @@
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, projectName, id;
 			$(function() {
-				upload.init("uploader", "添加附件...");
-				UploadProcess("uploader");
+				upload.init("upload", "添加附件...");
+				UploadProcess("upload");
 				/*页面传参并判断类型 start*/
 				var vali = new Validators();
 				action = $.getUrlParam("action");
@@ -75,7 +75,7 @@
 						if(res["code"] == "0") {
 							$("#docNo").val(res["result"]["docNo"]);
 							$("#time").val(res["result"]["dispatchTime"]);
-							upload.show(res["result"]["fileUrls"], "files_uploader")
+							upload.show(res["result"]["fileUrls"], "files_upload")
 							id = res["result"]["id"];
 						}
 					},
@@ -88,7 +88,7 @@
 			function SubmitData(status) {
 				var docNo = $('#docNo').val();
 				var time = $('#time').val();
-				var fileurl = $('#fileurl_uploader').val();
+				var fileurl = $('#fileurl_upload').val();
 				var data = {
 					"dispatchTime": time,
 					"docNo": docNo,

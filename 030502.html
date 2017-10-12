@@ -35,16 +35,22 @@
 		</style>
 		<script type="text/javascript">
 			var action, moduleId, projectId, projectNo, projectType, projectName, id, procTaskId, stage = [];
+			var read, noticeId, Index;
 			$(function() {
 				$.ajaxSettings.async = false;
 				moduleId = $.getUrlParam("moduleId");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
+				read = $.getUrlParam("read");
+				Index = $.getUrlParam("Index");
+				noticeId = $.getUrlParam("noticeId");
 				projectNo = $.getUrlParam("projectNo");
 				projectType = $.getUrlParam("projectType");
 				projectName = unescape($.getUrlParam("projectName"));
 				$("#projectName").val(projectName);
+				if(read == "777")
+					readData(noticeId);
 				GetDirection(projectType + "_PLAN_STAGE_TYPE", CreateHTML);
 				//SelectUser("spry");
 				if(action != "" && action != undefined) {
@@ -81,6 +87,22 @@
 					Reject();
 				});
 			});
+
+			function readData(Id) {
+				$.getJSON(
+					domain + "/api/message/set/read/" + Id,
+					function(res) {
+						if(res["code"] == "0") {
+							window.parent.xxIndexList.children[Index].remove();
+							var INum = window.parent.XxNum.innerText;
+							window.parent.XxNum.innerText = parseInt(INum) - 1;
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
 
 			function CreateHTML(res) {
 				var html = "";

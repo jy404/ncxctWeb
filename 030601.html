@@ -60,6 +60,8 @@
 						$(this).attr("disabled", "disabled");
 					});
 					$("#saveButton").hide();
+					$("#allmap").hide();
+					$("#xqdiv").hide();
 					//}
 				}
 				$('.szxmTjPageRightFormBtn1').click(function() {
@@ -133,10 +135,21 @@
 				meetAdd('/api/project/save', JSON.stringify(data), "0306.html?moduleId=" + moduleId);
 			}
 		</script>
-		<style type="text/css">
-			select {
-				width: 380px;
-				height: 35px;
+		<style type="text/css">				
+			select{
+				    display: block;
+				    width: 380px;
+				    height: 35px;
+				    line-height: 35px;
+				    font-family: "微软雅黑";
+				    font-size: 14px;
+				    color: #333333;
+				    padding: 0 5px;
+				    outline: none;
+				    float: left;
+				    margin-left: 5px;
+				    border: 1px solid #CBCBCB;
+				    border-radius: 3px;
 			}
 		</style>
 	</head>
@@ -198,10 +211,10 @@
 			<span>项目地址：</span>
 			<input type="text" id="address" valType="required" msg="<font color=red>*</font>项目地址不能为空" />
 		</div>
-		<div class="szxmTjPageRightForm">
+		<div id="xqdiv" class="szxmTjPageRightForm">
 			<span>选取经纬度：</span>
 			<input name="txtAddressName" type="text" id="txtAddressName" class="input normal" placeholder="请输入地点名称" />
-			<input type="button" value="搜索" class="btn yellow" onclick="findaddress();" style="width: 60px;text-align: center;" />
+			<input type="button" value="搜索" class="btn yellow" onclick="findaddress();" style="color: #ffffff; background: #4bb2ff ; width: 60px;text-align: center; margin-left: 5px;"  />
 		</div>
 		<div class="szxmTjPageRightForm">
 			<span>经度：</span>

@@ -34,30 +34,36 @@
 		<script type="text/javascript" src="js/drag_v1.0.js"></script>
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id, procTaskId;
+			var read, noticeId, Index;
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
 				//判断编辑或者查看
+				read = $.getUrlParam("read");
+				Index = $.getUrlParam("Index");
+				noticeId = $.getUrlParam("noticeId");
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("projectId");
 				projectType = $.getUrlParam("projectType");
 				id = $.getUrlParam("id");
-				if (action != "" && action != undefined && id != "" && id != undefined) {
+				if(read == "777")
+					readData(noticeId);
+				if(action != "" && action != undefined && id != "" && id != undefined) {
 					SetData(id)
-					if (action == "view") {
+					if(action == "view") {
 						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 					}
 				}
-				if (action != "sp") {
+				if(action != "sp") {
 					$("#agreeBtn,#refuseBtn,#rejectBtn,#comment_div,#historylist,#historylist,#rejectChoose,#isLast").hide();
 				} else {
 					$("#changetype").attr("disabled", "disabled");
 					$("#saveBtn,#submitBtn").hide();
 				}
 				$("#changetype").change(function() {
-					if (($(this).val().split("-")[1] == "gteq_five" || $(this).val().split("-")[1] == "gt_five") && ($(this).val().split("-")[2] == "confirm")) {
+					if(($(this).val().split("-")[1] == "gteq_five" || $(this).val().split("-")[1] == "gt_five") && ($(this).val().split("-")[2] == "confirm")) {
 						$("#townAudit_div,#townDnrc_div,#townFinance_div").show();
 					} else {
 						$("#townAudit_div,#townDnrc_div,#townFinance_div").hide();
@@ -71,11 +77,27 @@
 				});
 			});
 
+			function readData(Id) {
+				$.getJSON(
+					domain + "/api/message/set/read/" + Id,
+					function(res) {
+						if(res["code"] == "0") {
+							window.parent.xxIndexList.children[Index].remove();
+							var INum = window.parent.XxNum.innerText;
+							window.parent.XxNum.innerText = parseInt(INum) - 1;
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
 			function SetData(id) {
 				$.getJSON(
 					domain + "/api/construction/schedule/designchange/" + id,
 					function(res) {
-						if (res["code"] == "0") {
+						if(res["code"] == "0") {
 							var result = res.result;
 							$("#code").val(result.code);
 							$("#constructionOrg").val(result.constructionOrg);
@@ -96,8 +118,8 @@
 							//附件加上
 							$("fileurl_uploader").val(result.fileUrl);
 							upload.show(result.fileUrl, "files_uploader")
-								//显示审批记录
-							if (result.histories.length > 0) {
+							//显示审批记录
+							if(result.histories.length > 0) {
 								$.each(result.histories, function(i, item) {
 									var html = "<div class=\"gcqzsjLong\">";
 									html += "<span>" + item.assessor + "<b style=\"color: red;\">" + GetOperateName(item.checkStat) + "申请</b></span>";
@@ -134,7 +156,7 @@
 				var townFinance = $("#townFinance").val();
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if (id_span.length > 0) {
+				if(id_span.length > 0) {
 					$.each(id_span, function() {
 						var userid = $(this).attr("id").split("_")[0];
 						var username = $(this).children("a").text();
@@ -147,13 +169,13 @@
 				}
 				var assessor = null;
 				var assessorSubList = [];
-				if (users.length == 1) {
+				if(users.length == 1) {
 					assessor = {};
 					assessor["assessor"] = users[0].username;
 					assessor["assessorId"] = users[0].userid;
 					assessor["assessorSubList"] = [];
 					assessor["assessorType"] = "PERSON";
-				} else if (users.length > 1) {
+				} else if(users.length > 1) {
 					assessor = {};
 					$.each(users, function(i, user) {
 						var assessorSub = {
@@ -190,7 +212,7 @@
 					"townFinance": townFinance,
 					"visaType": visaType
 				}
-				if (action == "edit" && id != "" && id != undefined)
+				if(action == "edit" && id != "" && id != undefined)
 					data["id"] = id;
 				meetAdd('/api/construction/schedule/designchange/save', JSON.stringify(data));
 			}
@@ -199,7 +221,7 @@
 				var giveAmount = 0;
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if (id_span.length > 0) {
+				if(id_span.length > 0) {
 					$.each(id_span, function() {
 						var userid = $(this).attr("id").split("_")[0];
 						var username = $(this).children("a").text();
@@ -210,14 +232,14 @@
 						users.push(user);
 					});
 				}
-				if (CheckLastPerson(procTaskId) == true) {
-					if ($("input[name='next']:checked").val() == "nextPerson") {
-						if (users.length == 0) {
+				if(CheckLastPerson(procTaskId) == true) {
+					if($("input[name='next']:checked").val() == "nextPerson") {
+						if(users.length == 0) {
 							Toast.Err('错误', '请选择下一个审批人~', 'top-center', 'left');
 							return false;
 						}
 					} else {
-						if ($("#lastAmount").val() == "" || $("#lastAmount").val() == undefined) {
+						if($("#lastAmount").val() == "" || $("#lastAmount").val() == undefined) {
 							Toast.Err('错误', '请输入最终审批金额~', 'top-center', 'left');
 							return false;
 						}
@@ -225,13 +247,13 @@
 				}
 				var assessor = null;
 				var assessorSubList = [];
-				if (users.length == 1) {
+				if(users.length == 1) {
 					assessor = {};
 					assessor["assessor"] = users[0].username;
 					assessor["assessorId"] = users[0].userid;
 					assessor["assessorSubList"] = [];
 					assessor["assessorType"] = "PERSON";
-				} else if (users.length > 1) {
+				} else if(users.length > 1) {
 					assessor = {};
 					$.each(users, function(i, user) {
 						var assessorSub = {
@@ -246,7 +268,7 @@
 					assessor["assessorSubList"] = assessorSubList;
 					assessor["assessorType"] = "PERSON";
 				}
-				if ($("#lastAmount").val() != "" && $("#lastAmount").val() != undefined && $("input[name='next']:checked").val() == "isLast") {
+				if($("#lastAmount").val() != "" && $("#lastAmount").val() != undefined && $("input[name='next']:checked").val() == "isLast") {
 					giveAmount = $("#lastAmount").val();
 				}
 				var data = {
@@ -269,12 +291,12 @@
 
 			function Reject() {
 				var returnval = $("#rejectStepId").val();
-				if (returnval == "" || returnval == undefined) {
+				if(returnval == "" || returnval == undefined) {
 					Toast.Err('错误', '请选择驳回节点~', 'top-center', 'left');
 					return false;
 				}
 				var returnId, returnSubId;
-				if (returnval.indexOf("_") == -1) {
+				if(returnval.indexOf("_") == -1) {
 					returnId = returnval;
 				} else {
 					returnId = returnval.split("_")[0];
