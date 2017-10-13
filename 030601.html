@@ -39,6 +39,9 @@
 			var action, projectId, projectNo, projectType, id;
 			var moduleId = 0;
 			$(function() {
+				$('.qujg').click(function(){
+					$('.window').hide();
+				});
 				//判断编辑或者查看
 				moduleId = $.getUrlParam("moduleId");
 				var vali = new Validators();
@@ -66,7 +69,8 @@
 				}
 				$('.szxmTjPageRightFormBtn1').click(function() {
 					if(vali.subByJs()) {
-						SubmitData();
+						$(".window").show();
+						//SubmitData();
 					}
 				});
 			});
@@ -151,6 +155,40 @@
 				    border: 1px solid #CBCBCB;
 				    border-radius: 3px;
 			}
+			.alert{
+				width: 600px;
+				height: 200px;
+				background: #ffffff;
+				border-radius: 10px;
+				position: absolute;
+				left: 50%;
+				margin-left: -300px;
+				top: 50%;
+				margin-top: -100px;
+				text-align: center;
+				font-family: "微软雅黑";
+			}
+			.alert span,.alert h3{
+				display: block;
+				height: 60px;
+				line-height: 60px;
+				text-align: center;
+				color: #111111;
+				font-size: 20px;
+				font-weight: bold;
+			}
+			.alert a{
+				padding: 10px 30px;
+				background: #4bb2ff;
+				margin-right: 10px;
+				margin-top: 40px;
+				color: #ffffff;
+				border-radius: 5px;
+				font-size: 16px;
+				font-family: "微软雅黑";
+				text-decoration: none;
+			}
+
 		</style>
 	</head>
 
@@ -238,6 +276,14 @@
 		</div>
 		<a href="#" id="saveButton" class="szxmTjPageRightFormBtn1" style="margin-left: 44%;">提交</a>
 
+		</div>
+		<div class="window">
+			<div class="alert">
+				<h3 style="color: red; font-size: 28px;">提示！！！</h3>
+				<span style="line-height: 40px;">请确定您是否提交，提交后将无法修改！</span>				
+				<a href="#" onclick="SubmitData()">确定</a>
+				<a href="#" class="qujg">取消</a>				
+			</div>
 		</div>
 	</body>
 	<script type="text/javascript">

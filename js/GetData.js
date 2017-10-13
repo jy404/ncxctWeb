@@ -126,7 +126,7 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 								html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
 						} else if(rows[i]["type"] == "NOTICE") //通知公告
 						{
-							html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + JSON.parse(rows[i].content).noticeId + "' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
+							html += "<td><a href='020201.html?msgtype=notice&moduleId=" + moduleId + "&id=" + JSON.parse(rows[i].content).noticeId + "' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 						} else if(rows[i]["type"] == "PROJECT_PLAN_ORDER") //计划表
 						{
 							var content = JSON.parse(rows[i].content);
@@ -714,7 +714,7 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + rows[i]["totalAmount"] + "</td>";
 						if(typeof rows[i]["startTime"] == "undefined")
-							html += "<td>无返回</td>";
+							html += "<td></td>";
 						else
 							html += "<td>" + new Date(rows[i]["startTime"]).toLocaleDateString() + "</td>";
 						html += "<td>&nbsp;</td>";
@@ -773,13 +773,13 @@ function GetProjectListForMap(currentpage, pagesize, data, obj, pageobj, isInit,
 					for(i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td title=\"" + (rows[i]["longitude"].toString() + "," + rows[i]["latitude"].toString()) + "\">" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
-						html += "<td>" + rows[i]["name"] + "</td>";
-						html += "<td>无返回</td>";
+						html += "<td>" + subString(rows[i]["name"].toString(), 5) + "</td>";
+						html += "<td></td>";
 
 						html += "<td title='" + rows[i]["address"] + "'>" + subString(rows[i]["address"], 6) + "</td>";
 						html += "<td>" + rows[i]["totalAmount"] + "</td>";
 						//						html += "<td>无返回</td>";
-						html += "<td>无返回</td>";
+						html += "<td></td>";
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "</tr>";
 						//标注地图
@@ -924,7 +924,7 @@ function GetUnitList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 }
 //*********************项目中介/参建单位列表查询结束*************************//
 
-function meetAdd(apis, data, url) {
+function meetAdd(apis, data, url, out) {
 	$.ax(
 		domain + apis,
 		data,
@@ -937,8 +937,11 @@ function meetAdd(apis, data, url) {
 				location.reload();
 				Toast.Success('成功', res["description"], 'top-center', 'left');
 				GetMessage(1, 999, 1, "nosend", null, true, "/api/sended/message/list");
-				if(url != null && url != "")
+				if(out) {
+					parent.location.href = url;
+				} else if(url != null && url != "") {
 					location.href = url;
+				}
 			} else
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
@@ -991,7 +994,7 @@ function SetUserList(unitList, obj) {
 	$("#" + obj).text(unitTempname);
 }
 
-function GetnoticeTmpList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+function GetnoticeTmpList(currentpage, pagesize, data, obj, pageobj, isInit, url, type) {
 	data["currentPage"] = currentpage;
 	data["pageSize"] = pagesize;
 	$.axse(
@@ -1011,8 +1014,14 @@ function GetnoticeTmpList(currentpage, pagesize, data, obj, pageobj, isInit, url
 
 						if(rows[i]["status"].toString() == "1")
 							html += "<td><a href=\"020203.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
-						else
-							html += "<td><a href=\"020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
+						else {
+							if(type == "notice") {
+								html += "<td><a href=\"020201.html?msgtype=notice&moduleId=" + moduleId + "&id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
+							} else {
+								html += "<td><a href=\"020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
+							}
+						}
+
 						if(obj == "projectList2")
 							html += "<td>" + (rows[i]["userName"] == "" ? "未知" : rows[i]["userName"]) + "</td>";
 						else
@@ -1131,7 +1140,7 @@ function GetProjectWeekList(currentpage, pagesize, data, sort, obj, pageobj, isI
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td title='" + rows[i]["comment"] + "'>" + subString(rows[i]["comment"], 6) + "</td>";
 						html += "<td title='" + rows[i]["allPushPlan"] + "'>" + subString(rows[i]["allPushPlan"], 6) + "</td>";
-						html += "<td>" + "无返回" + "</td>";
+						html += "<td>" + "" + "</td>";
 						html += "<td title='" + rows[i]["tWeekPlan"] + "'>" + subString(rows[i]["tWeekPlan"], 6) + "</td>";
 						html += "<td title='" + rows[i]["tWeekCase"] + "'>" + subString(rows[i]["tWeekCase"], 6) + "</td>";
 						html += "<td title='" + rows[i]["nWeekCase"] + "'>" + subString(rows[i]["nWeekCase"], 6) + "</td>";

@@ -33,7 +33,7 @@
 		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
 		<script type="text/javascript" src="js/hsCheckData.js"></script>
 		<script type="text/javascript">
-			var Id, api, msgtype, read,noticeId,Index;
+			var Id, api, msgtype, read, noticeId, Index;
 			$(function() {
 				$.ajaxSettings.async = false;
 				Id = $.getUrlParam("id");
@@ -45,6 +45,8 @@
 					api = "/api/message/";
 				else if(msgtype == "sendmsg")
 					api = "/api/messagetmp/";
+				else if(msgtype == "notice")
+					api = "/api/notice/";
 				else
 					api = "/api/noticeTmp/";
 				SetData(Id, api);
@@ -59,7 +61,11 @@
 						if(res["code"] == "0") {
 							window.parent.xxIndexList.children[Index].remove();
 							var INum = window.parent.XxNum.innerText;
-							window.parent.XxNum.innerText = parseInt(INum) - 1;
+							if(parseInt(INum) > 1)
+								window.parent.XxNum.innerText = parseInt(INum) - 1;
+							else {
+								$(window.parent.XxNum).hide();
+							}
 						}
 					},
 					function() {

@@ -42,8 +42,8 @@
 					currentpage = 1;
 					pagesize = 10;
 					data = {};
-					GetnoticeTmpList(currentpage, pagesize, data, "projectList1", $("#fj_page1"), true, "/api/noticeTmp/list");
-					GetnoticeTmpList(currentpage, pagesize, data, "projectList2", $("#fj_page2"), true, "/api/notice/list");
+					GetnoticeTmpList(currentpage, pagesize, data, "projectList1", $("#fj_page1"), true, "/api/noticeTmp/list", "noticeTmp");
+					GetnoticeTmpList(currentpage, pagesize, data, "projectList2", $("#fj_page2"), true, "/api/notice/list", "notice");
 				});
 				$('#noticeUl1 li').click(function() {
 					$("#noticeType1")[0].innerHTML = $(this)[0].innerHTML;
@@ -62,7 +62,7 @@
 						"endTime": $("#endTime1").val(),
 						"title": $("#title1").val()
 					};
-					GetnoticeTmpList(currentpage, pagesize, data, "projectList1", $("#fj_page1"), true, "/api/noticeTmp/list");
+					GetnoticeTmpList(currentpage, pagesize, data, "projectList1", $("#fj_page1"), true, "/api/noticeTmp/list", "noticeTmp");
 				});
 				$('#tzggSerachBtn12').click(function() {
 					currentpage = 1;
@@ -73,10 +73,10 @@
 						"endTime": $("#endTime1").val(),
 						"title": $("#title1").val()
 					};
-					GetnoticeTmpList(currentpage, pagesize, data, "projectList2", $("#fj_page2"), true, "/api/notice/list");
+					GetnoticeTmpList(currentpage, pagesize, data, "projectList2", $("#fj_page2"), true, "/api/notice/list", "notice");
 				});
-				GetnoticeTmpList(currentpage, pagesize, data, "projectList1", $("#fj_page1"), true, "/api/noticeTmp/list");
-				GetnoticeTmpList(currentpage, pagesize, data, "projectList2", $("#fj_page2"), true, "/api/notice/list");
+				GetnoticeTmpList(currentpage, pagesize, data, "projectList1", $("#fj_page1"), true, "/api/noticeTmp/list", "noticeTmp");
+				GetnoticeTmpList(currentpage, pagesize, data, "projectList2", $("#fj_page2"), true, "/api/notice/list", "notice");
 			})
 		</script>
 
@@ -96,7 +96,7 @@
 			<div class="xxtz" style="width: 100%;">
 				<ul class="xxtzTabList">
 					<li data="hasread" read="true" class="xxtzTabSelect">已接收</li>
-					<li data="unread" read="false">我的创建</li>					
+					<li data="unread" read="false">我的创建</li>
 				</ul>
 				<div class="xxtzTab" style="display: block;">
 					<div class="tzggSerach">
@@ -185,7 +185,7 @@
 
 					</div>
 				</div>
-				
+
 			</div>
 		</div>
 	</body>

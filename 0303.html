@@ -19,6 +19,18 @@
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=NvjXWehxrhWlK51T65hyBXzfiOVTFVUV"></script>
 		<script type="text/javascript" src="js/step/lib.js"></script>
 		<style>
+			.totalPages {
+				display: inline-block;
+				width: 45%;
+				text-align: right;
+			}
+			
+			.totalSize {
+				display: inline-block;
+				width: 45%;
+				text-align: left;
+			}
+			
 			.fjjdTable {
 				width: 6000px;
 			}
@@ -70,21 +82,21 @@
 			
 			.map {
 				width: 100%;
-				height: 480px;
+				height: 560px;
 				float: left;
 				border: 1px #cccccc solid;
 			}
 			
 			.mapBox {
 				width: 50%;
-				height: 480px;
+				height: 560px;
 				border: 1px solid #4bb2ff;
 				float: left;
 			}
 			
 			.mapRight {
 				width: 49%;
-				height: 480px;
+				height: 560px;
 				float: right;
 			}
 			
@@ -163,7 +175,7 @@
 			var data = {
 				//"projectType": projecttype
 			};
-			var data1={};
+			var data1 = {};
 			$(function() {
 				CreateProjectStep(null, "HOUSE", "HOUSETable");
 				CreateProjectStep(null, "CITY", "CITYTable");
@@ -179,15 +191,6 @@
 				$('.jdTab li').click(function() {
 					$(this).addClass('xmbbTabSelect').siblings('li').removeClass('xmbbTabSelect');
 					$('.jdTabBox').eq($(this).index()).show().siblings('.jdTabBox').hide();
-				});
-				$("#projectList tr:gt(0)").on("click", function() {
-					//console.log(this);
-					var coordinate = $($(this).find("td")[0])[0].title;
-					var XMName = $($(this).find("td")[1]).text();
-					var coordinates = coordinate.split(',');
-					var marker = new BMap.Marker(new BMap.Point(coordinates[0], coordinates[1]));
-					map.addOverlay(marker);
-					showInfo(marker, XMName);
 				});
 			});
 
@@ -270,12 +273,23 @@
 	<script type="text/javascript">
 		// 百度地图API功能
 		var map;
+
 		function SetMap() {
 			map = new BMap.Map("allmap")
 			map.centerAndZoom("南昌县", 13);
 			//map.setCurrentCity("南昌县"); 
 			map.enableScrollWheelZoom(true);
-			GetProjectListForMap(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+			GetProjectListForMap(currentpage, pagesize, data1, "projectList", $("#fj_page"), true, "/api/project/list");
+
+			$("#projectList tr:gt(0)").on("click", function() {
+				//console.log(this);
+				var coordinate = $($(this).find("td")[0])[0].title;
+				var XMName = $($(this).find("td")[1]).text();
+				var coordinates = coordinate.split(',');
+				var marker = new BMap.Marker(new BMap.Point(coordinates[0], coordinates[1]));
+				map.addOverlay(marker);
+				showInfo(marker, XMName);
+			});
 		}
 	</script>
 

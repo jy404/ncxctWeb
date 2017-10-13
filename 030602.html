@@ -194,7 +194,7 @@
 				};
 				if(status == 2)
 					data["id"] = id
-				meetAdd("/api/projectPlan", JSON.stringify(data), "0306.html?moduleId=" + moduleId);
+				meetAdd("/api/projectPlan", JSON.stringify(data), "0306.html?moduleId=" + moduleId, true);
 			}
 
 			function Agree() {
@@ -251,7 +251,7 @@
 					"nextProcessAssessor": assessor,
 					"procForeignId": id
 				};
-				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId);
+				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId, true);
 			}
 
 			function Refuse() {
@@ -260,7 +260,7 @@
 					"comment": $("#comment").val(),
 					"procForeignId": id
 				};
-				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId);
+				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId, true);
 			}
 
 			function Reject() {
@@ -283,7 +283,7 @@
 					"returnId": returnId,
 					"returnSubId": returnSubId
 				};
-				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId);
+				meetAdd("/api/projectPlan/check", JSON.stringify(data), "0306.html?moduleId=" + moduleId, true);
 			}
 		</script>
 	</head>

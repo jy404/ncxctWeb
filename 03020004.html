@@ -35,6 +35,7 @@
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id, procTaskId;
 			var read, noticeId, Index;
+			var BackUrl = "07.html";
 			$(function() {
 				upload.init("uploader", "添加附件...");
 				UploadProcess("uploader");
@@ -45,6 +46,7 @@
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("projectId");
 				projectType = $.getUrlParam("projectType");
+				BackUrl = BackUrl + "?id=" + projectId + "&projectType=" + projectType;
 				id = $.getUrlParam("id");
 				if(read == "777")
 					readData(noticeId);
@@ -54,6 +56,7 @@
 						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
+						$(".sumitbtn").hide();
 					}
 				}
 				if(action != "sp") {
@@ -84,7 +87,10 @@
 						if(res["code"] == "0") {
 							window.parent.xxIndexList.children[Index].remove();
 							var INum = window.parent.XxNum.innerText;
-							window.parent.XxNum.innerText = parseInt(INum) - 1;
+							if(parseInt(INum) > 1)
+								window.parent.XxNum.innerText = parseInt(INum) - 1;
+							else
+								$(window.parent.XxNum).hide();
 						}
 					},
 					function() {
@@ -214,7 +220,7 @@
 				}
 				if(action == "edit" && id != "" && id != undefined)
 					data["id"] = id;
-				meetAdd('/api/construction/schedule/designchange/save', JSON.stringify(data));
+				meetAdd('/api/construction/schedule/designchange/save', JSON.stringify(data), BackUrl);
 			}
 
 			function Agree() {
@@ -277,7 +283,7 @@
 					"nextProcessAssessor": assessor,
 					"procForeignId": id
 				};
-				meetAdd('/api/construction/schedule/designchange/check', JSON.stringify(data));
+				meetAdd('/api/construction/schedule/designchange/check', JSON.stringify(data), BackUrl);
 			}
 
 			function Refuse() {
@@ -286,7 +292,7 @@
 					"comment": $("#comment").val(),
 					"procForeignId": id
 				};
-				meetAdd('/api/construction/schedule/designchange/check', JSON.stringify(data));
+				meetAdd('/api/construction/schedule/designchange/check', JSON.stringify(data), BackUrl);
 			}
 
 			function Reject() {
@@ -309,7 +315,7 @@
 					"returnId": returnId,
 					"returnSubId": returnSubId
 				};
-				meetAdd('/api/construction/schedule/designchange/check', JSON.stringify(data));
+				meetAdd('/api/construction/schedule/designchange/check', JSON.stringify(data), BackUrl);
 			}
 		</script>
 	</head>
@@ -436,11 +442,11 @@
 
 			<div class="cwbbTxBtn">
 				<div>
-					<a style="float: left;" id="saveBtn" href="#">保存</a>
-					<a style="float: left;" id="submitBtn" href="#">保存并发起流程</a>
-					<a style="float: left;" id="agreeBtn" href="#" onclick="Agree();">同意</a>
-					<a style="float: left;" id="refuseBtn" href="#" onclick="Refuse()">拒绝</a>
-					<a style="float: left;" id="rejectBtn" href="#" onclick="Reject()">驳回</a>
+					<a class="sumitbtn" style="float: left;" id="saveBtn" href="#">保存</a>
+					<a class="sumitbtn" style="float: left;" id="submitBtn" href="#">保存并发起流程</a>
+					<a class="sumitbtn" style="float: left;" id="agreeBtn" href="#" onclick="Agree();">同意</a>
+					<a class="sumitbtn" style="float: left;" id="refuseBtn" href="#" onclick="Refuse()">拒绝</a>
+					<a class="sumitbtn" style="float: left;" id="rejectBtn" href="#" onclick="Reject()">驳回</a>
 				</div>
 			</div>
 		</div>

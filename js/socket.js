@@ -90,7 +90,7 @@ function getUnreadMessage() {
 						var noticeId = content.noticeId;
 						var XXtitle = list[index]["title"];
 						XXtitle = subString(XXtitle, 26);
-						html += '<li id="Xxli' + index + '"><a target="bodyRight" href="020201.html?moduleId=4&read=777&id=' +
+						html += '<li id="Xxli' + index + '"><a target="bodyRight" href="020201.html?msgtype=notice&moduleId=4&read=777&id=' +
 							noticeId +
 							"&Index=" + index +
 							'&noticeId=' + list[index].id + '">' +
