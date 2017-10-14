@@ -85,26 +85,27 @@
 								$("#titlespan")[0].innerHTML = "> " + res["result"]["title"];
 								$("#title")[0].innerHTML = res["result"]["title"];
 								$("#subtitle")[0].innerHTML = "发布人：" + userName + "&nbsp;&nbsp;" + "发布时间：" + publishTime;
-								$('#content')[0].innerHTML = res["result"]["content"];
+								$('#content')[0].innerHTML = HTMLDecode(res["result"]["content"].toString());
 							} else if(msgtype != "msg") {
 								var userName = res["result"]["userName"] == "" ? "未知" : res["result"]["userName"];
 								var publishTime = res["result"]["publishTime"];
 								$("#titlespan")[0].innerHTML = "> " + res["result"]["title"];
 								$("#title")[0].innerHTML = res["result"]["title"];
 								$("#subtitle")[0].innerHTML = "发布人：" + userName + "&nbsp;&nbsp;" + "发布时间：" + publishTime;
-								$('#content')[0].innerHTML = res["result"]["content"];
+								//$('#content')[0].innerHTML = res["result"]["content"];
+								$('#content')[0].innerHTML = HTMLDecode(res["result"]["content"].toString());
 								var file = res["result"]["attachments"];
 								var html = "";
 								for(var cnt = 0; cnt < file.length; cnt++) {
 									var filename = file[cnt]["name"];
 									var fileurl = file[cnt]["url"];
-									html += "<div class=\"xqTextFj\"><a href=\"" + fileurl + "\" > 附件一： " + filename + " </a></div > ";
+									html += "<div class=\"xqTextFj\"><a target=\"_blank\" href=\"" + fileurl + "\" > 附件一： " + filename + " </a></div > ";
 								}
 							} else {
 								var userName = res["result"]["publishUserName"] == "" ? "未知" : res["result"]["publishUserName"];
 								var publishTime = res["result"]["publishTime"];
 								$("#title")[0].innerHTML = res["result"]["title"];
-								$('#content')[0].innerHTML = res["result"]["content"];
+								$('#content')[0].innerHTML = HTMLDecode(res["result"]["content"].toString());
 								$("#subtitle")[0].innerHTML = "发布人：" + userName + "&nbsp;&nbsp;" + "发布时间：" + res["result"]["publishTime"];
 								if(res["result"]["hasRead"] == false) {
 									$.getJSON(
@@ -123,6 +124,14 @@
 						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
 					}
 				);
+			}
+
+			function HTMLDecode(text) {
+				var temp = document.createElement("div");
+				temp.innerHTML = text;
+				var output = temp.innerText || temp.textContent;
+				temp = null;
+				return output;
 			}
 		</script>
 		<style type="text/css">

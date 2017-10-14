@@ -59,8 +59,16 @@
 						});
 						$("#saveButton").hide();
 					}
-					$("#userName").attr("readonly",true);
+					$("#userName").attr("readonly", true);
 				}
+
+				$("#deptId").change(function() {
+					var data = {
+						"orgId": $("#deptId").val()
+					}
+					GetRole11("roleId", data);
+				});
+
 				$('#saveButton').click(function() {
 					if(vali.subByJs()) {
 						SubmitData();
@@ -165,7 +173,7 @@
 				</div>
 				<div class="lyhglxqyBox1Right">
 					<span>密码：</span>
-					<input type="text" id="password" placeholder="此项不填则原密码不变"/>
+					<input type="text" id="password" placeholder="此项不填则原密码不变" />
 				</div>
 			</div>
 			<div class="lyhglxqyBox1">

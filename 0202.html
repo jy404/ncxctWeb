@@ -36,9 +36,14 @@
 				});
 				$('.tzggSerachreset').click(function() {
 					$(".tzggSerachTypeSelect").val("");
-					$("#startTime1").val(""),
-						$("#endTime1").val(""),
-						$("#title1").val("")
+					$("#endTime1").val("");
+					$("#noticeType1").html("全部");//类型
+					$("#startTime1").val("");
+					$("#noticeTypeValue1").val("");
+					$("#endTime2").val("");
+					$("#noticeType2").html("全部");//类型
+					$("#startTime2").val("");
+					$("#noticeTypeValue2").val("");
 					currentpage = 1;
 					pagesize = 10;
 					data = {};

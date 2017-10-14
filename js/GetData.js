@@ -319,6 +319,30 @@ function GetRole1(obj) {
 		}
 	);
 }
+
+function GetRole11(obj, data) {
+	$.axse(
+		domain + '/api/role/query',
+		JSON.stringify(data),
+		function(res) {
+			if(res["code"] == 0) {
+				$("#" + obj).html("");
+				var html = "";
+				var rows = res["result"]["list"];
+				for(i = 0; i < rows.length; i++) {
+					html += " <option value=\"" + rows[i]["id"] + "\">" + rows[i]["roleName"] + "</option>";
+				}
+				$("#" + obj).append(html)
+			} else
+				Toast.Err('错误', res["description"], 'top-center', 'left');
+		},
+		function(xhr, text) {
+			if(xhr.status == "401")
+				top.location.href = "login.html";
+			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
+		}
+	);
+}
 //*********************组织架构菜单列表查询*****************************//
 //注意：isInit是表示是否是第一次加载，首次加载，要把分页初始化
 function GetOrgList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
@@ -494,7 +518,12 @@ function GetUserList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + rows[i]["name"] + "</td>";
-						html += "<td>" + rows[i]["deptId"] + "</td>";
+						if(rows[i]["orgName"] == null) {
+							html += "<td></td>";
+						} else {
+							html += "<td>" + rows[i]["orgName"] + "</td>";
+						}
+						//html += "<td>" + rows[i]["deptId"] + "</td>";
 						if(rows[i]["roleName"] == null) {
 							html += "<td></td>";
 						} else {
@@ -830,9 +859,12 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + (rows[i]["projectType"] == "HOUSE" ? "房建项目" : "市政项目") + "</td>";
 						html += "<td>" + (rows[i]["status"] == 1 ? "已保存" : "已报建") + "</td>";
-						html += "<td>无返回</td>";
-						html += "<td>无返回</td>";
-						html += "<td>无返回</td>";
+						if(typeof rows[i]["startTime"] == "undefined")
+							html += "<td></td>";
+						else
+							html += "<td>" + new Date(rows[i]["startTime"]).toLocaleDateString() + "</td>";
+						html += "<td></td>";
+						html += "<td></td>";
 						html += "<td width=\"12%\">";
 
 						if(rows[i]["projectType"] == "CITY") {
