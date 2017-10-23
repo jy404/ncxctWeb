@@ -7,7 +7,7 @@ var domain = "http://test.ncxct.com";
 	$.getUrlParam = function(name) {
 		var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
 		var r = window.location.search.substr(1).match(reg);
-		if(r != null) return unescape(r[2]);
+		if (r != null) return unescape(r[2]);
 		return null;
 	}
 })(jQuery);
@@ -34,35 +34,107 @@ function GetDirection(keyword, successcallback) {
 // (new Date()).Format("yyyy-MM-dd hh:mm:ss.S") ==> 2006-07-02 08:09:04.423 
 // (new Date()).Format("yyyy-M-d h:m:s.S")      ==> 2006-7-2 8:9:4.18 
 Date.prototype.format = function(fmt) { //author: meizz 
-	var o = {
-		"M+": this.getMonth() + 1, //月份 
-		"d+": this.getDate(), //日 
-		"h+": this.getHours(), //小时 
-		"m+": this.getMinutes(), //分 
-		"s+": this.getSeconds(), //秒 
-		"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-		"S": this.getMilliseconds() //毫秒 
-	};
-	if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-	for(var k in o)
-		if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-	return fmt;
-}
-/*
-调用：
-var time1 = new Date().Format("yyyy-MM-dd");
-var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
-*/
+		var o = {
+			"M+": this.getMonth() + 1, //月份 
+			"d+": this.getDate(), //日 
+			"h+": this.getHours(), //小时 
+			"m+": this.getMinutes(), //分 
+			"s+": this.getSeconds(), //秒 
+			"q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+			"S": this.getMilliseconds() //毫秒 
+		};
+		if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		for (var k in o)
+			if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		return fmt;
+	}
+	/*
+	调用：
+	var time1 = new Date().Format("yyyy-MM-dd");
+	var time2 = new Date().Format("yyyy-MM-dd HH:mm:ss");
+	*/
 
 function subString(str, len) {
-	if((str != "" && str != undefined)) {
-		if(str.length > len) {
+	if ((str != "" && str != undefined)) {
+		if (str.length > len) {
 			str = str.replace(/<.*?>/ig, "").substring(0, len) + "...";
 		}
 	} else str = "无";
 	return str;
 }
 
+function JSONToExcelConvertor(JSONData, FileName, ShowLabel) {
+	//先转化json  
+	var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+
+	var excel = '<table>';
+
+	//设置表头  
+	var row = "<tr>";
+	for (var i = 0, l = ShowLabel.length; i < l; i++) {
+		row += "<td>" + ShowLabel[i].value + '</td>';
+	}
+
+	//换行  
+	excel += row + "</tr>";
+
+	//设置数据  
+	for (var i = 0; i < arrData.length; i++) {
+		var row = "<tr>";
+
+		for (var index in arrData[i]) {
+			var value = arrData[i][index].value === "." ? "" : arrData[i]
+
+			[index].value;
+			row += '<td>' + value + '</td>';
+		}
+
+		excel += row + "</tr>";
+	}
+
+	excel += "</table>";
+
+	var excelFile = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns: x = 'urn:schemas-microsoft-com:office:excel' xmlns = 'http://www.w3.org/TR/REC-html40' > ";
+	excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel; charset = UTF - 8 ">';
+	excelFile += '<meta http-equiv="content-type" content="application/vnd.ms-excel';
+	excelFile += '; charset=UTF-8">';
+	excelFile += "<head>";
+	excelFile += "<!--[if gte mso 9]>";
+	excelFile += "<xml>";
+	excelFile += "<x:ExcelWorkbook>";
+	excelFile += "<x:ExcelWorksheets>";
+	excelFile += "<x:ExcelWorksheet>";
+	excelFile += "<x:Name>";
+	excelFile += "{worksheet}";
+	excelFile += "</x:Name>";
+	excelFile += "<x:WorksheetOptions>";
+	excelFile += "<x:DisplayGridlines/>";
+	excelFile += "</x:WorksheetOptions>";
+	excelFile += "</x:ExcelWorksheet>";
+	excelFile += "</x:ExcelWorksheets>";
+	excelFile += "</x:ExcelWorkbook>";
+	excelFile += "</xml>";
+	excelFile += "<![endif]-->";
+	excelFile += "</head>";
+	excelFile += "<body>";
+	excelFile += excel;
+	excelFile += "</body>";
+	excelFile += "</html>";
+
+	var uri = 'data:application/vnd.ms-excel;charset=utf-8,' + encodeURIComponent
+
+		(excelFile);
+
+	var link = document.createElement("a");
+	link.href = uri;
+
+	link.style = "visibility:hidden";
+	link.download = FileName + ".xls";
+
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+}
 //===========================公共方法结束=============================//
 
 //===========================数据交互==============================//
@@ -77,7 +149,7 @@ function UserLogin(data) {
 		'json',
 		'application/json; charset=utf-8',
 		function(res) {
-			if(res["code"] == 0)
+			if (res["code"] == 0)
 				window.location = "index.html";
 			else
 				Toast.Err('错误', res["description"], 'mid-center', 'left');
@@ -99,7 +171,7 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 		"currentPage": currentpage,
 		"pageSize": pagesize,
 	}
-	if(typeof(read) == "number")
+	if (typeof(read) == "number")
 		data["status"] = read;
 	else
 		data["read"] = read;
@@ -107,27 +179,27 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>";
 
-						if(rows[i]["type"] == "NOTIFY") //普通消息
+						if (rows[i]["type"] == "NOTIFY") //普通消息
 						{
-							if(data["status"] == 2)
+							if (data["status"] == 2)
 								html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
-							else if(data["status"] != 1)
+							else if (data["status"] != 1)
 								html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=msg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 							else
 								html += "<td><a onclick='SetMsgContent(" + rows[i]["id"] + ")'>" + rows[i]["title"] + "</a></td>";
-						} else if(rows[i]["type"] == "NOTICE") //通知公告
+						} else if (rows[i]["type"] == "NOTICE") //通知公告
 						{
 							html += "<td><a href='020201.html?msgtype=notice&moduleId=" + moduleId + "&id=" + JSON.parse(rows[i].content).noticeId + "' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
-						} else if(rows[i]["type"] == "PROJECT_PLAN_ORDER") //计划表
+						} else if (rows[i]["type"] == "PROJECT_PLAN_ORDER") //计划表
 						{
 							var content = JSON.parse(rows[i].content);
 							var projectId = content.projectId;
@@ -135,7 +207,7 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 							var projectName = content.projectName;
 							html += "<td><a href='030502.html?action=sp&id=" + projectId + "&projectType=" + projectType + "&projectName=" + escape(projectName) + "' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 							//html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
-						} else if(rows[i]["type"] == "VISA_CHANGE_ORDER") //签证
+						} else if (rows[i]["type"] == "VISA_CHANGE_ORDER") //签证
 						{
 							var content = JSON.parse(rows[i].content);
 							var QZId = content.id;
@@ -144,7 +216,7 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 							html += "<td><a href=\"03020004.html?action=edit&id=" + QZId + "&projectId=" + projectId + "&projectType=" + projectType + "\" target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 							//html += "<td><a href='020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "&msgtype=sendmsg' target='bodyRight'>" + rows[i]["title"] + "</a></td>";
 						}
-						if(data["status"] != 2 && data["status"] != 1) {
+						if (data["status"] != 2 && data["status"] != 1) {
 							html += "<td>" + (rows[i]["publishUserName"] == "" ? "未知" : rows[i]["publishUserName"]) + "</td>";
 							html += "<td>" + new Date(rows[i]["publishTime"]).format("yyyy/MM/dd hh:mm:ss") + "</td>";
 						} else {
@@ -153,8 +225,8 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 						html += "</tr>";
 					}
 					$("#" + obj).append(html);
-					if(isInit) {
-						if(pageobj != null || pageobj != undefined)
+					if (isInit) {
+						if (pageobj != null || pageobj != undefined)
 							$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 								GetMessage(index, pagesize, read, obj, pageobj, false, url)
 							});
@@ -169,7 +241,7 @@ function GetMessage(currentpage, pagesize, read, obj, pageobj, isInit, url) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -180,10 +252,10 @@ function GetDept() {
 	$.getJSON(
 		domain + '/api/system/org/tier/list',
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				var html = "";
 				var rows = res["result"];
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += " <span><a href=\"javascript:openCity('" + rows[i]["id"] + "','" + rows[i]["orgName"] + "');\">" + rows[i]["orgName"] + " </a></span>";
 				}
 				$("#province").append(html)
@@ -191,7 +263,7 @@ function GetDept() {
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -202,10 +274,10 @@ function SelectDept(obj) {
 	$.getJSON(
 		domain + '/api/system/org/tier/list',
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				var html = "";
 				var rows = res["result"];
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += "<option value='" + rows[i]["id"] + "'>" + rows[i]["orgName"] + "</option>";
 				}
 				$("#" + obj).append(html);
@@ -213,7 +285,7 @@ function SelectDept(obj) {
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -228,11 +300,11 @@ function SelectDeptMember(obj, DeptId) {
 		domain + '/api/user/list',
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				$("#" + obj + " option").not(':eq(0)').remove();
 				var html = "";
 				var rows = res["result"]["list"];
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += "<option value='" + rows[i]["id"] + "'>" + rows[i]["name"] + "</option>";
 				}
 				$("#" + obj).append(html);
@@ -240,7 +312,7 @@ function SelectDeptMember(obj, DeptId) {
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -251,10 +323,10 @@ function GetEmp(orgCode) {
 	$.getJSON(
 		domain + '/api/org/user/' + orgCode,
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				var html = "<dd><ul>";
 				var rows = res["result"];
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += "<li rel=\"" + rows[i]["id"] + "\">" + rows[i]["name"] + "</li>"
 				}
 				html += "</dd></ul>"
@@ -263,7 +335,7 @@ function GetEmp(orgCode) {
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -278,10 +350,10 @@ function GetDept1(obj) {
 		domain + '/api/system/org/tier/list',
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				var html = "";
 				var rows = res["result"];
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += " <option value=\"" + rows[i]["id"] + "\">" + rows[i]["orgName"] + "</option>";
 				}
 				$("#" + obj).append(html)
@@ -289,7 +361,7 @@ function GetDept1(obj) {
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -302,10 +374,10 @@ function GetRole1(obj) {
 		domain + '/api/role/query',
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				var html = "";
 				var rows = res["result"]["list"];
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += " <option value=\"" + rows[i]["id"] + "\">" + rows[i]["roleName"] + "</option>";
 				}
 				$("#" + obj).append(html)
@@ -313,7 +385,7 @@ function GetRole1(obj) {
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -325,11 +397,11 @@ function GetRole11(obj, data) {
 		domain + '/api/role/query',
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				$("#" + obj).html("");
 				var html = "";
 				var rows = res["result"]["list"];
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += " <option value=\"" + rows[i]["id"] + "\">" + rows[i]["roleName"] + "</option>";
 				}
 				$("#" + obj).append(html)
@@ -337,7 +409,7 @@ function GetRole11(obj, data) {
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -352,12 +424,12 @@ function GetOrgList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				$("#" + obj + " tr").not(':eq(0)').remove();
 				var html = "";
 				var rows = res["result"];
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += SetOrgList("", rows[i], i, "", 0);
 				}
 				$("#" + obj).append(html);
@@ -366,7 +438,7 @@ function GetOrgList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -374,7 +446,7 @@ function GetOrgList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 }
 
 function SetOrgList(html1, row, count, str, level) {
-	if(row["parentId"] == 0) {
+	if (row["parentId"] == 0) {
 		html1 += "<tr>";
 	} else {
 		html1 += "<tr class=\"org" + level + "\" > ";
@@ -390,8 +462,8 @@ function SetOrgList(html1, row, count, str, level) {
 
 	html1 += "</td>";
 	html1 += "</tr>";
-	if(row["subOrgList"].length > 0) {
-		for(j = 0; j < row["subOrgList"].length; j++) {
+	if (row["subOrgList"].length > 0) {
+		for (j = 0; j < row["subOrgList"].length; j++) {
 			html1 += SetOrgList("", row["subOrgList"][j], j, "├" + str, (level + 1));
 		}
 	}
@@ -407,13 +479,13 @@ function GetRoleList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					//$(obj).find("tr").remove();
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["roleCode"] + "</td>";
@@ -430,8 +502,8 @@ function GetRoleList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 					}
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetRoleList(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -442,7 +514,7 @@ function GetRoleList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -455,13 +527,13 @@ function GetModuleList(data, obj, pageobj, isInit, url) {
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				$("#" + obj + " tr").not(':eq(0)').remove();
 				var html = "";
 				var rows = res["result"];
 				//for(i = 0; i < rows.length; i++) {
-				for(i = 0; i < rows.length; i++) {
+				for (i = 0; i < rows.length; i++) {
 					html += SetModuleList("", rows[i], i, "", 0);
 				}
 				$("#" + obj).append(html);
@@ -470,7 +542,7 @@ function GetModuleList(data, obj, pageobj, isInit, url) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -478,7 +550,7 @@ function GetModuleList(data, obj, pageobj, isInit, url) {
 }
 
 function SetModuleList(html1, row, count, str, level) {
-	if(row["parentId"] == 0) {
+	if (row["parentId"] == 0) {
 		html1 += "<tr>";
 	} else {
 		html1 += "<tr class=\"org" + level + "\" > ";
@@ -492,8 +564,8 @@ function SetModuleList(html1, row, count, str, level) {
 	html1 += "</td>";
 	html1 += "<td><input type=\"checkbox\" name=\"AllCheck\"/></td>";
 	html1 += "</tr>";
-	if(row["children"].length > 0) {
-		for(j = 0; j < row["children"].length; j++) {
+	if (row["children"].length > 0) {
+		for (j = 0; j < row["children"].length; j++) {
 			html1 += SetModuleList("", row["children"][j], j, "├" + str, (level + 1));
 		}
 	}
@@ -507,30 +579,30 @@ function GetUserList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				$("#" + obj + " tr").not(':eq(0)').remove();
-				if(res["result"]["totalCount"] != "0") {
+				if (res["result"]["totalCount"] != "0") {
 					//$(obj).find("tr").remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + rows[i]["name"] + "</td>";
-						if(rows[i]["orgName"] == null) {
+						if (rows[i]["orgName"] == null) {
 							html += "<td></td>";
 						} else {
 							html += "<td>" + rows[i]["orgName"] + "</td>";
 						}
 						//html += "<td>" + rows[i]["deptId"] + "</td>";
-						if(rows[i]["roleName"] == null) {
+						if (rows[i]["roleName"] == null) {
 							html += "<td></td>";
 						} else {
 							html += "<td>" + rows[i]["roleName"] + "</td>";
 						}
 						html += "<td>" + new Date(rows[i]["joinTime"]).toLocaleDateString() + "</td>";
-						if(rows[i]["updateTime"] == null) {
+						if (rows[i]["updateTime"] == null) {
 							html += "<td>无返回</td>";
 						} else {
 							html += "<td>" + new Date(rows[i]["updateTime"]).toLocaleDateString() + "</td>";
@@ -546,8 +618,8 @@ function GetUserList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 					}
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetUserList(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -558,7 +630,7 @@ function GetUserList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -570,11 +642,11 @@ function GetAllMenuList() {
 	$.getJSON(
 		domain + "/api/module/list",
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				ParseMenu(res["result"]);
 				$("input[name=checkAll]").click(function() {
 					var checkbox = $(this.parentNode.parentNode).find("input[type=checkbox]");
-					for(var i = 0; i < checkbox.length; i++) {
+					for (var i = 0; i < checkbox.length; i++) {
 						checkbox[i].checked = this.checked;
 					}
 				});
@@ -583,7 +655,7 @@ function GetAllMenuList() {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -592,7 +664,7 @@ function GetAllMenuList() {
 
 function CreateMenuList(menudata, deepCnt) {
 	var tempstr = "|--";
-	for(var i = 0; i < deepCnt; i++) {
+	for (var i = 0; i < deepCnt; i++) {
 		tempstr += "----";
 	}
 
@@ -604,7 +676,7 @@ function CreateMenuList(menudata, deepCnt) {
 	html += "</td>"
 	html += "<td>"
 
-	if(menudata["header"] == true)
+	if (menudata["header"] == true)
 		html += "<span class='cbllist'><input name='ActionType' id='cblActionType_SHOW_" + menudata["id"] + "' type='checkbox' value='SHOW'><label for='rptList_cblActionType_0_0_0'> 显示 </label></span>";
 	else {
 		html += "<span class='cbllist'><input name='ActionType' id='cblActionType_SHOW_" + menudata["id"] + "' type='checkbox' value='SHOW'><label for='rptList_cblActionType_0_0_0'> 显示 </label></span>";
@@ -623,19 +695,19 @@ function CreateMenuList(menudata, deepCnt) {
 var deep = 0;
 
 function ParseMenu(menujson) {
-	if(typeof(menujson) == "undefined") {
+	if (typeof(menujson) == "undefined") {
 		Toast.Err('错误', '解析菜单出错', 'top-center', 'left');
 		return;
 	}
 
-	for(var j = 0; j < menujson.length; j++) {
+	for (var j = 0; j < menujson.length; j++) {
 		CreateMenuList(menujson[j], deep);
 		//递归调用
-		if(typeof(menujson[j]["children"]) == "object" && menujson[j]["children"].length > 0) {
+		if (typeof(menujson[j]["children"]) == "object" && menujson[j]["children"].length > 0) {
 			deep++;
 			ParseMenu(menujson[j]["children"]);
 		}
-		if(menujson[j]["parentId"] == "0")
+		if (menujson[j]["parentId"] == "0")
 			deep = 0; //一级菜单深度归零
 	}
 	deep--;
@@ -658,7 +730,7 @@ function SelectUnitList(obj, unitType, projectType) {
 			var list = "[";
 			var result = res["result"];
 			$.each(result, function(i, n) {
-				if(i != result.length - 1)
+				if (i != result.length - 1)
 					list += "{\"" + n.id + "\":\"" + n.name + "\"},";
 				else
 					list += "{\"" + n.id + "\":\"" + n.name + "\"}";
@@ -673,7 +745,7 @@ function SelectUnitList(obj, unitType, projectType) {
 			});
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 		}
 	);
@@ -696,7 +768,7 @@ function SelectUnit(obj, unitType, projectType) {
 			$("#" + obj).append(list);
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 		}
 	);
@@ -706,7 +778,7 @@ function SetUnitList(unitList, obj) {
 	var unitTemp = "";
 	var unitTempname = "";
 	$.each(unitList, function(i, unit) {
-		if(unitList.length - 1 != i) {
+		if (unitList.length - 1 != i) {
 			unitTemp += unit["id"] + "-";
 			unitTempname += unit["name"] + ",";
 		} else {
@@ -728,13 +800,13 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					//$(obj).find("tr").remove();
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["projectNo"] + "</td>";
@@ -742,7 +814,7 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						html += "<td title=\"" + rows[i]["address"] + "\">" + subString(rows[i]["address"].toString(), 6) + "</td>";
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + rows[i]["totalAmount"] + "</td>";
-						if(typeof rows[i]["startTime"] == "undefined")
+						if (typeof rows[i]["startTime"] == "undefined")
 							html += "<td></td>";
 						else
 							html += "<td>" + new Date(rows[i]["startTime"]).toLocaleDateString() + "</td>";
@@ -750,10 +822,10 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						html += "<td>" + (rows[i]["status"] == 1 ? "已保存" : "已报建") + "</td>";
 						html += "<td width=\"12%\">";
 
-						if(data["projectType"] == "CITY") {
+						if (data["projectType"] == "CITY") {
 							html += "<a href=\"03060101.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
 							html += "<a href=\"03060101.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
-						} else if(data["projectType"] == "HOUSE") {
+						} else if (data["projectType"] == "HOUSE") {
 							html += "<a href=\"03050101.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
 							html += "<a href=\"03050101.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
 						}
@@ -763,8 +835,8 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 					}
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetProjectList(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -775,7 +847,7 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -784,7 +856,7 @@ function GetProjectList(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 
 function GetProjectListForMap(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 	//清除上一页地图覆盖物
-	if(map != undefined && typeof(map) == "object") {
+	if (map != undefined && typeof(map) == "object") {
 		map.clearOverlays();
 	}
 	data["currentPage"] = currentpage;
@@ -793,13 +865,13 @@ function GetProjectListForMap(currentpage, pagesize, data, obj, pageobj, isInit,
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					//$(obj).find("tr").remove();
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td title=\"" + (rows[i]["longitude"].toString() + "," + rows[i]["latitude"].toString()) + "\">" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + subString(rows[i]["name"].toString(), 5) + "</td>";
@@ -812,15 +884,15 @@ function GetProjectListForMap(currentpage, pagesize, data, obj, pageobj, isInit,
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "</tr>";
 						//标注地图
-						if(map != undefined && typeof(map) == "object") {
+						if (map != undefined && typeof(map) == "object") {
 							var marker = new BMap.Marker(new BMap.Point(rows[i]["longitude"], rows[i]["latitude"]));
 							map.addOverlay(marker)
 						}
 					}
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetProjectListForMap(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -831,7 +903,7 @@ function GetProjectListForMap(currentpage, pagesize, data, obj, pageobj, isInit,
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -845,13 +917,13 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					//$(obj).find("tr").remove();
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["projectNo"] + "</td>";
@@ -859,7 +931,7 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 						html += "<td>" + rows[i]["userName"] + "</td>";
 						html += "<td>" + (rows[i]["projectType"] == "HOUSE" ? "房建项目" : "市政项目") + "</td>";
 						html += "<td>" + (rows[i]["status"] == 1 ? "已保存" : "已报建") + "</td>";
-						if(typeof rows[i]["startTime"] == "undefined")
+						if (typeof rows[i]["startTime"] == "undefined")
 							html += "<td></td>";
 						else
 							html += "<td>" + new Date(rows[i]["startTime"]).toLocaleDateString() + "</td>";
@@ -867,10 +939,10 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 						html += "<td></td>";
 						html += "<td width=\"12%\">";
 
-						if(rows[i]["projectType"] == "CITY") {
+						if (rows[i]["projectType"] == "CITY") {
 							html += "<a href=\"03060101.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
 							html += "<a href=\"03060101.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
-						} else if(rows[i]["projectType"] == "HOUSE") {
+						} else if (rows[i]["projectType"] == "HOUSE") {
 							html += "<a href=\"03050101.html?moduleId=" + moduleId + "&action=view&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #4bb2ff ;\">查看</a>";
 							html += "<a href=\"03050101.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "&projectType=" + rows[i]["projectType"] + "&projectNo=" + rows[i]["projectNo"] + "&projectName=" + escape(rows[i]["name"]) + "\" style=\"background: #ff0000;\">修改</a>";
 						}
@@ -879,8 +951,8 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 					}
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetProjectList1(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -891,7 +963,7 @@ function GetProjectList1(currentpage, pagesize, data, obj, pageobj, isInit, url)
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -908,12 +980,12 @@ function GetUnitList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i]["orgCategoryName"] + "</td>";
@@ -925,10 +997,10 @@ function GetUnitList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 						html += "<td>" + rows[i]["chargeProject"] + "</td>";
 						html += "<td width=\"12%\">";
 
-						if(rows[i]["orgType"] == "OUT") {
+						if (rows[i]["orgType"] == "OUT") {
 							html += "<a href=\"030701.html?moduleId=" + moduleId + "&action=view&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
 							html += "<a href=\"030701.html?moduleId=" + moduleId + "&action=edit&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #ff0000;\">修改</a>";
-						} else if(rows[i]["orgType"] == "AGENT") {
+						} else if (rows[i]["orgType"] == "AGENT") {
 							html += "<a href=\"030801.html?moduleId=" + moduleId + "&action=view&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #4bb2ff ;\">查看</a>";
 							html += "<a href=\"030801.html?moduleId=" + moduleId + "&action=edit&orgType=" + rows[i]["orgType"] + "&orgCategory=" + rows[i]["orgCategory"] + "&id=" + rows[i]["id"] + "\" style=\"background: #ff0000;\">修改</a>";
 						}
@@ -937,8 +1009,8 @@ function GetUnitList(currentpage, pagesize, data, obj, pageobj, isInit, url) {
 					}
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetUnitList(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -965,20 +1037,20 @@ function meetAdd(apis, data, url, out) {
 		'json',
 		'application/json; charset=utf-8',
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				location.reload();
 				Toast.Success('成功', res["description"], 'top-center', 'left');
 				GetMessage(1, 999, 1, "nosend", null, true, "/api/sended/message/list");
-				if(out) {
+				if (out) {
 					parent.location.href = url;
-				} else if(url != null && url != "") {
+				} else if (url != null && url != "") {
 					location.href = url;
 				}
 			} else
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -994,16 +1066,16 @@ function meetPut(apis, data, url) {
 		'json',
 		'application/json; charset=utf-8',
 		function(res) {
-			if(res["code"] == 0) {
+			if (res["code"] == 0) {
 				location.reload();
 				Toast.Success('成功', res["description"], 'top-center', 'left');
-				if(url != null && url != "")
+				if (url != null && url != "")
 					location.href = url;
 			} else
 				Toast.Err('错误', res["description"], 'top-center', 'left');
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1013,8 +1085,8 @@ function meetPut(apis, data, url) {
 function SetUserList(unitList, obj) {
 	var unitTemp = "";
 	var unitTempname = "";
-	for(var i = 0; i < unitList["names"].length; i++) {
-		if(unitList["names"].length - 1 != i) {
+	for (var i = 0; i < unitList["names"].length; i++) {
+		if (unitList["names"].length - 1 != i) {
 			unitTemp += unitList["userIds"][i] + "-";
 			unitTempname += unitList["names"][i] + ",";
 		} else {
@@ -1033,33 +1105,33 @@ function GetnoticeTmpList(currentpage, pagesize, data, obj, pageobj, isInit, url
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				$("#" + obj + " tr").not(':eq(0)').remove();
-				if(res["result"]["totalCount"] != "0") {
+				if (res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + (rows[i]["noticeType"] == "inform" ? "通知" : "决定") + "</td>";
 
-						if(rows[i]["status"].toString() == "1")
+						if (rows[i]["status"].toString() == "1")
 							html += "<td><a href=\"020203.html?moduleId=" + moduleId + "&action=edit&id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
 						else {
-							if(type == "notice") {
+							if (type == "notice") {
 								html += "<td><a href=\"020201.html?msgtype=notice&moduleId=" + moduleId + "&id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
 							} else {
 								html += "<td><a href=\"020201.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "\">" + rows[i]["title"] + "</a></td>";
 							}
 						}
 
-						if(obj == "projectList2")
+						if (obj == "projectList2")
 							html += "<td>" + (rows[i]["userName"] == "" ? "未知" : rows[i]["userName"]) + "</td>";
 						else
 							html += "<td>" + (rows[i]["status"] == "1" ? "未发布" : "已发布") + "</td>";
 
-						if(rows[i]["publishTime"] != undefined)
+						if (rows[i]["publishTime"] != undefined)
 							html += "<td>" + new Date(rows[i]["publishTime"]).format("yyyy/MM/dd hh:mm:ss") + "</td>";
 						else
 							html += "<td></td>"
@@ -1074,8 +1146,8 @@ function GetnoticeTmpList(currentpage, pagesize, data, obj, pageobj, isInit, url
 
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetnoticeTmpList(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -1086,7 +1158,7 @@ function GetnoticeTmpList(currentpage, pagesize, data, obj, pageobj, isInit, url
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1111,7 +1183,7 @@ function SelectUser(obj) {
 			$("#" + obj).append(list);
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 		}
 	);
@@ -1129,7 +1201,7 @@ function SelectUserList(obj) {
 			var list = "[";
 			var result = res["result"]["list"];
 			$.each(result, function(i, n) {
-				if(i != result.length - 1)
+				if (i != result.length - 1)
 					list += "{\"" + n.id + "\":\"" + n.name + "\"},";
 				else
 					list += "{\"" + n.id + "\":\"" + n.name + "\"}";
@@ -1144,7 +1216,7 @@ function SelectUserList(obj) {
 			});
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 		}
 	);
@@ -1158,13 +1230,13 @@ function GetProjectWeekList(currentpage, pagesize, data, sort, obj, pageobj, isI
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				$("#" + obj + " tr").not(':eq(0)').remove();
-				if(res["result"]["totalCount"] != "0") {
+				if (res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + new Date(rows[i]["projectTime"]).toLocaleDateString() + "</td>";
@@ -1192,8 +1264,8 @@ function GetProjectWeekList(currentpage, pagesize, data, sort, obj, pageobj, isI
 
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetnoticeTmpList(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -1204,7 +1276,7 @@ function GetProjectWeekList(currentpage, pagesize, data, sort, obj, pageobj, isI
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1230,7 +1302,7 @@ function SelectProject(projectType, obj) {
 			$("#" + obj).append(list);
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 		}
 	);
@@ -1243,13 +1315,13 @@ function GetDocmanageList(currentpage, pagesize, data, obj, pageobj, isInit, url
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
-						if(rows[i]["folder"].toString() == "true") {
+					for (i = 0; i < rows.length; i++) {
+						if (rows[i]["folder"].toString() == "true") {
 							html += "<li>";
 							html += "<a href=\"0401.html?moduleId=" + moduleId + "&id=" + rows[i]["id"] + "\">";
 							html += "<img src=\"img/wdgl.png\" />";
@@ -1259,8 +1331,8 @@ function GetDocmanageList(currentpage, pagesize, data, obj, pageobj, isInit, url
 					}
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetDocmanageList(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -1271,7 +1343,7 @@ function GetDocmanageList(currentpage, pagesize, data, obj, pageobj, isInit, url
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1285,14 +1357,14 @@ function GetDocmanageList1(currentpage, pagesize, data, obj, pageobj, isInit, ur
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						var filenum = 1;
-						if(rows[i]["folder"].toString() == "false") {
+						if (rows[i]["folder"].toString() == "false") {
 							html += "<tr>";
 							html += "<td>" + ((currentpage - 1) * pagesize + (filenum++)) + "</td>";
 							html += "<td>" + rows[i]["userName"] + "</td>";
@@ -1301,7 +1373,7 @@ function GetDocmanageList1(currentpage, pagesize, data, obj, pageobj, isInit, ur
 							html += "<td width=\"12%\">";
 							//html += "<a style=\"background: #33cc00 ;\">预览</a>";
 							var fileurl = ";";
-							if(rows[i]["fileUrl"] != null && rows[i]["fileUrl"].toString().length > 0)
+							if (rows[i]["fileUrl"] != null && rows[i]["fileUrl"].toString().length > 0)
 								fileurl = rows[i]["fileUrl"].toString();
 							html += "<a target=\"_blank\" href=\"" + fileurl.substring(0, fileurl.length - 1) + "\" style=\"background: #4bb2ff ;\">下载</a>";
 							html += "<a href=\"0402.html?action=edit&id=" + rows[i]["id"] + "&parentId=" + rows[i]["parentId"] + "\" style=\"background: #ff0000 ;\">修改</a>";
@@ -1311,8 +1383,8 @@ function GetDocmanageList1(currentpage, pagesize, data, obj, pageobj, isInit, ur
 					}
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetDocmanageList1(index, pagesize, data, obj, pageobj, true, url)
 						});
@@ -1323,7 +1395,7 @@ function GetDocmanageList1(currentpage, pagesize, data, obj, pageobj, isInit, ur
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1334,14 +1406,14 @@ function GetDocmanagePath(obj, url, Id) {
 	$.getJSON(
 		domain + url + Id,
 		function(res) {
-			if(res["code"] == "0") {
-				if(res["result"]["totalCount"] != "0") {
+			if (res["code"] == "0") {
+				if (res["result"]["totalCount"] != "0") {
 					$("#" + obj + " tr").not(':eq(0)').remove();
 					var html = "";
 					var rows = res["result"];
 					html += "<span id=\"" + obj + rows["id"].toString() + "\">> <a href=\"0401.html?id=" + rows["id"] + "\">" + rows["title"] + "</a></span>";
 					$("#" + obj).before(html);
-					if(rows["parentId"].toString() != "0") {
+					if (rows["parentId"].toString() != "0") {
 						GetDocmanagePath(obj + rows["id"].toString(), url, rows["parentId"]);
 					}
 				}
@@ -1350,7 +1422,7 @@ function GetDocmanagePath(obj, url, Id) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1368,7 +1440,7 @@ function getConfig() {
 		dataType: "json",
 		contentType: "application/json",
 		success: function(data) {
-			if(data.code != 0) {
+			if (data.code != 0) {
 				console.log(data.description)
 				return;
 			}
@@ -1377,7 +1449,7 @@ function getConfig() {
 		},
 		error: function(s) {},
 		complete: function(XHR, TS) {
-			if(XHR.status === 401) {
+			if (XHR.status === 401) {
 				location.href = 'login.html';
 			}
 		}
@@ -1399,25 +1471,25 @@ function getSchedule() {
 		async: true,
 		contentType: "application/json",
 		success: function(data) {
-			if(data.code != 0) {
+			if (data.code != 0) {
 				return;
 			}
 
 			var rows = data["result"]["list"];
-			if(typeof rows == "undefined")
+			if (typeof rows == "undefined")
 				return;
 			var html = ""
 			rows.forEach(function(row, index, arr) {
 				var foreignType = row.procForeignType;
 				var projectType = row.projectType;
 				var jumpUrl = "";
-				if(foreignType == "project_plan") {
-					if(projectType == "HOUSE")
+				if (foreignType == "project_plan") {
+					if (projectType == "HOUSE")
 						jumpUrl = "030502.html?action=sp&id=" + row.projectId + "&projectType=" + row.projectType + "&projectName=" + escape(row.projectName);
 					else
 						jumpUrl = "030602.html?action=sp&id=" + row.projectId + "&projectType=" + row.projectType + "&projectName=" + escape(row.projectName);
-				} else if(foreignType == "project_visa_design_change") {
-					if(projectType == "HOUSE")
+				} else if (foreignType == "project_visa_design_change") {
+					if (projectType == "HOUSE")
 						jumpUrl = "03020004.html?action=sp&id=" + row.procForeignId + "&projectId=" + row.projectId + "&projectType=" + row.projectType + "&projectName=" + escape(row.projectName);
 					else
 						jumpUrl = "03020004.html?action=sp&id=" + row.procForeignId + "&projectId=" + row.projectId + "&projectType=" + row.projectType + "&projectName=" + escape(row.projectName);
@@ -1431,7 +1503,7 @@ function getSchedule() {
 		},
 		error: function(s) {},
 		complete: function(XHR, TS) {
-			if(XHR.status === 401) {
+			if (XHR.status === 401) {
 				location.href = 'login.html';
 			}
 		}
@@ -1445,7 +1517,7 @@ function getSchedule() {
 		dataType: "json",
 		contentType: "application/json",
 		success: function(data) {
-			if(data.code != 0) {
+			if (data.code != 0) {
 				console(data.description)
 				return;
 			}
@@ -1455,7 +1527,7 @@ function getSchedule() {
 		},
 		error: function(s) {},
 		complete: function(XHR, TS) {
-			if(XHR.status === 401) {
+			if (XHR.status === 401) {
 				location.href = 'login.html';
 			}
 		}
@@ -1477,12 +1549,12 @@ function getNoticeList() {
 		async: true,
 		contentType: "application/json",
 		success: function(data) {
-			if(data.code != 0) {
+			if (data.code != 0) {
 				return;
 			}
 
 			var rows = data["result"]["list"];
-			if(typeof rows == "undefined")
+			if (typeof rows == "undefined")
 				return;
 			var html = ""
 			rows.forEach(function(row, index, arr) {
@@ -1494,7 +1566,7 @@ function getNoticeList() {
 		},
 		error: function(s) {},
 		complete: function(XHR, TS) {
-			if(XHR.status === 401) {
+			if (XHR.status === 401) {
 				location.href = 'login.html';
 			}
 		}
@@ -1517,17 +1589,17 @@ function getProjectNew() {
 		async: true,
 		contentType: "application/json",
 		success: function(data) {
-			if(data.code != 0) {
+			if (data.code != 0) {
 				return;
 			}
 
 			var rows = data["result"]["list"];
-			if(typeof rows == "undefined")
+			if (typeof rows == "undefined")
 				return;
 			var html = ""
 			rows.forEach(function(row, index, arr) {
 
-				if(row.projectType == "HOUSE") {
+				if (row.projectType == "HOUSE") {
 					html += "<li><a href=\"03050101.html?moduleId=16&action=view&id=" + row.id + "&projectType=" + row.projectType + "&projectNo=" + row.projectNo + "&projectName=" + escape(row.name) + "\"><b>";
 				} else {
 					html += "<li><a href=\"03060101.html?moduleId=96&action=view&id=" + row.id + "&projectType=" + row.projectType + "&projectNo=" + row.projectNo + "&projectName=" + escape(row.name) + "\"><b>";
@@ -1539,7 +1611,7 @@ function getProjectNew() {
 		},
 		error: function(s) {},
 		complete: function(XHR, TS) {
-			if(XHR.status === 401) {
+			if (XHR.status === 401) {
 				location.href = 'login.html';
 			}
 		}
@@ -1553,7 +1625,7 @@ function getProjectNew() {
 		async: true,
 		contentType: "application/json",
 		success: function(data) {
-			if(data.code != 0) {
+			if (data.code != 0) {
 				console(data.description)
 				return;
 			}
@@ -1563,7 +1635,7 @@ function getProjectNew() {
 		},
 		error: function(s) {},
 		complete: function(XHR, TS) {
-			if(XHR.status === 401) {
+			if (XHR.status === 401) {
 				location.href = 'login.html';
 			}
 		}
@@ -1586,7 +1658,7 @@ function SelectOrgByTypeAndCategory(orgTypeObj, orgCategoryObj, orgObj) {
 function GetOrgCategory(orgType, obj) {
 	$(obj).html("");
 	$(obj).append("<option value=''>请选择单位类型</option>");
-	if(orgType != "" && orgType != undefined) {
+	if (orgType != "" && orgType != undefined) {
 		$.each(unitInfo, function(i, item) {
 			$(obj).append("<option value='" + item.id + "'>" + item.name + "</option>");
 		});
@@ -1596,7 +1668,7 @@ function GetOrgCategory(orgType, obj) {
 function GetOrgs(orgType, orgCategory, obj) {
 	$(obj).html("");
 	$(obj).append("<option value=''>请选择单位名称</option>");
-	if(orgCategory == "" || orgCategory == undefined)
+	if (orgCategory == "" || orgCategory == undefined)
 		return;
 	$.axse(
 		domain + "/api/proorg/page/list",
@@ -1625,14 +1697,14 @@ function GetDesignChangeList(currentpage, pagesize, data, obj, pageobj, isInit, 
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				$("#" + obj + " tr").not(':eq(0)').remove();
-				if(res["result"]["totalCount"] != "0") {
+				if (res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["list"];
 
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i].name + "</td>";
@@ -1657,8 +1729,8 @@ function GetDesignChangeList(currentpage, pagesize, data, obj, pageobj, isInit, 
 
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetDesignChangeList(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -1669,7 +1741,7 @@ function GetDesignChangeList(currentpage, pagesize, data, obj, pageobj, isInit, 
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1683,14 +1755,14 @@ function GetDesignChangeList1(currentpage, pagesize, data, obj, pageobj, isInit,
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				$("#" + obj + " tr").not(':eq(0)').remove();
-				if(res["result"]["totalCount"] != "0") {
+				if (res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["list"];
 
-					for(i = 0; i < rows.length; i++) {
+					for (i = 0; i < rows.length; i++) {
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>"
 						html += "<td>" + rows[i].name + "</td>";
@@ -1712,8 +1784,8 @@ function GetDesignChangeList1(currentpage, pagesize, data, obj, pageobj, isInit,
 
 					$("#" + obj).append(html);
 				}
-				if(isInit) {
-					if(pageobj != null || pageobj != undefined)
+				if (isInit) {
+					if (pageobj != null || pageobj != undefined)
 						$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 							GetDesignChangeList1(index, pagesize, data, obj, pageobj, false, url)
 						});
@@ -1724,7 +1796,7 @@ function GetDesignChangeList1(currentpage, pagesize, data, obj, pageobj, isInit,
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1735,7 +1807,7 @@ function CheckLastPerson(procTaskId) {
 	$.getJSON(
 		domain + "/api/process/assessor/last/" + procTaskId,
 		function(res) {
-			if(res.code == 0) {
+			if (res.code == 0) {
 				return res.result;
 			} else
 				return true;
@@ -1746,7 +1818,7 @@ function CheckLastPerson(procTaskId) {
 //返回操作状态
 function GetOperateName(enName) {
 	var cnName = "";
-	switch(enName) {
+	switch (enName) {
 		case "SUBMIT":
 			cnName = "发起";
 			break;
@@ -1779,9 +1851,9 @@ function GetRejectList(procTaskId) {
 		domain + "/api/process/assessor/list",
 		JSON.stringify(data),
 		function(res) {
-			if(res.code == 0) {
+			if (res.code == 0) {
 				$.each(res.result, function(i, item) {
-					if(item.checkType != "COUNTERSIGN")
+					if (item.checkType != "COUNTERSIGN")
 						$("#rejectStepId").append("<option value='" + item.id + "'>" + item.assessor + "</option>")
 					else {
 						$("#rejectStepId").append("<option value='" + item.id + "_" + item.pId + "'>" + item.assessor + "</option>")
@@ -1790,7 +1862,7 @@ function GetRejectList(procTaskId) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -1805,14 +1877,14 @@ function CreateProjectStep(data, Type, obj) {
 	$("#" + obj + " tr").remove();
 	var str = "";
 	str += "<tr>"
-	if(data != null && data.length > 0) {
+	if (data != null && data.length > 0) {
 		str += "<td>序号</td>";
 		str += "<td>项目名称</td>";
 		$.each(data, function(i, item) {
 			str += "<td>" + item.stageTypeName + "</td>";
 		});
 	} else {
-		if(Type == "HOUSE") {
+		if (Type == "HOUSE") {
 			str += "<td>序号</td>";
 			str += "<td>项目名称</td>";
 			str += "<td>会议纪要或抄告单</td>";
@@ -1949,23 +2021,23 @@ function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				$("#" + obj + " tr").not(':eq(0)').remove();
-				if(res["result"]["totalCount"] != "0") {
+				if (res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["list"];
-					for(i = 0; i < rows.length; i++) {
-						if(i == 0)
+					for (i = 0; i < rows.length; i++) {
+						if (i == 0)
 							CreateProjectStep(rows[i]["projectPlanExtensionList"], data["projectType"], obj);
 						html += "<tr>";
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>";
 						html += "<td>" + rows[i]["projectName"] + "</td>";
 						$.each(rows[i]["projectPlanExtensionList"], function(i, item) {
 							var ClassName = "";
-							if(item.done == true) {
+							if (item.done == true) {
 								ClassName = "selectGreen";
-							} else if(item.delay == true) {
+							} else if (item.delay == true) {
 								ClassName = "selectRed";
 							}
 							html += "<td><span></span>";
@@ -1977,8 +2049,8 @@ function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 					}
 					$("#" + obj).append(html);
 
-					if(isInit) {
-						if(pageobj != null || pageobj != undefined)
+					if (isInit) {
+						if (pageobj != null || pageobj != undefined)
 							$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
 								GetProjectStep(index, pagesize, data, obj, pageobj, false, url)
 							});
@@ -1997,7 +2069,7 @@ function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -2010,18 +2082,18 @@ function GetMenuList(data, obj, url) {
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				//$("#" + obj + " tr").not(':eq(0)').remove();
 				$(obj).html = "";
-				if(res["result"]["totalCount"] != "0") {
+				if (res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["moduleList"];
-					if(typeof rows == "undefined")
+					if (typeof rows == "undefined")
 						return;
 					html += "<h4 class=\"column\">系统栏目</h4>";
-					for(i = 0; i < rows.length; i++) {
-						if(typeof rows[i]["childMenus"] == "undefined" || rows[i]["name"].toString() == "文档管理" || rows[i]["name"].toString() == "我的账户" || rows[i]["name"].toString() == "首页") {
+					for (i = 0; i < rows.length; i++) {
+						if (typeof rows[i]["childMenus"] == "undefined" || rows[i]["name"].toString() == "文档管理" || rows[i]["name"].toString() == "我的账户" || rows[i]["name"].toString() == "首页") {
 							html += "<div class=\"" + MenuClass(rows[i]["name"].toString()) + "\">";
 							var url = rows[i]["url"].toString();
 							html += "<a href=\"" + url.substring(1, url.length) + "?moduleId=" + rows[i]["id"] + "\" target=\"bodyRight\"><h2><span>" + rows[i]["name"] + "</span></h2></a>";
@@ -2044,7 +2116,7 @@ function GetMenuList(data, obj, url) {
 						//$(this).siblings('ul').slideToggle();	
 						$('.content .leftNav div ul').slideUp();
 						$('.information h2 span,.integrated h2 span,.system h2 span').css('background-image', 'url(img/leftNavLeft.png)')
-						if($(this).siblings('ul').is(':hidden')) {
+						if ($(this).siblings('ul').is(':hidden')) {
 							$(this).siblings('ul').slideDown();
 							$(this).find('span').css('background-image', 'url(img/leftNavBottom.png)')
 						} else {
@@ -2063,7 +2135,7 @@ function GetMenuList(data, obj, url) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -2075,20 +2147,20 @@ function GetXMMenuList(data, obj, url, moduleId) {
 		domain + url,
 		JSON.stringify(data),
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				$(obj).html = "";
-				if(res["result"]["totalCount"] != "0") {
+				if (res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["moduleList"];
-					if(typeof rows == "undefined")
+					if (typeof rows == "undefined")
 						return;
-					for(i = 0; i < rows.length; i++) {
-						if(rows[i]["childMenus"].length > 0) {
-							for(var j = 0; j < rows[i]["childMenus"].length; j++) {
-								if(rows[i]["childMenus"][j].id == moduleId) {
+					for (i = 0; i < rows.length; i++) {
+						if (rows[i]["childMenus"].length > 0) {
+							for (var j = 0; j < rows[i]["childMenus"].length; j++) {
+								if (rows[i]["childMenus"][j].id == moduleId) {
 									var rows1 = rows[i]["childMenus"][j]["childMenus"];
-									for(var t = 0; t < rows1.length; t++) {
-										if(typeof rows1[t]["childMenus"] == "undefined" || rows1[t]["childMenus"].length == 0) {
+									for (var t = 0; t < rows1.length; t++) {
+										if (typeof rows1[t]["childMenus"] == "undefined" || rows1[t]["childMenus"].length == 0) {
 											var url = rows1[t]["url"].toString();
 											html += "<a href=\"" + url.substring(1, url.length) + "?moduleId=" + rows1[t]["id"] + "\" target=\"szRight\">";
 											html += "<h6>" + rows1[t]["name"] + "</h6></a>";
@@ -2113,7 +2185,7 @@ function GetXMMenuList(data, obj, url, moduleId) {
 						//$(this).siblings('ul').slideToggle();	
 						$('.szxmTjPage .leftNavSz div ul').slideUp();
 						$('.information h2 span,.integrated h2 span,.system h2 span').css('background-image', 'url(img/leftNavLeft.png)')
-						if($(this).siblings('ul').is(':hidden')) {
+						if ($(this).siblings('ul').is(':hidden')) {
 							$(this).siblings('ul').slideDown();
 							$(this).find('span').css('background-image', 'url(img/leftNavBottom.png)')
 						} else {
@@ -2131,7 +2203,7 @@ function GetXMMenuList(data, obj, url, moduleId) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -2143,24 +2215,24 @@ $(function() {
 	var moduleId = $.getUrlParam("moduleId");
 	var action = $.getUrlParam("action");
 	//var url = this.location.href;
-	if(moduleId == null)
+	if (moduleId == null)
 		return;
-	if(!GetMenuPermission("/api/permission/" + moduleId, "SHOW")) {
+	if (!GetMenuPermission("/api/permission/" + moduleId, "SHOW")) {
 		location.href = window.history.back();
 		Toast.Err('错误', "无权限", 'top-center', 'left');
 	}
-	if(action != "" && action != undefined) {
-		if(!GetMenuPermission("/api/permission/" + moduleId, "ADD")) {
+	if (action != "" && action != undefined) {
+		if (!GetMenuPermission("/api/permission/" + moduleId, "ADD")) {
 			$("#saveButton").hide();
 			$("#updateBtn").hide();
 		}
 	} else {
-		if(!GetMenuPermission("/api/permission/" + moduleId, "EDIT")) {
+		if (!GetMenuPermission("/api/permission/" + moduleId, "EDIT")) {
 			$("#saveButton").hide();
 			$("#updateBtn").hide();
 		}
 	}
-	if(!GetMenuPermission("/api/permission/" + moduleId, "SUBMIT")) {
+	if (!GetMenuPermission("/api/permission/" + moduleId, "SUBMIT")) {
 		$("#submitButton").hide();
 	}
 })
@@ -2171,10 +2243,10 @@ function GetMenuPermission(url, Value) {
 	$.getJSON(
 		domain + url,
 		function(res) {
-			if(res["code"] == "0") {
+			if (res["code"] == "0") {
 				var rows = res["result"];
-				for(var i = 0; i < rows.length; i++) {
-					if(rows[i] == Value) {
+				for (var i = 0; i < rows.length; i++) {
+					if (rows[i] == Value) {
 						State = true;
 					}
 				}
@@ -2183,7 +2255,7 @@ function GetMenuPermission(url, Value) {
 			}
 		},
 		function(xhr, text) {
-			if(xhr.status == "401")
+			if (xhr.status == "401")
 				top.location.href = "login.html";
 			Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 		}
@@ -2192,7 +2264,7 @@ function GetMenuPermission(url, Value) {
 }
 
 function MenuClass(name) {
-	switch(name) {
+	switch (name) {
 		case "首页":
 			return "index";
 		case "消息中心":

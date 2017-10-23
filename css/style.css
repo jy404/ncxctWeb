@@ -64,7 +64,9 @@ textarea {
 	margin: 25px auto 20px auto;
 	padding-top: 25px;
 }
-.loginBox .urseNameBox,.loginBox .passwordBox{
+
+.loginBox .urseNameBox,
+.loginBox .passwordBox {
 	width: 340px;
 	height: 36px;
 	border: 1px solid #d2d2d2;
@@ -75,23 +77,27 @@ textarea {
 	font-size: 14px;
 	color: #333333;
 	font-family: "微软雅黑";
-	background: #ffffff;	
+	background: #ffffff;
 }
-.loginBox .urseNameBox span{
+
+.loginBox .urseNameBox span {
 	display: block;
 	width: 40px;
 	height: 38px;
 	background: url(../img/urse.png) no-repeat center;
 	float: left;
 }
-.loginBox .passwordBox span{
+
+.loginBox .passwordBox span {
 	display: block;
 	width: 40px;
 	height: 38px;
 	background: url(../img/password.png) no-repeat center;
 	float: left;
 }
-.loginBox input[type=text],.loginBox input[type=password] {
+
+.loginBox input[type=text],
+.loginBox input[type=password] {
 	width: 260px;
 	height: 36px;
 	line-height: 36px;
@@ -209,7 +215,8 @@ header .headNav span.myUrse {
 	background: url(../img/myUrse.png) no-repeat left center;
 	position: relative;
 }
-header .headNav span.myUrse b{
+
+header .headNav span.myUrse b {
 	display: block;
 	width: 20px;
 	height: 20px;
@@ -949,10 +956,9 @@ header .headNav span.myUrse b{
 .xxtz .xxtzTab .draftList {
 	width: 39%;
 	float: left;
-	
 	min-height: 380px;
 	border-top: none;
-	border-radius:0 0 3px 3px;
+	border-radius: 0 0 3px 3px;
 }
 
 .xxtz .xxtzTab .draftList h2 {
@@ -1702,7 +1708,6 @@ header .headNav span.myUrse b{
 .gcqzsj {
 	width: 95%;
 	margin: 0 auto;
-	
 }
 
 .gcqzsj .gcqzsjTitle {
@@ -1798,7 +1803,6 @@ header .headNav span.myUrse b{
 	height: 35px;
 	overflow: hidden;
 	margin: 0 0 0 265px;
-	
 }
 
 .gcqzsj .cwbbTxBtn a {
@@ -2400,7 +2404,6 @@ header .headNav span.myUrse b{
 	float: right;
 }
 
-
 .szBtn1 {
 	width: 480px;
 	margin: 30px 0 20px 200px;
@@ -2427,8 +2430,6 @@ header .headNav span.myUrse b{
 	float: right;
 	margin-right: 0;
 }
-
-
 
 .szxmTjPageRightFormBtn1 {
 	display: block;
@@ -2799,7 +2800,6 @@ header .headNav span.myUrse b{
 	width: 100%;
 	height: 37px;
 	line-height: 35px;
-	
 }
 
 .lfjqqzbbBox2 .lfjqqzbbBox2Left {
@@ -2842,7 +2842,6 @@ header .headNav span.myUrse b{
 	width: 100%;
 	height: 92px;
 	line-height: 35px;
-	
 }
 
 .lfjqqzbbBoxSame .lfjqqzbbBoxSameLeft {
@@ -2975,8 +2974,9 @@ header .headNav span.myUrse b{
 	width: 700px;
 	margin: 15px auto;
 	overflow: auto;
-    height: 400px;
+	height: 400px;
 }
+
 .window .windowBox ul li {
 	width: 32%;
 	font-size: 14px;
@@ -3894,20 +3894,24 @@ header .headNav span.myUrse b{
 
 
 /****************附件样式************************/
-.fjStyle{
+
+.fjStyle {
 	margin-left: 190px;
 	margin-top: -57px;
 	overflow: hidden;
 }
-.fjStyle1{
+
+.fjStyle1 {
 	margin-left: 10.8%;
 	margin-top: -57px;
 	overflow: hidden;
 }
-.files div{
+
+.files div {
 	float: left;
 	margin-right: 15px;
 }
+
 .tzgg .addBb {
 	display: block;
 	width: 110px;
@@ -3921,82 +3925,85 @@ header .headNav span.myUrse b{
 	border-radius: 5px;
 	margin: 15px 0;
 }
-.spjl{
-	border: 2px solid #4bb2ff; 
-	width: 754px; 
-	padding: 8px 0; 
+
+.spjl {
+	border: 2px solid #4bb2ff;
+	width: 754px;
+	padding: 8px 0;
 	margin-bottom: 10px;
 	float: left;
 	margin-left: 5px;
 }
-.spjl h2{
-	font-size: 20px; 
-	color: #4bb2ff; 
-	padding-bottom: 15px; 
+
+.spjl h2 {
+	font-size: 20px;
+	color: #4bb2ff;
+	padding-bottom: 15px;
 	margin-left: 15px;
 }
-.spjlBox{
-	width: 600px; 
-	float: left; 
+
+.spjlBox {
+	width: 600px;
+	float: left;
 	margin: 8px 0 0 24px;
 	line-height: 20px;
 }
-.spjlBox i{
+
+.spjlBox i {
 	font-size: 14px;
 	color: #C6C6C6;
 	font-style: normal;
-	margin-left:15px;
+	margin-left: 15px;
 	float: right;
 	margin-top: 3px;
 }
-.gcqzsjLong input[type='radio']{
+
+.gcqzsjLong input[type='radio'] {
 	margin-right: 4px;
 }
 
-
-.lfjqqzbbBox1Left select,.lfjqqzbbBox2Left select{
+.lfjqqzbbBox1Left select,
+.lfjqqzbbBox2Left select {
 	width: 65%;
 	height: 35px;
 	border: 1px solid #cbcbcb;
 	border-radius: 3px;
 }
-#changetype{
+
+#changetype {
 	width: 300px;
 	height: 35px;
 	border: 1px solid #cbcbcb;
 	border-radius: 3px;
 	margin-left: 5px;
 }
-.jgjsSelect{
+
+.jgjsSelect {
 	width: 380px;
 	height: 35px;
 	float: left;
 	margin-left: 5px;
 }
-.backbtn{
+
+.backbtn {
 	position: absolute;
 	left: -55px;
 	top: 45px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.exportBtn {
+	display: block;
+	width: 100px;
+	height: 30px;
+	border-radius: 3px;
+	text-align: center;
+	line-height: 30px;
+	color: #ffffff;
+	font-size: 14px;
+	font-family: "微软雅黑";
+	text-decoration: none;
+	float: right;
+	background: #4bb2ff;
+	margin-bottom: 15px;
+	margin-right: 3%;
+}

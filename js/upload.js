@@ -80,6 +80,15 @@ function UploadProcess(obj) {
 					$this.remove();
 				});
 		});
+	var deleteButton = $('<a/>')
+		.addClass('btn btn-primary')
+		.text('删除')
+		.on('click', function() {
+			var $this = $(this),
+				data = $this.data();
+			$this.parent().remove();
+			data.context = "";
+		});
 	$('#' + obj).fileupload(options)
 		.on('fileuploadadd', function(e, data) {
 			data.context = $('<div/>').appendTo('#files_' + obj);
@@ -89,7 +98,9 @@ function UploadProcess(obj) {
 				if (!index) {
 					node
 						.append('<br>')
-						.append(uploadButton.clone(true).data(data));
+						.append(uploadButton.clone(true).data(data))
+						.append("&nbsp;&nbsp;")
+						.append(deleteButton.clone(true).data(data));
 				}
 				node.appendTo(data.context);
 			});
@@ -112,6 +123,7 @@ function UploadProcess(obj) {
 					"success_action_status": "200"
 				};
 			});
+			data.context.find("a").remove();
 
 		}).on('fileuploadprocessalways', function(e, data) {
 			var index = data.index,
@@ -131,6 +143,7 @@ function UploadProcess(obj) {
 				data.context.find('button')
 					.text('上传')
 					.prop('disabled', !!data.files.error);
+					
 			}
 		}).on('fileuploadprogressall', function(e, data) {
 			var progress = parseInt(data.loaded / data.total * 100, 10);

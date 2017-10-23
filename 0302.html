@@ -37,7 +37,7 @@
 				height: 35px;
 				margin-left: 8px;
 				background: #f1f1f1;
-				border:1px solid #cbcbc;
+				border: 1px solid #cbcbc;
 				border-radius: 3px;
 				float: right;
 				border: 1px solid #cbcbcb;
@@ -45,6 +45,7 @@
 				color: #666666;
 				font-family: "微软雅黑";
 			}
+			
 		</style>
 		<script type="text/javascript">
 			var currentpage = 1;
@@ -62,7 +63,7 @@
 				$('.xmbbSerachreset').click(function() {
 					$(this).parent().parent().find(".xmbbSerachTypeSelect").val("");
 					var sort = $(this).attr("name");
-					if(sort == 1) {
+					if (sort == 1) {
 						GetDesignChangeList1(currentpage, pagesize, data1, "changeList", $("#fy_page"), true, "/api/construction/schedule/designchange/list");
 					} else {
 						data = {
@@ -76,7 +77,7 @@
 					currentpage = 1;
 					pagesize = 10;
 					var sort = $(this).attr("name");
-					if(sort == 1) {
+					if (sort == 1) {
 						data = {
 							"name": $("#gcname").val(),
 							"xmname": $("#xmname").val(),
@@ -120,6 +121,53 @@
 					"step": "construction"
 				}
 				GetProjectWeekList(currentpage, pagesize, data, 5, "projectList5", $("#fj_page5"), true, "/api/project/week/list");
+				$(".exportBtn").click(function() {
+					var sort = $(this).attr("id").substr(9, 1);
+					var parameter = "";
+					switch (sort) {
+						case "1":
+							break;
+						case "2":
+							parameter += "projectType=HOUSE";
+							parameter += "&step=prophase";
+							break;
+						case "3":
+							parameter += "projectType=HOUSE";
+							parameter += "&step=construction";
+							break;
+						case "4":
+							parameter += "projectType=CITY";
+							parameter += "&step=prophase";
+							break;
+						case "5":
+							parameter += "projectType=CITY";
+							parameter += "&step=construction";
+							break;
+					}
+					if (sort != "1") {
+						if ($("#projectName" + sort).val() != "" && $("#projectName" + sort).val() != undefined)
+							parameter += "&projectName=" + $("#projectName" + sort).val();
+						if ($("#startTime" + sort).val() != "" && $("#startTime" + sort).val() != undefined && $("#endTime" + sort).val() != "" && $("#endTime" + sort).val() != undefined)
+							parameter += "&startTime=" + $("#startTime" + sort).val() + "&endTime=" + $("#endTime" + sort).val();
+						window.open(domain + "/api/project/week/list/export?" + parameter);
+					} else {
+						if ($("#gcname").val() != "" && $("#gcname").val() != undefined)
+							parameter += "name=" + $("#gcname").val();
+						if ($("#xmname").val() != "" && $("#xmname").val() != undefined)
+							parameter += "&projectName=" + $("#xmname").val();
+						if ($("#bgtype option:selected").val() != "" && $("#bgtype option:selected").val() != undefined)
+							parameter += "&changeType=" + $("#bgtype option:selected").val();
+						if ($("#djtype option:selected").val() != "" && $("#djtype option:selected").val() != undefined)
+							parameter += "&visaType=" + $("#djtype option:selected").val();
+						if ($("#jetype option:selected").val() != undefined && $("#jetype option:selected").val() != "")
+							parameter += "&amountType=" + $("#jetype option:selected").val();
+						if ($("#xmtype option:selected").val() != "" && $("#xmtype option:selected").val() != undefined)
+							parameter += "&projectType=" + $("#xmtype option:selected").val();
+						if ($("#spstate option:selected").val() != undefined && $("#spstate option:selected").val() != "")
+							parameter += "&status=" + $("#spstate option:selected").val();
+						window.open(domain + "/api/construction/schedule/designchange/report/list/export?" + parameter);
+					}
+				})
 			})
 		</script>
 		<style type="text/css">
@@ -169,10 +217,10 @@
 						<span>金额类型</span>
 						<select id="jetype">
 							<option value="">全部</option>
-							<option value="gt_five">大于5万</option>
-							<option value="lt_five">小于5万</option>
-							<option value="gteq_five">大于等于5万</option>
-							<option value="lteq_five">小于等于5万</option>
+							<option value="gt_five">&gt;5万</option>
+							<option value="lt_five">&lt;5万</option>
+							<option value="gteq_five">&ge;5万</option>
+							<option value="lteq_five">&le;5万</option>
 						</select>
 					</div>
 					<div class="xmbbSerachTitle">
@@ -206,6 +254,7 @@
 						<a href="#" name="1" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
+				<a id="exportBtn1" class="exportBtn">导出excel表格</a>
 				<div class="xmbbTable">
 					<table cellpadding="0" cellspacing="0" class="xmbbTable1" id="changeList">
 						<tr>
@@ -223,6 +272,7 @@
 					<div class="page_div fy" id="fy_page">
 
 					</div>
+					
 				</div>
 			</div>
 			<div class="xmbbTab">
@@ -234,9 +284,9 @@
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" id="projectTime2" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<input type="text" id="startTime2" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 						<label style="float: left;">-</label>
-						<input type="text" id="projectTime21" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<input type="text" id="endTime2" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>项目负责人</span>
@@ -247,6 +297,7 @@
 						<a href="#" name="2" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
+				<a id="exportBtn2" class="exportBtn">导出excel表格</a>
 				<div class="xmbbTable">
 					<table cellpadding="0" cellspacing="0" id="projectList2">
 						<tr>
@@ -268,6 +319,7 @@
 					<div class="page_div fy" id="fj_page2">
 
 					</div>
+					
 				</div>
 			</div>
 			<div class="xmbbTab">
@@ -279,7 +331,9 @@
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" id="projectTime3" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<input type="text" id="startTime3" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<label style="float: left;">-</label>
+						<input type="text" id="endTime3" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>项目负责人</span>
@@ -290,6 +344,7 @@
 						<a href="#" name="3" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
+				<a id="exportBtn3" class="exportBtn">导出excel表格</a>
 				<div class="xmbbTable">
 					<table cellpadding="0" cellspacing="0" id="projectList3">
 						<tr>
@@ -311,6 +366,7 @@
 					<div class="page_div fy" id="fj_page3">
 
 					</div>
+					
 				</div>
 			</div>
 			<div class="xmbbTab">
@@ -322,7 +378,9 @@
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" id="projectTime4" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<input type="text" id="startTime4" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<label style="float: left;">-</label>
+						<input type="text" id="endTime4" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>项目负责人</span>
@@ -333,6 +391,7 @@
 						<a href="#" name="4" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
+				<a id="exportBtn4" class="exportBtn">导出excel表格</a>
 				<div class="xmbbTable">
 					<table cellpadding="0" cellspacing="0" id="projectList4">
 						<tr>
@@ -354,6 +413,7 @@
 					<div class="page_div fy" id="fj_page4">
 
 					</div>
+					
 				</div>
 			</div>
 			<div class="xmbbTab">
@@ -365,7 +425,9 @@
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>时间</span>
-						<input type="text" id="projectTime5" class="xmbbSerachTypeSelect" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" />
+						<input type="text" id="startTime5" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
+						<label style="float: left;">-</label>
+						<input type="text" id="endTime5" style="float: left;margin: 0 10px;width: 90px;" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd'})" />
 					</div>
 					<div class="xmbbSerachTitle">
 						<span>项目负责人</span>
@@ -376,6 +438,7 @@
 						<a href="#" name="5" class="xmbbSerachreset">清空</a>
 					</div>
 				</div>
+				<a id="exportBtn5" class="exportBtn">导出excel表格</a>
 				<div class="xmbbTable">
 					<table cellpadding="0" cellspacing="0" id="projectList5">
 						<tr>
@@ -397,6 +460,7 @@
 					<div class="page_div fy" id="fj_page5">
 
 					</div>
+					
 				</div>
 			</div>
 		</div>

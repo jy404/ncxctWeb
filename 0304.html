@@ -27,7 +27,6 @@
 			var data = {
 				//"projectType": projecttype
 			};
-
 			$(function() {
 				moduleId = $.getUrlParam("moduleId");
 				$('.xmcxSerachreset').click(function() {
@@ -41,6 +40,14 @@
 					$("#projectType").val($(this)[0].title);
 					$(".noticeUl").hide();
 				});
+				$("#noticeStatus").click(function() {
+					$("#statusUl").show();
+				});
+				$('#statusUl li').click(function() {
+					$("#noticeStatus")[0].innerHTML = $(this)[0].innerHTML;
+					$("#status").val($(this)[0].title);
+					$("#statusUl").hide();
+				});
 				$('.xmcxSerachBtn1').click(function() {
 					currentpage = 1;
 					pagesize = 10;
@@ -48,13 +55,27 @@
 						"name": $("#name").val(),
 						//"orgName": $("#orgName").val(),
 						"projectType": $("#projectType").val() == "" ? null : $("#projectType").val(),
-						//"status": $("#status").val(),
-						"startTime": $("#startTime").val()
-						//"endTime": $("#endTime").val()
+						"status": $("#status").val(),
+						"startTime": $("#startTime").val(),
+						"endTime": $("#endTime").val()
 					};
 					GetProjectList1(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
 				});
 				GetProjectList1(currentpage, pagesize, data, "projectList", $("#fj_page"), true, "/api/project/list");
+				$(".exportBtn").click(function() {
+					var parameter = "";
+					if ($("#projectType").val() != "" && $("#projectType").val() != undefined)
+						parameter += "projectType=" + $("#projectType").val();
+					if ($("#name").val() != "" && $("#name").val() != undefined)
+						parameter += "&name=" + $("#name").val();
+					if ($("#status").val() != "" && $("#status").val() != undefined)
+						parameter += "&step=" + $("#status").val();
+					if ($("#startTime").val() != "" && $("#startTime").val() != undefined)
+						parameter += "&startTime=" + $("#startTime").val();
+					if ($("#endTime").val() != "" && $("#endTime").val() != undefined)
+						parameter += "&completedTime=" + $("#endTime").val();
+					window.open(domain + "/api/project/list/export?" + parameter);
+				})
 			})
 		</script>
 		<style type="text/css">
@@ -134,7 +155,20 @@
 				</div>
 				<div class="xmcxSerachTitle">
 					<span>项目状态</span>
-					<input type="text" id="status" class="xmcxSerachTypeSelect" />
+					<div class="tzggSerachTypeSelect">
+						<h2 id="noticeStatus">全部</h2>
+						<input id="status" value="" style="display: none;" />
+						<ul id="statusUl" class="noticeUl">
+							<li title="">全部</li>
+							<li title="已报建">已报建</li>
+							<li title="计划已审批">计划已审批</li>
+							<li title="前期">前期</li>
+							<li title="征地拆迁">征地拆迁</li>
+							<li title="施工">施工</li>
+							<li title="竣工结算">竣工结算</li>
+							<li title="完成">完成</li>
+						</ul>
+					</div>
 				</div>
 				<div class="xmcxSerachTitle">
 					<span>开始时间</span>
@@ -149,6 +183,7 @@
 					<a href="#" class="xmcxSerachreset">清空</a>
 				</div>
 			</div>
+			<a id="exportBtn1" class="exportBtn">导出excel表格</a>
 			<div class="xmcxTable">
 				<table cellpadding="0" cellspacing="0" id="projectList">
 					<tr>

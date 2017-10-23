@@ -49,13 +49,13 @@
 					"parentId": Id
 				}
 				$(".har").click(function() {
-					location.href = "04.html?moduleId=" + moduleId;
+					location.href = "0400.html";//?moduleId=" + moduleId;
 				});
 				$("#addBtn1").click(function() {
-					location.href = "0403.html?moduleId=" + moduleId + "&id=" + Id;
+					location.href = "0403.html?id=" + Id;//moduleId=" + moduleId + "&
 				});
 				$("#addBtn2").click(function() {
-					location.href = "0402.html?moduleId=" + moduleId + "&parentId=" + Id;
+					location.href = "0402.html?parentId=" + Id;//moduleId=" + moduleId + "&
 				});
 				$('.fjxmSerachreset').click(function() {
 					$(".fjxmSerachTypeSelect").val("");
@@ -100,7 +100,7 @@
 				<li>文件</li>
 			</ul>
 			<div class="xxtzTab" style="display: block;">
-				<a href="#" id="addBtn1" class="addBtn" style="margin-left: 25px;">新增文件夹</a>
+				<a id="addBtn1" class="addBtn" style="margin-left: 25px;">新增文件夹</a>
 				<table cellpadding="0" cellspacing="0" class="wdxx">
 					<ul class="lwdgg" id="projectList">
 					</ul>
@@ -109,7 +109,7 @@
 
 			<div class="xxtzTab">
 				<div class="fjxm">
-					<a href="#" id="addBtn2" class="addBtn">新增文件</a>
+					<a id="addBtn2" class="addBtn">新增文件</a>
 					<div class="fjxmSerach" style="margin-top: 15px;">
 						<div class="fjxmSerachList">
 							<div class="fjxmSerachTitle">

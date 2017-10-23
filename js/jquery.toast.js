@@ -102,17 +102,17 @@ if ( typeof Object.create !== 'function' ) {
 
                 if ( this.options.position === 'bottom-center' ) {
                     this._container.css({
-                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
+                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2-31,
                         bottom: 20
                     });
                 } else if ( this.options.position === 'top-center' ) {
                     this._container.css({
-                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
+                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2-31,
                         top: 20
                     });
                 } else if ( this.options.position === 'mid-center' ) {
                     this._container.css({
-                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2,
+                        left: ( $(window).outerWidth() / 2 ) - this._container.outerWidth()/2-31,
                         top: ( $(window).outerHeight() / 2 ) - this._container.outerHeight()/2
                     });
                 } else {
