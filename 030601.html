@@ -37,13 +37,14 @@
 		<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.5&ak=NvjXWehxrhWlK51T65hyBXzfiOVTFVUV"></script>
 		<script type="text/javascript">
 			var action, projectId, projectNo, projectType, id;
-			var moduleId = 0;
+			var moduleId = 0;var parentModuleId=0;
 			$(function() {
 				$('.qujg').click(function(){
 					$('.window').hide();
 				});
 				//判断编辑或者查看
 				moduleId = $.getUrlParam("moduleId");
+				parentModuleId=$.getUrlParam("parentModuleId");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -136,7 +137,7 @@
 				}
 				if(action == "edit")
 					data["id"] = id;
-				meetAdd('/api/project/save', JSON.stringify(data), "0306.html?moduleId=" + moduleId);
+				meetAdd('/api/project/save', JSON.stringify(data), "0306.html?moduleId=" + parentModuleId);
 			}
 		</script>
 		<style type="text/css">				

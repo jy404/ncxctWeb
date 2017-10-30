@@ -32,6 +32,10 @@
 				height: 30px;
 				margin-left: 20px;
 			}
+			.szxmTjPageRightFormBtn1{
+				margin-left: 20px;
+				float: left;
+			}
 		</style>
 		<script type="text/javascript">
 			var action, moduleId, projectId, projectNo, projectType, projectName, id, stage = [];
@@ -102,8 +106,8 @@
 					function(res) {
 						if(res.code == 0) {
 							id = res.result.id;
-							$("#sequence").val(res.result.sequence);
-							$("#survey").val(res.result.survey);
+							//$("#sequence").val(res.result.sequence);
+							//$("#survey").val(res.result.survey);
 
 							if(action == "edit") {
 								//$("#spry").val(res["result"]["assessors"][1]["assessorId"]);
@@ -136,8 +140,8 @@
 			}
 
 			function SubmitData(status) {
-				var sequence = $("#sequence").val();
-				var survey = $("#survey").val();
+				//var sequence = $("#sequence").val();
+				//var survey = $("#survey").val();
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
 				if(id_span.length > 0) {
@@ -155,7 +159,7 @@
 				//					"userid": $("#spry option:selected").val(),
 				//					"username": $("#spry option:selected").text()
 				//				};
-				users.push(user);
+				//users.push(user);
 				var assessor = {};
 				var assessorSubList = [];
 				if(users.length == 1) {
@@ -188,9 +192,9 @@
 					"projectName": projectName,
 					"projectPlanExtensionList": projectPlanExtensionList,
 					"projectType": projectType,
-					"sequence": sequence,
-					"status": status,
-					"survey": survey
+					//"sequence": sequence,
+					"status": status
+					//"survey": survey
 				};
 				if(status == 2)
 					data["id"] = id
@@ -291,18 +295,18 @@
 	<body>
 
 		<h2 class="szTitle">项目计划</h2>
-		<div class="szxmTjPageRightJh">
+		<!--<div class="szxmTjPageRightJh">
 			<span>序号：</span>
 			<input type="text" id="sequence" style="width: 388px; margin-left: 18px; background: none;" valType="required" msg="<font color=red>*</font>序号不能为空" />
-		</div>
+		</div>-->
 		<div class="szxmTjPageRightJh">
 			<span>项目名称：</span>
 			<input type="text" id="projectName" readonly="readonly" style="width: 388px; margin-left: 18px; background: none;" />
 		</div>
-		<div class="szxmTjPageRightJh">
+		<!--<div class="szxmTjPageRightJh">
 			<span>项目概况：</span>
 			<input type="text" id="survey" style="width: 388px; margin-left: 20px; background: none;" valType="required" msg="<font color=red>*</font>项目概况不能为空" />
-		</div>
+		</div>-->
 		<div class="szxmTjPageRightJh" id="spyj">
 			<span>审批意见：</span>
 			<input type="text" id="comment" style="width: 388px; margin-left: 20px; background: none;" />

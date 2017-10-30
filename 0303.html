@@ -21,13 +21,11 @@
 		<style>
 			.totalPages {
 				display: inline-block;
-				width: 45%;
 				text-align: right;
 			}
 			
 			.totalSize {
 				display: inline-block;
-				width: 45%;
 				text-align: left;
 			}
 			
@@ -58,7 +56,6 @@
 				left: 0;
 				top: 19px;
 			}
-			
 			.fjjdTable td b {
 				display: block;
 				width: 20px;
@@ -66,10 +63,13 @@
 				border-radius: 20px;
 				background: #ffffff;
 				position: absolute;
-				left: 30px;
+				left: 10px;
 				top: 9px;
 				z-index: 111;
 				border: 1px solid #666666;
+			}
+			#CITYTable td b{
+				left: 30px;
 			}
 			
 			.fjjdTable .selectRed {
@@ -182,11 +182,11 @@
 				data = {
 					"projectType": "HOUSE"
 				};
-				GetProjectStep(currentpage, pagesize, data, "HOUSETable", $("#step_page1"), true, "/api/project/schedule/list");
+				GetProjectStep(currentpage, pagesize, data,"fjtitletab", "HOUSETable", $("#step_page1"), true, "/api/project/schedule/list");
 				data = {
 					"projectType": "CITY"
 				};
-				GetProjectStep(currentpage, pagesize, data, "CITYTable", $("#step_page2"), true, "/api/project/schedule/list");
+				GetProjectStep(currentpage, pagesize, data, "sztitletab","CITYTable", $("#step_page2"), true, "/api/project/schedule/list");
 				GetProjectListForMap(currentpage, pagesize, data1, "projectList", $("#fj_page"), true, "/api/project/list");
 				$('.jdTab li').click(function() {
 					$(this).addClass('xmbbTabSelect').siblings('li').removeClass('xmbbTabSelect');
@@ -224,20 +224,40 @@
 					<li>市政项目</li>
 				</ul>
 				<div class="jdTabBox">
-					<div style="overflow: auto; padding-bottom: 20px;">
-						<table id="HOUSETable" class="fjjdTable" cellpadding="0" cellspacing="0">
-
-						</table>
+					<div style=" padding-bottom: 20px; position: relative; height: 520px;">
+						<div style="position: absolute; left: 0; top: 0; width: 200px; z-index: 222222; background: #fff;">
+							<table id="fjtitletab" class="fjjdTable" cellpadding="0" cellspacing="0" style="width: 200px;">
+								<tr style="height: 94px;">
+									<td>序号</td>
+									<td width="150px">项目名称</td>
+								</tr>
+							</table>
+						</div>
+						<div style="overflow: auto; width: 100%; position: absolute;left: 200px; top: 0;">
+							<table id="HOUSETable" class="fjjdTable" cellpadding="0" cellspacing="0">
+	
+							</table>
+						</div>	
 					</div>
 					<div class="page_div fy" id="step_page1">
 
 					</div>
 				</div>
 				<div class="jdTabBox" style="display: none;">
-					<div style="overflow: auto; padding-bottom: 20px;">
-						<table id="CITYTable" style="width: 5300px;" class="fjjdTable" cellpadding="0" cellspacing="0">
-
-						</table>
+					<div style=" padding-bottom: 20px;position: relative; height: 520px;">
+						<div style="position: absolute; left: 0; top: 0; width: 200px; z-index: 222222; background: #fff;">
+							<table  id="sztitletab" class="fjjdTable" cellpadding="0" cellspacing="0" style="width: 200px;">
+								<tr style="height: 55px;">
+									<td>序号</td>
+									<td width="150px">项目名称</td>
+								</tr>
+							</table>
+						</div>
+						<div style="overflow: auto; width: 100%; position: absolute; left: 200px; top: 0;">
+							<table id="CITYTable" style="width: 5300px;" class="fjjdTable" cellpadding="0" cellspacing="0">
+	
+							</table>
+						</div>	
 					</div>
 					<div class="page_div fy" id="step_page2">
 

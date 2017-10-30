@@ -32,13 +32,18 @@
 				height: 30px;
 				margin-left: 20px;
 			}
+			.szxmTjPageRightFormBtn1{
+				float: left;
+				margin-left: 20px;
+			}
 		</style>
 		<script type="text/javascript">
-			var action, moduleId, projectId, projectNo, projectType, projectName, id, procTaskId, stage = [];
+			var action, moduleId, parentModuleId,projectId, projectNo, projectType, projectName, id, procTaskId, stage = [];
 			var read, noticeId, Index;
 			$(function() {
 				$.ajaxSettings.async = false;
 				moduleId = $.getUrlParam("moduleId");
+				parentModuleId=$.getUrlParam("parentModuleId");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -119,7 +124,7 @@
 					html += "<input type='text' id='" + item.wordValue.Trim() + "_et' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" readonly='readonly' />";
 					html += "</div>";
 				});
-				$("#saveBtn").before(html);
+				$(".szBtn").before(html);
 			}
 
 			function SetData(projectID) {
@@ -129,8 +134,8 @@
 						if(res.code == 0) {
 							id = res.result.id;
 							procTaskId = res.result.procTaskId;
-							$("#sequence").val(res.result.sequence);
-							$("#survey").val(res.result.survey);
+							//$("#sequence").val(res.result.sequence);
+							//$("#survey").val(res.result.survey);
 
 							if(action == "edit") {
 								//$("#spry").val(res["result"]["assessors"][1]["assessorId"]);
@@ -175,8 +180,8 @@
 			}
 
 			function SubmitData(status) {
-				var sequence = $("#sequence").val();
-				var survey = $("#survey").val();
+				//var sequence = $("#sequence").val();
+				//var survey = $("#survey").val();
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
 				if(id_span.length > 0) {
@@ -236,13 +241,13 @@
 					"projectName": projectName,
 					"projectPlanExtensionList": projectPlanExtensionList,
 					"projectType": projectType,
-					"sequence": sequence,
-					"status": status,
-					"survey": survey
+					//"sequence": sequence,
+					"status": status
+					//"survey": survey
 				};
 				if(id != "" && id != undefined)
 					data["id"] = id
-				meetAdd("/api/projectPlan", JSON.stringify(data), "0305.html?moduleId=" + moduleId, true);
+				meetAdd("/api/projectPlan", JSON.stringify(data), "0305.html?moduleId=" + parentModuleId, true);
 			}
 
 			function Agree() {
@@ -339,18 +344,18 @@
 	<body>
 
 		<h2 class="szTitle">项目计划</h2>
-		<div class="szxmTjPageRightJh">
+		<!--<div class="szxmTjPageRightJh">
 			<span>序号：</span>
 			<input type="text" id="sequence" style="width: 388px; margin-left: 18px; background: none;" valType="required" msg="<font color=red>*</font>序号不能为空" />
-		</div>
+		</div>-->
 		<div class="szxmTjPageRightJh">
 			<span>项目名称：</span>
 			<input type="text" id="projectName" readonly="readonly" style="width: 388px; margin-left: 18px; background: none;" />
 		</div>
-		<div class="szxmTjPageRightJh">
+		<!--<div class="szxmTjPageRightJh">
 			<span>项目概况：</span>
 			<input type="text" id="survey" style="width: 388px; margin-left: 20px; background: none;" valType="required" msg="<font color=red>*</font>项目概况不能为空" />
-		</div>
+		</div>-->
 		<div class="szxmTjPageRightJh" id="spyj">
 			<span>审批意见：</span>
 			<input type="text" id="comment" style="width: 388px; margin-left: 20px; background: none;" />
@@ -380,12 +385,13 @@
 			</select>
 		</div>
 		<!--这里是动态生成内容-->
-
-		<a href="#" id="saveBtn" class="szxmTjPageRightFormBtn1">保存</a>
-		<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn1">保存并发起流程</a>
-		<a href="#" id="agreeBtn" class="szxmTjPageRightFormBtn1">同意</a>
-		<!--<a href="#" id="refuseBtn" class="szxmTjPageRightFormBtn1">拒绝</a>-->
-		<a href="#" id="rejectBtn" class="szxmTjPageRightFormBtn1">驳回</a>
+		<div class="szBtn">
+			<a href="#" id="saveBtn" class="szxmTjPageRightFormBtn1">保存</a>
+			<a href="#" id="submitBtn" class="szxmTjPageRightFormBtn1">保存并发起流程</a>
+			<a href="#" id="agreeBtn" class="szxmTjPageRightFormBtn1">同意</a>
+			<!--<a href="#" id="refuseBtn" class="szxmTjPageRightFormBtn1">拒绝</a>-->
+			<a href="#" id="rejectBtn" class="szxmTjPageRightFormBtn1">驳回</a>
+		</div>
 	</body>
 
 </html>

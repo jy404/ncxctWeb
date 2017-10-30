@@ -1878,15 +1878,11 @@ function CreateProjectStep(data, Type, obj) {
 	var str = "";
 	str += "<tr>"
 	if (data != null && data.length > 0) {
-		str += "<td>序号</td>";
-		str += "<td>项目名称</td>";
 		$.each(data, function(i, item) {
 			str += "<td>" + item.stageTypeName + "</td>";
 		});
 	} else {
 		if (Type == "HOUSE") {
-			str += "<td>序号</td>";
-			str += "<td>项目名称</td>";
 			str += "<td>会议纪要或抄告单</td>";
 			str += "<td>项目选址意见书</td>";
 			str += "<td>环评、交评</td>";
@@ -1947,8 +1943,6 @@ function CreateProjectStep(data, Type, obj) {
 			str += "<td>工程结算</td>";
 			str += "<td>工程保修</td>";
 		} else {
-			str += "<td>序号</td>";
-			str += "<td>项目名称</td>";
 			str += "<td>会议纪要或抄告单</td>";
 			str += "<td>项目选址意见书</td>";
 			str += "<td>环评、交评</td>";
@@ -2014,7 +2008,7 @@ function CreateProjectStep(data, Type, obj) {
 	$("#" + obj).append(str);
 }
 
-function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) {
+function GetProjectStep(currentpage, pagesize, data, titleObj,obj, pageobj, isInit, url) {
 	data["currentPage"] = currentpage;
 	data["pageSize"] = pagesize;
 	$.axse(
@@ -2024,15 +2018,20 @@ function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 			if (res["code"] == "0") {
 				//$(obj).find("tr").remove();
 				$("#" + obj + " tr").not(':eq(0)').remove();
+				$("#" + titleObj + " tr").not(':eq(0)').remove();
 				if (res["result"]["totalCount"] != "0") {
 					var html = "";
 					var rows = res["result"]["list"];
 					for (i = 0; i < rows.length; i++) {
 						if (i == 0)
 							CreateProjectStep(rows[i]["projectPlanExtensionList"], data["projectType"], obj);
-						html += "<tr>";
+						html+='<tr>';
 						html += "<td>" + ((currentpage - 1) * pagesize + (i + 1)) + "</td>";
-						html += "<td>" + rows[i]["projectName"] + "</td>";
+						html += "<td>" + subString(rows[i]["projectName"],10) + "</td></tr>";
+						$("#"+titleObj).append(html);
+						html='';
+						//第一个table
+						html += "<tr>";
 						$.each(rows[i]["projectPlanExtensionList"], function(i, item) {
 							var ClassName = "";
 							if (item.done == true) {
@@ -2046,13 +2045,16 @@ function GetProjectStep(currentpage, pagesize, data, obj, pageobj, isInit, url) 
 						});
 						html += "</tr>";
 						//bsStep(step);
+						//第一个table结束
+						$("#" + obj).append(html);
+						html='';
 					}
-					$("#" + obj).append(html);
+					
 
 					if (isInit) {
 						if (pageobj != null || pageobj != undefined)
 							$.pagination(pageobj, res["result"]["pageCount"], res["result"]["totalCount"], function(index) {
-								GetProjectStep(index, pagesize, data, obj, pageobj, false, url)
+								GetProjectStep(index, pagesize, data, titleObj,obj, pageobj, false, url)
 							});
 					}
 				} else {
@@ -2162,7 +2164,7 @@ function GetXMMenuList(data, obj, url, moduleId) {
 									for (var t = 0; t < rows1.length; t++) {
 										if (typeof rows1[t]["childMenus"] == "undefined" || rows1[t]["childMenus"].length == 0) {
 											var url = rows1[t]["url"].toString();
-											html += "<a href=\"" + url.substring(1, url.length) + "?moduleId=" + rows1[t]["id"] + "\" target=\"szRight\">";
+											html += "<a href=\"" + url.substring(1, url.length) + "?parentModuleId="+moduleId+"&moduleId=" + rows1[t]["id"] + "\" target=\"szRight\">";
 											html += "<h6>" + rows1[t]["name"] + "</h6></a>";
 										} else {
 											html += "<div>";
@@ -2170,7 +2172,7 @@ function GetXMMenuList(data, obj, url, moduleId) {
 											html += "<ul>";
 											$.each(rows1[t]["childMenus"], function(i, item) {
 												var url1 = item.url.toString();
-												html += "<a href=\"" + url1.substring(1, url1.length) + "?moduleId=" + item.id + "\" target=\"szRight\">";
+												html += "<a href=\"" + url1.substring(1, url1.length) + "?parentModuleId="+moduleId+"&moduleId=" + item.id + "\" target=\"szRight\">";
 												html += "<li>-" + item.name + " </li></a>";
 											});
 											html += "</ul></div>";
