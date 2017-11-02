@@ -57,7 +57,7 @@
 							$(this).attr("disabled", "disabled");
 						});
 						$("#saveButton,#submitButton,#agreeBtn,#rejectBtn,#refuseBtn").hide();
-						$(".szBtn").hide();
+						$(".szBtn2").hide();
 					}
 					if(action != "sp") {
 						$("#agreeBtn,#refuseBtn,#rejectBtn,#comment,#spyj,#bhjd").hide();
@@ -97,7 +97,7 @@
 					html += "<input type='text' id='" + item.wordValue.Trim() + "_et' onfocus=\"WdatePicker({dateFmt:'yyyy-MM-dd'})\" readonly='readonly' />";
 					html += "</div>";
 				});
-				$(".szBtn").before(html);
+				$(".szBtn2").before(html);
 			}
 
 			function SetData(projectID) {
@@ -333,7 +333,7 @@
 			</select>
 		</div>
 		<!--这里是动态生成内容-->
-		<div class="szBtn">
+		<div class="szBtn2">
 			<a href="#" id="saveButton" class="szxmTjPageRightFormBtn1">保存</a>
 			<a href="#" id="submitButton" class="szxmTjPageRightFormBtn1">保存并发起流程</a>
 			<a href="#" id="agreeBtn" class="szxmTjPageRightFormBtn1">同意</a>

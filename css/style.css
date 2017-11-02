@@ -2380,8 +2380,8 @@ header .headNav span.myUrse b {
 }
 
 .szBtn {
+	width: 320px;
 	margin: 30px 0 20px 200px;
-	overflow: hidden;
 }
 
 .szBtn a {
@@ -2394,7 +2394,6 @@ header .headNav span.myUrse b {
 	text-align: center;
 	line-height: 35px;
 	font-size: 14px;
-	float: left;
 }
 
 .szBtn a.szxmTjPageRightFormBc {
@@ -2431,6 +2430,35 @@ header .headNav span.myUrse b {
 	float: right;
 	margin-right: 0;
 }
+
+
+.szBtn2 {
+	margin: 30px 0 20px 200px;
+	overflow: hidden;
+}
+
+.szBtn2 a {
+	display: block;
+	width: 150px;
+	height: 35px;
+	background: #4bb2ff;
+	border-radius: 5px;
+	color: #ffffff;
+	text-align: center;
+	line-height: 35px;
+	font-size: 14px;
+	float: left;
+}
+
+.szBtn2 a.szxmTjPageRightFormBc {
+	float: left;
+}
+
+.szBtn2 a.szxmTjPageRightFormBtn {
+	float: right;
+}
+
+
 
 .szxmTjPageRightFormBtn1 {
 	display: block;
