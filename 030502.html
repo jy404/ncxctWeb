@@ -32,18 +32,19 @@
 				height: 30px;
 				margin-left: 20px;
 			}
-			.szxmTjPageRightFormBtn1{
+			
+			.szxmTjPageRightFormBtn1 {
 				float: left;
 				margin-left: 20px;
 			}
 		</style>
 		<script type="text/javascript">
-			var action, moduleId, parentModuleId,projectId, projectNo, projectType, projectName, id, procTaskId, stage = [];
+			var action, moduleId, parentModuleId, projectId, projectNo, projectType, projectName, id, procTaskId, stage = [];
 			var read, noticeId, Index;
 			$(function() {
 				$.ajaxSettings.async = false;
 				moduleId = $.getUrlParam("moduleId");
-				parentModuleId=$.getUrlParam("parentModuleId");
+				parentModuleId = $.getUrlParam("parentModuleId");
 				var vali = new Validators();
 				action = $.getUrlParam("action");
 				projectId = $.getUrlParam("id");
@@ -54,31 +55,30 @@
 				projectType = $.getUrlParam("projectType");
 				projectName = unescape($.getUrlParam("projectName"));
 				$("#projectName").val(projectName);
-				if(read == "777")
+				if (read == "777")
 					readData(noticeId);
 				GetDirection(projectType + "_PLAN_STAGE_TYPE", CreateHTML);
 				//SelectUser("spry");
-				if(action != "" && action != undefined) {
+				if (action != "" && action != undefined) {
 					SetData(projectId)
-					if(action == "view") {
+					if (action == "view") {
 						$("body").find("input,textarea,select").each(function() {
 							$(this).attr("disabled", "disabled");
 						});
 						$("#saveBtn,#submitBtn,#agreeBtn,#rejectBtn,#refuseBtn").hide();
 					}
-					if(action != "sp") {
-						$("#agreeBtn,#refuseBtn,#rejectBtn,#comment,#spyj,#bhjd").hide();
-
+					if (action != "sp") {
+						$("#agreeBtn,#refuseBtn,#rejectBtn,#comment,#spyj,#bhjd,#historylist").hide();
 					} else
 						$("#saveBtn,#submitBtn").hide();
 				}
 				$("#saveBtn").click(function() {
-					if(vali.subByJs()) {
+					if (vali.subByJs()) {
 						SubmitData(1);
 					}
 				});
 				$("#submitBtn").click(function() {
-					if(vali.subByJs()) {
+					if (vali.subByJs()) {
 						SubmitData(3);
 					}
 				});
@@ -97,10 +97,10 @@
 				$.getJSON(
 					domain + "/api/message/set/read/" + Id,
 					function(res) {
-						if(res["code"] == "0") {
+						if (res["code"] == "0") {
 							window.parent.xxIndexList.children[Index].remove();
 							var INum = window.parent.XxNum.innerText;
-							if(parseInt(INum) > 1)
+							if (parseInt(INum) > 1)
 								window.parent.XxNum.innerText = parseInt(INum) - 1;
 							else
 								$(window.parent.XxNum).hide();
@@ -131,18 +131,17 @@
 				$.getJSON(
 					domain + '/api/projectPlan/' + projectID,
 					function(res) {
-						if(res.code == 0) {
+						if (res.code == 0) {
 							id = res.result.id;
 							procTaskId = res.result.procTaskId;
 							//$("#sequence").val(res.result.sequence);
 							//$("#survey").val(res.result.survey);
-
-							if(action == "edit") {
+							if (action == "edit") {
 								//$("#spry").val(res["result"]["assessors"][1]["assessorId"]);
 								var users = "";
 								$("#RegionJobBusinessTag").html = "";
 								$.each(res["result"]["assessors"], function(i, user) {
-									if(i != 0) {
+									if (i != 0) {
 										var html = "<span ty='r' id='" + user.assessorId + "_ed'><a href='#'>" + user.assessor + "</a><input type='button' onclick='del(" + user.assessorId + ")' name='selectedCity' id='" + user.assessorId + "_ch' class='city_det'></span>"
 										$("#RegionJobBusinessTag").append(html);
 										users += user.assessor + " ";
@@ -150,17 +149,16 @@
 								});
 								$("#ApplicationDirection").val(users);
 							}
-
 							$.each(res.result.projectPlanExtensionList, function(i, item) {
-								if(typeof item.planStartTime != "undefined")
+								if (typeof item.planStartTime != "undefined")
 									$("#" + item.stageType + "_st").val(new Date(item.planStartTime).format("yyyy-MM-dd"));
-								if(typeof item.planEndTime != "undefined")
+								if (typeof item.planEndTime != "undefined")
 									$("#" + item.stageType + "_et").val(new Date(item.planEndTime).format("yyyy-MM-dd"));
 							});
 							GetRejectList(res.result.procTaskId);
-							/*
-							if (result.histories.length > 0) {
-								$.each(result.histories, function(i, item) {
+							
+							if (res.result.histories.length > 0) {
+								$.each(res.result.histories, function(i, item) {
 									var html = "<div class=\"gcqzsjLong\">";
 									html += "<span>" + item.assessor + "<b style=\"color: red;\">" + GetOperateName(item.checkStat) + "申请</b></span>";
 									html += "<div class=\"spjlBox\"><i>" + item.checkTime + "</i></div>";
@@ -168,11 +166,11 @@
 									$(".spjl").append(html);
 								});
 							}
-							*/
+							
 						}
 					},
 					function(xhr, text) {
-						if(xhr.status == "401")
+						if (xhr.status == "401")
 							top.location.href = "login.html";
 						Toast.Err('错误', '请求数据失败~', 'top-center', 'left');
 					}
@@ -184,7 +182,7 @@
 				//var survey = $("#survey").val();
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if(id_span.length > 0) {
+				if (id_span.length > 0) {
 					$.each(id_span, function() {
 						var userid = $(this).attr("id").split("_")[0];
 						var username = $(this).children("a").text();
@@ -200,19 +198,19 @@
 				//					"username": $("#spry option:selected").text()
 				//				};
 				//				users.push(user);
-				if(status == 3 && users.length == 0) {
+				if (status == 3 && users.length == 0) {
 					Toast.Err('错误', '请指定下一环节审批人~', 'top-center', 'left');
 					return;
 				}
 				var assessor = null;
 				var assessorSubList = [];
-				if(users.length == 1) {
+				if (users.length == 1) {
 					assessor = {};
 					assessor["assessor"] = users[0].username;
 					assessor["assessorId"] = users[0].userid;
 					assessor["assessorSubList"] = [];
 					assessor["assessorType"] = "PERSON";
-				} else if(users.length > 1) {
+				} else if (users.length > 1) {
 					assessor = {};
 					$.each(users, function(i, user) {
 						var assessorSub = {
@@ -243,9 +241,9 @@
 					"projectType": projectType,
 					//"sequence": sequence,
 					"status": status
-					//"survey": survey
+						//"survey": survey
 				};
-				if(id != "" && id != undefined)
+				if (id != "" && id != undefined)
 					data["id"] = id
 				meetAdd("/api/projectPlan", JSON.stringify(data), "0305.html?moduleId=" + parentModuleId, true);
 			}
@@ -253,7 +251,7 @@
 			function Agree() {
 				var users = [];
 				var id_span = $("#RegionJobBusinessTag").find("span");
-				if(id_span.length > 0) {
+				if (id_span.length > 0) {
 					$.each(id_span, function() {
 						var userid = $(this).attr("id").split("_")[0];
 						var username = $(this).children("a").text();
@@ -271,19 +269,19 @@
 				//				users.push(user);
 				var assessor = null;
 				var assessorSubList = [];
-				if(CheckLastPerson(procTaskId) == true) {
-					if(users.length == 0) {
+				if (CheckLastPerson(procTaskId) == true) {
+					if (users.length == 0) {
 						Toast.Err('错误', '请指定下一环节审批人~', 'top-center', 'left');
 						return;
 					}
 				}
-				if(users.length == 1) {
+				if (users.length == 1) {
 					assessor = {};
 					assessor["assessor"] = users[0].username;
 					assessor["assessorId"] = users[0].userid;
 					assessor["assessorSubList"] = [];
 					assessor["assessorType"] = "PERSON";
-				} else if(users.length > 1) {
+				} else if (users.length > 1) {
 					assessor = {}
 					$.each(users, function(i, user) {
 						var assessorSub = {
@@ -318,12 +316,12 @@
 
 			function Reject() {
 				var returnval = $("#rejectStepId").val();
-				if(returnval == "" || returnval == undefined) {
+				if (returnval == "" || returnval == undefined) {
 					Toast.Err('错误', '请选择驳回节点~', 'top-center', 'left');
 					return false;
 				}
 				var returnId, returnSubId;
-				if(returnval.indexOf("_") == -1) {
+				if (returnval.indexOf("_") == -1) {
 					returnId = returnval;
 				} else {
 					returnId = returnval.split("_")[0];
@@ -377,6 +375,12 @@
 					m.ShowIframeDialog("data.html");
 				}
 			</script>
+		</div>
+		<div class="gcqzsjLong" id="historylist">
+			<span>审批记录：</span>
+			<div class="spjl">
+
+			</div>
 		</div>
 		<div class="szxmTjPageRightJh" id="bhjd">
 			<span>驳回节点：</span>

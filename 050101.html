@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>新增公告</title>
+		<link href="css/style.css" type="text/css" rel="stylesheet" />
+		<link href="css/jquery.toast.css" type="text/css" rel="stylesheet" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/jquery.fileupload.css">
+		<link type="text/css" rel="stylesheet" href="css/commen.css" />
+		<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+		<script type="text/javascript" src="js/js.js"></script>
+		<script type="text/javascript" src="js/AjaxRequest.js"></script>
+		<script type="text/javascript" src="js/json2.js"></script>
+		<script type="text/javascript" src="js/GetData.js"></script>
+		<script type="text/javascript" src="js/paging.js"></script>
+		<script type="text/javascript" src="js/PluginFun.js"></script>
+		<script type="text/javascript" src="js/jquery.toast.js"></script>
+		<script type="text/javascript" src="js/JavaScript.js"></script>
+		<script type="text/javascript" src="js/datepicker/WdatePicker.js"></script>
+		<script src="js/vendor/jquery.ui.widget.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js"></script>
+		<script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+		<script src="http://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="js/jquery.iframe-transport.js"></script>
+		<script src="js/jquery.fileupload.js"></script>
+		<script src="js/jquery.fileupload-process.js"></script>
+		<script src="js/jquery.fileupload-image.js"></script>
+		<script src="js/jquery.fileupload-validate.js"></script>
+		<script type="text/javascript" src="js/upload.js"></script>
+		<script type="text/javascript" src="js/editor/kindeditor-min.js"></script>
+		<link type="text/css" rel="stylesheet" href="css/hsCheckData.css" />
+		<script type="text/javascript" src="js/hsCheckData.js"></script>
+		<script type="text/javascript" src="js/core.js"></script>
+		<script type="text/javascript" src="js/client.js"></script>
+		<script type="text/javascript" src="js/messageboxnotitle.js"></script>
+		<script type="text/javascript" src="js/drag_v1.0.js"></script>
+		<!--表单验证-->
+		<script type="text/javascript" src="js/lib/jquery.poshytip.js"></script>
+		<script type="text/javascript" src="js/lib/jq.validate.js"></script>
+		<link rel="stylesheet" href="js/lib/reset.css" />
+		<link rel="stylesheet" href="js/lib/tip-yellowsimple/tip-yellowsimple.css" />
+		<!--表单验证-->
+		<script type="text/javascript">
+			var Id, type, action;
+			var moduleId = 0;
+			$(function() {
+				$.ajaxSettings.async = false;
+				moduleId = $.getUrlParam("moduleId");
+				type = $.getUrlParam("type");
+				action = $.getUrlParam("action");
+				//初始化编辑器
+				var editorMini = KindEditor.create('.editor-mini', {
+					width: '60%',
+					height: '250px',
+					resizeType: 1,
+					items: [
+						'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+						'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+						'insertunorderedlist'
+					],
+					afterBlur: function() {
+						//编辑器失去焦点时直接同步，可以取到值
+						this.sync();
+					}
+				});
+				
+				SetData();
+			});
+
+			function SetData() {
+				$.getJSON(
+					domain + "/api/system/company/view",
+					function(res) {
+						if (res["code"] == "0") {
+							$.each(res.result, function(i, result) {
+								if (result.type == type) {
+									Id = result.id;
+									$("#content").val(result.content);
+								}
+							});
+						} else {
+							Toast.Err("错误", res["description"], 'top-center', 'left')
+						}
+					},
+					function() {
+						Toast.Err("错误", "请求数据失败~", 'top-center', 'left')
+					}
+				);
+			}
+
+			function SubmitData(status) {
+				var content = $('#content').val();
+				var data = {
+					"content": content,
+					"type": type
+				}
+				if (status == 2) {
+					data["id"] = Id;
+				}
+				meetAdd('/api/system/company/save', JSON.stringify(data), "");
+			}
+		</script>
+		<style type="text/css">
+			.szxmTjPageLeftFormBtn1 {
+				display: block;
+				float: left;
+				width: 150px;
+				height: 35px;
+				background: #4bb2ff;
+				border-radius: 5px;
+				color: #ffffff;
+				text-align: center;
+				line-height: 35px;
+				font-size: 14px;
+				margin: 30px 0 20px 200px;
+			}
+			
+			.szxmTjPageRightFormBtn1 {
+				float: left;
+				margin-left: 40px;
+			}
+			
+			.tzggSerachTypeSelect {
+				float: left;
+				width: 380px;
+				height: 35px;
+				line-height: 35px;
+				border: 1px solid #cbcbcb;
+				position: relative;
+				background: url(img/tzggBg.png) no-repeat 97% center;
+				cursor: pointer;
+				margin-left: 5px;
+			}
+			
+			.tzggSerachTypeSelect h2 {
+				margin: 0px;
+				width: 100%;
+				height: 35px;
+				line-height: 35px;
+				color: #666666;
+				font-size: 14px;
+				padding: 0 0 0 10px;
+				font-weight: normal;
+			}
+			
+			.tzggSerachTypeSelect ul {
+				width: 380px;
+				position: absolute;
+				z-index: 11;
+				background: #ffffff;
+				left: -14px;
+				top: 34px;
+				display: none;
+			}
+			
+			.tzggSerachTypeSelect ul li {
+				width: 100%;
+				height: 30px;
+				line-height: 30px;
+				color: #666666;
+				border: 1px solid #cbcbcb;
+				font-size: 14px;
+				padding-left: 10%;
+				border-top: none;
+			}
+			
+			span.ke-outline {
+				width: 24px !important;
+				height: 19px !important;
+			}
+			
+			.ke-statusbar {
+				width: 100% !important;
+				height: 15px !important;
+			}
+			
+			.ke-statusbar-center-icon {
+				width: 100% !important;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h2 class="szTitle">新增</h2>
+
+		<div class="szxmTjPageRightForm">
+			<span>编辑介绍：</span>
+			<textarea id="content" class="editor-mini"></textarea>
+		</div>
+		<a onclick="SubmitData(1)" class="szxmTjPageLeftFormBtn1" id="saveButton">新增</a>
+		<a onclick="SubmitData(2)" class="szxmTjPageRightFormBtn1" id="submitButton">更新</a>
+		</div>
+	</body>
+
+</html>
